@@ -10,7 +10,7 @@ var sight_ray : RayCast3D
 func _ready():
 	## LOCATE ALL THE RELEVANT NODES RELATIVE TO SELF
 	player = get_parent().get_parent().get_parent()
-	world = player.get_parent().get_parent().find_child("map", false)
+	world = player.get_parent().get_parent().find_child("world", false)
 	sight_ray = player.find_child("head", false).find_child("sight_ray", false)
 
 func _enter_tree():

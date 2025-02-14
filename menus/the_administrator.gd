@@ -5,6 +5,7 @@ extends Node3D
 
 @onready var demo_world = preload("res://levels/demo_world.tscn")
 @onready var little_guy = preload("res://player/small_man.tscn")
+@onready var octagon_map = preload("res://levels/octogon/octogon_map.tscn")
 
 const PORT = 8910
 var enet_peer = ENetMultiplayerPeer.new()
@@ -62,5 +63,7 @@ func remove_player(peer_id):
 		####################
 
 func spawn_world():
-	var world1 = demo_world.instantiate()
+	var world1 = octagon_map.instantiate()
+	var world2 = demo_world.instantiate()
 	world_node.add_child(world1)
+	world_node.add_child(world2)

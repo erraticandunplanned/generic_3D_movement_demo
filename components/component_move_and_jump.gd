@@ -131,7 +131,7 @@ func _physics_process(_delta):
 		is_airdashing = false
 	
 	## HANDLE SNEAK INPUT
-	if Input.is_action_pressed("sneak"):
+	if Input.is_action_pressed("crouch"):
 		# perform a "dive" in the air (fall faster)
 		if not player.is_on_floor():
 			effective_gravity *= statistics.dive_gravity_multi
@@ -139,7 +139,7 @@ func _physics_process(_delta):
 		# perform a "slide" on the ground
 		else:
 			queue_slide = true
-	if Input.is_action_just_released("sneak"):
+	if Input.is_action_just_released("crouch"):
 		queue_unslide = true
 	
 									#################

@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://bq1uv8qyc3u66"]
+
+[node name="PauseMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="foreground" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="ColorRect" type="ColorRect" parent="foreground/MarginContainer"]
+modulate = Color(1, 1, 1, 0.501961)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="foreground/MarginContainer"]
+layout_mode = 2
+
+[node name="start_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer/CenterContainer/start_menu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "GAME PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="play_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Return to Game"
+
+[node name="settings_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="quit_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit Game"

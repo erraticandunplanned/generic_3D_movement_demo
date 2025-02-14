@@ -14,9 +14,9 @@ func _process(delta):
 	pass
 
 func _physics_process(_delta):
-	if Input.is_action_just_pressed("action_left"): 
+	if Input.is_action_just_pressed("use_active_left"): 
 		for action in grip_left.find_children("*","ActiveAbility",false):
 			action._on_action_press()
-	if Input.is_action_just_pressed("action_right"):
+	if Input.is_action_just_pressed("use_active_right"):
 		for action in grip_right.find_children("*","ActiveAbility",false):
 			action._on_action_press()

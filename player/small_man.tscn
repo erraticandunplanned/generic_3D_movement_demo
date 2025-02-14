@@ -89,3 +89,5 @@ shape = SubResource("BoxShape3D_ux6xp")
 [node name="CreateCube" parent="hands/grip_left" instance=ExtResource("6_5rywb")]
 
 [node name="grip_right" type="Node3D" parent="hands"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
