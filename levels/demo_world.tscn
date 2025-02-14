@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwfdkpoqswir1"]
+[gd_scene load_steps=5 format=3 uid="uid://bwfdkpoqswir1"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_q1gq3"]
 size = Vector3(30, 1, 30)
@@ -6,17 +6,23 @@ size = Vector3(30, 1, 30)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hta1q"]
 size = Vector3(30, 1, 30)
 
+[sub_resource type="Sky" id="Sky_rmf4f"]
+
+[sub_resource type="Environment" id="Environment_ql5wl"]
+background_mode = 1
+background_color = Color(0.34902, 0.698039, 0.760784, 1)
+sky = SubResource("Sky_rmf4f")
+
 [node name="DemoWorld" type="Node3D"]
 
-[node name="map" type="Node3D" parent="."]
-
-[node name="floor" type="StaticBody3D" parent="map"]
+[node name="floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="map/floor"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
 mesh = SubResource("BoxMesh_q1gq3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="map/floor"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
 shape = SubResource("BoxShape3D_hta1q")
 
-[node name="players" type="Node3D" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ql5wl")

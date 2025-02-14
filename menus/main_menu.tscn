@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://xo57pnbxv0a2"]
+[gd_scene load_steps=3 format=3 uid="uid://xo57pnbxv0a2"]
 
 [ext_resource type="Texture2D" uid="uid://ys32rilefwa8" path="res://textures/TREES-john-towner.jpg" id="1_iovce"]
+[ext_resource type="Script" path="res://menus/main_menu.gd" id="1_obsmi"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_obsmi")
 
 [node name="background" type="Control" parent="."]
 layout_mode = 1
@@ -17,6 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="background"]
 layout_mode = 1
@@ -194,8 +197,20 @@ layout_mode = 2
 text = "Back"
 
 [node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 64
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 64
+
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer/play_button" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer/settings_button" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer/quit_button" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer/single_button" to="." method="_on_single_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer/multi_button" to="." method="_on_multi_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer/to_main" to="." method="_on_to_main_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer/hostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer/joinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer/to_play" to="." method="_on_to_play_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer/to_main" to="." method="_on_to_main_pressed"]

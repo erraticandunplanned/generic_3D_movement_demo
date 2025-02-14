@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cthqq2ey33ibm"]
+
+[ext_resource type="Script" path="res://player/create_cube/the_cube_in_question.gd" id="1_185ar"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ch454"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u25x7"]
+
+[node name="TheCubeInQuestion" type="Node3D"]
+script = ExtResource("1_185ar")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_ch454")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_u25x7")

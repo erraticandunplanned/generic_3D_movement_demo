@@ -83,13 +83,13 @@ func _physics_process(_delta):
 	
 	## HANDLE WASD INPUTS
 	# sets input_dir to a Vector2 product of WASD or Left Joystick, reults in only 8-directional movement for WASD
-	input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")
 	if not accept_inputs: input_dir = Vector2.ZERO
 	direction = (player.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
 	## HANDLE JUMP INPUT
 	# different action based on if the player is on the floor, next to a wall, or in the air
-	if Input.is_action_just_pressed("ui_jump") and accept_inputs: 
+	if Input.is_action_just_pressed("jump") and accept_inputs: 
 		queue_unslide = true
 		# is on floor
 		if since_on_floor < statistics.coyote_time: 
