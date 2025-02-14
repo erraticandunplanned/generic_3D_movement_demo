@@ -50,7 +50,7 @@ func _physics_process(_delta):
 	# prevent inputs from registering if the game is paused (but physics still applies)
 	if not is_multiplayer_authority(): return
 	accept_inputs = not Global.paused
-	
+		
 	## ONE-TIME VARIABLE SETUP
 	# these variables are used at multiple points throughout the script,
 	# but shouldn't follow over from one frame to the next.
@@ -67,7 +67,7 @@ func _physics_process(_delta):
 		used_airdash = 0
 		last_kicked_on = 0
 		is_vaulting = false
-		is_airdashing = false
+		#is_airdashing = false
 	
 									###################
 									## HANDLE INPUTS ##
@@ -123,7 +123,8 @@ func _physics_process(_delta):
 		effective_max_speed *= statistics.sprint_multi
 		effective_accel *= statistics.sprint_multi
 	# perform airdash when in the air
-	if Input.is_action_just_pressed("sprint") and not player.is_on_floor() and not is_airdashing and used_airdash < statistics.airdash_max:
+	#if Input.is_action_just_pressed("lunge") and not player.is_on_floor() and not is_airdashing and used_airdash < statistics.airdash_max:
+	if Input.is_action_just_pressed("lunge") and not is_airdashing and used_airdash < statistics.airdash_max:
 		is_airdashing = true
 		used_airdash += 1
 		# airdash returns after a cooldown (cools down instantly if player is grounded)

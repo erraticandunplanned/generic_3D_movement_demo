@@ -1,5 +1,8 @@
 extends Node
 
+const PORT = 8910
+var upnp = UPNP.new()
+
 var gravity = 20
 var paused = false
 var jump_on_release = false

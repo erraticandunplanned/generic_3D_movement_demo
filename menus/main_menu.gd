@@ -44,8 +44,8 @@ func _on_settings_button_pressed():
 	swap_menu(SETTINGS)
 
 func _on_quit_button_pressed():
-	#if multiplayer.is_server():
-	#	upnp.delete_port_mapping(PORT)
+	if multiplayer.is_server():
+		Global.upnp.delete_port_mapping(Global.PORT)
 	get_tree().quit(0)
 
 ## PLAY MENU

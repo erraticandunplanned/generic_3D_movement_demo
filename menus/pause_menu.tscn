@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://bq1uv8qyc3u66"]
+[gd_scene load_steps=2 format=3 uid="uid://bq1uv8qyc3u66"]
+
+[ext_resource type="Script" path="res://menus/pause_menu.gd" id="1_1src0"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_1src0")
 
 [node name="foreground" type="Control" parent="."]
 layout_mode = 1
@@ -57,7 +60,7 @@ text = "GAME PAUSED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="play_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+[node name="resume_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Return to Game"
 
@@ -68,3 +71,43 @@ text = "Settings"
 [node name="quit_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Quit Game"
+
+[node name="settings_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer/CenterContainer/settings_menu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "SETTINGS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="GridContainer" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="first_person_camera" type="CheckButton" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+button_pressed = true
+text = "First Person Camera"
+
+[node name="return_button" type="Button" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer/resume_button" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer/settings_button" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer/quit_button" to="." method="_on_quit_button_pressed"]
+[connection signal="toggled" from="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer/MarginContainer/first_person_camera" to="." method="_on_first_person_camera_toggled"]
+[connection signal="pressed" from="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer/return_button" to="." method="_on_return_button_pressed"]

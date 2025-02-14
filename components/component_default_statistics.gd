@@ -17,6 +17,7 @@ class_name StatisticsComponent
 @export var DEFAULT_MELEE_DAMAGE = 30
 @export_group("Camera")
 @export var DEFAULT_CAMERA_FOV = 75
+@export var DEFAULT_FIRST_PERSON_CAMERA = true
 @export var DEFAULT_INVERT_Y_AXIS = false
 @export var DEFAULT_MOUSE_CAMERA_SENSITIVITY_X = 0.005
 @export var DEFAULT_MOUSE_CAMERA_SENSITIVITY_Y = 0.005
@@ -25,7 +26,7 @@ class_name StatisticsComponent
 @export_group("Movement")
 @export_subgroup("Speed and Acceleration")
 @export var DEFAULT_MAX_SPEED = 24
-@export var DEFAULT_SPRINT_MULTI = 2
+@export var DEFAULT_SPRINT_MULTI = 1.2
 @export var DEFAULT_ACCEL = 10
 @export var DEFAULT_DECCEL = 75
 @export_subgroup("Jump")
@@ -43,9 +44,9 @@ class_name StatisticsComponent
 @export var DEFAULT_SLIDE_DURATION = 0.5
 @export var DEFAULT_SLIDE_JUMP_MULTI = 1.7
 @export var DEFAULT_SLIDE_DECCEL = 25
-@export_subgroup("Airdash")
+@export_subgroup("Lunge")
 @export var DEFAULT_AIRDASH_MAX = 1
-@export var DEFAULT_AIRDASH_STRENGTH = 40
+@export var DEFAULT_AIRDASH_STRENGTH = 20
 @export var DEFAULT_AIRDASH_DURATION = 0.5
 @export var DEFAULT_AIRDASH_DECCEL = 10
 
@@ -54,6 +55,7 @@ var max_health = DEFAULT_MAX_HEALTH
 var health = DEFAULT_MAX_HEALTH
 var melee_damage = DEFAULT_MELEE_DAMAGE
 var camera_fov = DEFAULT_CAMERA_FOV
+var first_person_camera = DEFAULT_FIRST_PERSON_CAMERA 
 var invert_y_axis = DEFAULT_INVERT_Y_AXIS
 var mouse_camera_sensitivity_x = DEFAULT_MOUSE_CAMERA_SENSITIVITY_X
 var mouse_camera_sensitivity_y = DEFAULT_MOUSE_CAMERA_SENSITIVITY_Y
