@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqsjx4islw6jh"]
+
+[ext_resource type="Script" path="res://scripts/public_component_scripts/component_action_and_ability.gd" id="1_rig5j"]
+
+[node name="ComponentActionAndAbility" type="Node"]
+script = ExtResource("1_rig5j")

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://bwfdkpoqswir1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_q1gq3"]
+size = Vector3(30, 1, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hta1q"]
+size = Vector3(30, 1, 30)
+
+[node name="DemoWorld" type="Node3D"]
+
+[node name="map" type="Node3D" parent="."]
+
+[node name="floor" type="StaticBody3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="map/floor"]
+mesh = SubResource("BoxMesh_q1gq3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="map/floor"]
+shape = SubResource("BoxShape3D_hta1q")
+
+[node name="players" type="Node3D" parent="."]

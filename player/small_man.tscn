@@ -1,0 +1,91 @@
+[gd_scene load_steps=11 format=3 uid="uid://1vtsjcfeqxus"]
+
+[ext_resource type="Script" path="res://player/small_man.gd" id="1_b0im8"]
+[ext_resource type="PackedScene" uid="uid://cu2ef7we4r66m" path="res://scenes/public_component_scenes/component_default_statistics.tscn" id="1_dywh5"]
+[ext_resource type="PackedScene" uid="uid://ebpgtvukckpf" path="res://scenes/public_component_scenes/component_move_and_jump.tscn" id="2_7620y"]
+[ext_resource type="PackedScene" uid="uid://dr7gv14t8qgym" path="res://scenes/public_component_scenes/component_hitbox_cluster.tscn" id="3_l8wx6"]
+[ext_resource type="PackedScene" uid="uid://dqsjx4islw6jh" path="res://scenes/public_component_scenes/component_action_and_ability.tscn" id="4_bl7wd"]
+[ext_resource type="PackedScene" uid="uid://lx83dij2hnrd" path="res://items/active/1 common/create_cube/create_cube.tscn" id="6_5rywb"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nmpgv"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_vb5eu"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_5b6pe"]
+height = 0.5
+radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ux6xp"]
+size = Vector3(2, 2, 2)
+
+[node name="SmallMan" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 2
+collision_mask = 11
+script = ExtResource("1_b0im8")
+
+[node name="body" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_nmpgv")
+
+[node name="body_mesh" type="MeshInstance3D" parent="body"]
+layers = 2
+mesh = SubResource("CapsuleMesh_vb5eu")
+skeleton = NodePath("../..")
+
+[node name="head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="head"]
+
+[node name="sight_ray" type="RayCast3D" parent="head"]
+target_position = Vector3(0, 0, -50)
+collision_mask = 3
+
+[node name="ComponentDefaultStatistics" parent="." instance=ExtResource("1_dywh5")]
+
+[node name="ComponentMoveAndJump" parent="." node_paths=PackedStringArray("player", "statistics", "hitbox", "head", "camera") instance=ExtResource("2_7620y")]
+player = NodePath("..")
+statistics = NodePath("../ComponentDefaultStatistics")
+hitbox = NodePath("../ComponentHitboxCluster")
+head = NodePath("../head")
+camera = NodePath("../head/Camera3D")
+
+[node name="ComponentActionAndAbility" parent="." node_paths=PackedStringArray("player", "head", "statistics", "grip_left", "grip_right") instance=ExtResource("4_bl7wd")]
+player = NodePath("..")
+head = NodePath("../head")
+statistics = NodePath("../ComponentDefaultStatistics")
+grip_left = NodePath("../hands/grip_left")
+grip_right = NodePath("../hands/grip_right")
+
+[node name="ComponentHitboxCluster" parent="." node_paths=PackedStringArray("hitbox", "area_at_eyes", "area_at_feet", "melee_area") instance=ExtResource("3_l8wx6")]
+hitbox = NodePath("../body")
+area_at_eyes = NodePath("../area_at_eyes")
+area_at_feet = NodePath("../area_at_feet")
+melee_area = NodePath("../melee_area")
+
+[node name="area_at_eyes" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="area_at_eyes"]
+shape = SubResource("CylinderShape3D_5b6pe")
+
+[node name="area_at_feet" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="area_at_feet"]
+shape = SubResource("CylinderShape3D_5b6pe")
+
+[node name="melee_area" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+collision_mask = 14
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="melee_area"]
+shape = SubResource("BoxShape3D_ux6xp")
+
+[node name="hands" type="Node3D" parent="."]
+
+[node name="grip_left" type="Node3D" parent="hands"]
+
+[node name="CreateCube" parent="hands/grip_left" instance=ExtResource("6_5rywb")]
+
+[node name="grip_right" type="Node3D" parent="hands"]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dr7gv14t8qgym"]
+
+[ext_resource type="Script" path="res://scripts/public_component_scripts/component_hitbox_cluster.gd" id="1_sxymb"]
+
+[node name="ComponentHitboxCluster" type="Node"]
+script = ExtResource("1_sxymb")

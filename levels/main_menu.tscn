@@ -1,0 +1,201 @@
+[gd_scene load_steps=2 format=3 uid="uid://xo57pnbxv0a2"]
+
+[ext_resource type="Texture2D" uid="uid://ys32rilefwa8" path="res://textures/TREES-john-towner.jpg" id="1_iovce"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="background" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_iovce")
+expand_mode = 4
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="background"]
+modulate = Color(1, 1, 1, 0.25098)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="foreground" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="ColorRect" type="ColorRect" parent="foreground/MarginContainer"]
+modulate = Color(1, 1, 1, 0.501961)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="foreground/MarginContainer"]
+layout_mode = 2
+
+[node name="start_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer/CenterContainer/start_menu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "3D MOVEMENT DEMO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="play_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Play Now"
+
+[node name="settings_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="quit_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Quit Game"
+
+[node name="play_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer/CenterContainer/play_menu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="single_button" type="Button" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Singleplayer"
+
+[node name="multi_button" type="Button" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Multiplayer"
+
+[node name="to_main" type="Button" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="multiplayer_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Multiplayer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="hostButton" type="Button" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host Game"
+
+[node name="joinButton" type="Button" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join Game"
+
+[node name="to_play" type="Button" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="addressEntry" type="LineEdit" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "enter address to join"
+alignment = 1
+
+[node name="settings_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer/CenterContainer/settings_menu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="to_main" type="Button" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 64
