@@ -25,6 +25,7 @@ var accept_inputs = true
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	if Global.paused: return
+	if Global.inventory_open: return
 	
 	## HANDLE CAMERA MOVEMENT FROM MOUSE
 	# has to be done in _unhandled_input() for some reason
@@ -49,8 +50,8 @@ func _physics_process(_delta):
 	# prevent inputs from controlling other player characters
 	# prevent inputs from registering if the game is paused (but physics still applies)
 	if not is_multiplayer_authority(): return
-	accept_inputs = not Global.paused
-		
+	accept_inputs = false if Global.paused or Global.inventory_open else true
+	
 	## ONE-TIME VARIABLE SETUP
 	# these variables are used at multiple points throughout the script,
 	# but shouldn't follow over from one frame to the next.
@@ -119,12 +120,12 @@ func _physics_process(_delta):
 	
 	## HANDLE SPRINT INPUT
 	# increase speed and acceleration while grounded
-	if Input.is_action_pressed("sprint") and player.is_on_floor():
+	if Input.is_action_pressed("sprint") and accept_inputs and player.is_on_floor():
 		effective_max_speed *= statistics.sprint_multi
 		effective_accel *= statistics.sprint_multi
 	# perform airdash when in the air
 	#if Input.is_action_just_pressed("lunge") and not player.is_on_floor() and not is_airdashing and used_airdash < statistics.airdash_max:
-	if Input.is_action_just_pressed("lunge") and not is_airdashing and used_airdash < statistics.airdash_max:
+	if Input.is_action_just_pressed("lunge") and accept_inputs and not is_airdashing and used_airdash < statistics.airdash_max:
 		is_airdashing = true
 		used_airdash += 1
 		# airdash returns after a cooldown (cools down instantly if player is grounded)
@@ -132,7 +133,7 @@ func _physics_process(_delta):
 		is_airdashing = false
 	
 	## HANDLE SNEAK INPUT
-	if Input.is_action_pressed("crouch"):
+	if Input.is_action_pressed("crouch") and accept_inputs:
 		# perform a "dive" in the air (fall faster)
 		if not player.is_on_floor():
 			effective_gravity *= statistics.dive_gravity_multi
@@ -140,7 +141,7 @@ func _physics_process(_delta):
 		# perform a "slide" on the ground
 		else:
 			queue_slide = true
-	if Input.is_action_just_released("crouch"):
+	if Input.is_action_just_released("crouch") and accept_inputs:
 		queue_unslide = true
 	
 									#################

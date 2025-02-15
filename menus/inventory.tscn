@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3 uid="uid://brpka74vi7axm"]
+
+[ext_resource type="Script" path="res://menus/inventory.gd" id="1_5orjq"]
+[ext_resource type="Texture2D" uid="uid://ys32rilefwa8" path="res://textures/TREES-john-towner.jpg" id="1_a8ipr"]
+[ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_27ofo"]
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5orjq")
+
+[node name="background" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="background"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_a8ipr")
+expand_mode = 4
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="background"]
+modulate = Color(1, 1, 1, 0.25098)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(193.905, 214)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_27ofo")
