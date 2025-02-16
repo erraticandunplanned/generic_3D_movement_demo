@@ -11,6 +11,10 @@ enum {START, PLAY, MULTIPLAYER, SETTINGS}
 @onready var administrator = preload("res://menus/the_administrator.tscn")
 
 func _ready():
+	# these two are for debug only
+	get_viewport().size = Vector2(1920,1080)
+	get_window().position = Vector2(100,100)
+	
 	swap_menu(START)
 
 func swap_menu(menu : int):

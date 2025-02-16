@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://xo57pnbxv0a2"]
+[gd_scene load_steps=4 format=3 uid="uid://xo57pnbxv0a2"]
 
 [ext_resource type="Texture2D" uid="uid://ys32rilefwa8" path="res://textures/TREES-john-towner.jpg" id="1_iovce"]
 [ext_resource type="Script" path="res://menus/main_menu.gd" id="1_obsmi"]
+[ext_resource type="Theme" uid="uid://df313ejliqdb6" path="res://fonts/menu_text.tres" id="3_fiowj"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -87,20 +88,24 @@ theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "3D MOVEMENT DEMO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="play_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Play Now"
 
 [node name="settings_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Settings"
 
 [node name="quit_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Quit Game"
 
 [node name="play_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
@@ -119,17 +124,34 @@ theme_override_constants/margin_bottom = 15
 layout_mode = 2
 theme_override_constants/separation = 15
 
+[node name="SPACER" type="Label" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_fiowj")
+text = "                                         "
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="single_button" type="Button" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Singleplayer"
 
 [node name="multi_button" type="Button" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Multiplayer"
 
 [node name="to_main" type="Button" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Back"
+
+[node name="SPACER2" type="Label" parent="foreground/MarginContainer/CenterContainer/play_menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_fiowj")
+text = "                                         "
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="multiplayer_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
 visible = false
@@ -149,24 +171,29 @@ theme_override_constants/separation = 15
 
 [node name="Label" type="Label" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Multiplayer"
+theme = ExtResource("3_fiowj")
+text = " MULTIPLAYER GAME "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="hostButton" type="Button" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Host Game"
 
 [node name="joinButton" type="Button" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Join Game"
 
 [node name="to_play" type="Button" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Back"
 
 [node name="addressEntry" type="LineEdit" parent="foreground/MarginContainer/CenterContainer/multiplayer_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 placeholder_text = "enter address to join"
 alignment = 1
 
@@ -188,12 +215,14 @@ theme_override_constants/separation = 15
 
 [node name="Label" type="Label" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Settings"
+theme = ExtResource("3_fiowj")
+text = "           SETTINGS           "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="to_main" type="Button" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_fiowj")
 text = "Back"
 
 [node name="MarginContainer" type="MarginContainer" parent="foreground/MarginContainer"]

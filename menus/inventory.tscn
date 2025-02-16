@@ -1,8 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://brpka74vi7axm"]
+[gd_scene load_steps=7 format=3 uid="uid://brpka74vi7axm"]
 
 [ext_resource type="Script" path="res://menus/inventory.gd" id="1_5orjq"]
 [ext_resource type="Texture2D" uid="uid://ys32rilefwa8" path="res://textures/TREES-john-towner.jpg" id="1_a8ipr"]
 [ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_27ofo"]
+[ext_resource type="Texture2D" uid="uid://5fa33oddr0sw" path="res://textures/inventory/empty_slot.png" id="4_jblma"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_urvbb"]
+texture = ExtResource("4_jblma")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_2xflr"]
+tile_size = Vector2i(128, 128)
+sources/0 = SubResource("TileSetAtlasSource_urvbb")
 
 [node name="Inventory" type="Control"]
 layout_mode = 3
@@ -14,6 +24,7 @@ grow_vertical = 2
 script = ExtResource("1_5orjq")
 
 [node name="background" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +34,6 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="background"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,7 +54,29 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(193.905, 214)
-scale = Vector2(0.15, 0.15)
+[node name="images" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="images"]
+position = Vector2(700, 700)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_27ofo")
+
+[node name="TileMap" type="TileMap" parent="images"]
+visible = false
+tile_set = SubResource("TileSet_2xflr")
+format = 2
+layer_0/tile_data = PackedInt32Array(262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 0, 0, 327685, 0, 0, 393221, 0, 0, 458757, 0, 0, 524293, 0, 0, 196613, 0, 0, 393224, 0, 0, 393223, 0, 0, 458759, 0, 0, 458760, 0, 0, 262148, 0, 0, 262147, 0, 0, 262146, 0, 0, 393218, 0, 0, 393219, 0, 0, 458755, 0, 0, 458754, 0, 0, 131085, 0, 0, 131086, 0, 0, 131087, 0, 0, 131088, 0, 0, 131089, 0, 0, 131090, 0, 0, 131091, 0, 0, 131092, 0, 0)
+
+[node name="slots" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

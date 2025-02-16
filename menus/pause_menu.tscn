@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bq1uv8qyc3u66"]
+[gd_scene load_steps=3 format=3 uid="uid://bq1uv8qyc3u66"]
 
 [ext_resource type="Script" path="res://menus/pause_menu.gd" id="1_1src0"]
+[ext_resource type="Theme" uid="uid://df313ejliqdb6" path="res://fonts/menu_text.tres" id="2_5gttx"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -56,20 +57,24 @@ theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "GAME PAUSED"
+theme = ExtResource("2_5gttx")
+text = "        GAME PAUSED        "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="resume_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_5gttx")
 text = "Return to Game"
 
 [node name="settings_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_5gttx")
 text = "Settings"
 
 [node name="quit_button" type="Button" parent="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_5gttx")
 text = "Quit Game"
 
 [node name="settings_menu" type="PanelContainer" parent="foreground/MarginContainer/CenterContainer"]
@@ -90,7 +95,8 @@ theme_override_constants/separation = 15
 
 [node name="Title" type="Label" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "SETTINGS"
+theme = ExtResource("2_5gttx")
+text = "           SETTINGS           "
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -99,11 +105,13 @@ layout_mode = 2
 
 [node name="first_person_camera" type="CheckButton" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
+theme = ExtResource("2_5gttx")
 button_pressed = true
 text = "First Person Camera"
 
 [node name="return_button" type="Button" parent="foreground/MarginContainer/CenterContainer/settings_menu/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("2_5gttx")
 text = "Back"
 
 [connection signal="pressed" from="foreground/MarginContainer/CenterContainer/start_menu/MarginContainer/VBoxContainer/resume_button" to="." method="_on_resume_button_pressed"]
