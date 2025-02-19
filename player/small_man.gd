@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @onready var pause_menu = preload("res://menus/pause_menu.tscn")
 @onready var inventory_menu = preload("res://menus/inventory.tscn")
+@onready var selection_wheel = preload("res://menus/selection_wheel.tscn")
 @onready var canvas = $CanvasLayer
 @onready var statistics : StatisticsComponent = $ComponentDefaultStatistics
 @onready var camera = $head/Camera3D
@@ -28,6 +29,20 @@ func _process(delta):
 		else:
 			for m in canvas.get_children():
 				if m.name == "inventory_menu": m.queue_free()
+	
+	## SELECTION WHEEL TEST
+	if Input.is_action_pressed("toggle_toolset"):
+		var menu_open = false
+		for m in canvas.get_children():
+			if m.name == "selection_wheel": menu_open = true
+		if not menu_open:
+			var menu = selection_wheel.instantiate()
+			canvas.add_child(menu)
+			menu.name = "selection_wheel"
+			menu.generate_wheel([],8)
+	else:
+		for m in canvas.get_children():
+			if m.name == "selection_wheel": m.queue_free()
 
 @rpc("any_peer", "call_local")
 func place_player(provided_spawn_positions):
