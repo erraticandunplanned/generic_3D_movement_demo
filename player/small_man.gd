@@ -3,46 +3,34 @@ extends CharacterBody3D
 @onready var pause_menu = preload("res://menus/pause_menu.tscn")
 @onready var inventory_menu = preload("res://menus/inventory.tscn")
 @onready var selection_wheel = preload("res://menus/selection_wheel.tscn")
+@onready var HUD = preload("res://menus/HUD.tscn")
+
 @onready var canvas = $CanvasLayer
 @onready var statistics : StatisticsComponent = $ComponentDefaultStatistics
 @onready var camera = $head/Camera3D
 
 var last_used_spawns
 
+func _ready():
+	swap_to_menu("HUD")
+
 func _process(delta):
-	if Input.is_action_just_pressed("pause_game"):
-		Global.paused = not Global.paused
-		if Global.paused:
-			var menu = pause_menu.instantiate()
-			canvas.add_child(menu)
-			menu.name = "pause_menu"
-		else:
-			for m in canvas.get_children():
-				if m.name == "pause_menu": m.queue_free()
+	if Input.is_action_just_pressed("pause_game"): swap_to_menu("pause_menu")
+	if Input.is_action_just_pressed("open_inventory"): swap_to_menu("inventory_menu")
 	
-	if Input.is_action_just_pressed("open_inventory"):
-		Global.inventory_open = not Global.inventory_open
-		if Global.inventory_open:
-			var menu = inventory_menu.instantiate()
-			canvas.add_child(menu)
-			menu.name = "inventory_menu"
-		else:
-			for m in canvas.get_children():
-				if m.name == "inventory_menu": m.queue_free()
-	
-	## SELECTION WHEEL TEST
-	if Input.is_action_pressed("toggle_toolset"):
-		var menu_open = false
-		for m in canvas.get_children():
-			if m.name == "selection_wheel": menu_open = true
-		if not menu_open:
-			var menu = selection_wheel.instantiate()
-			canvas.add_child(menu)
-			menu.name = "selection_wheel"
-			menu.generate_wheel([],8)
-	else:
-		for m in canvas.get_children():
-			if m.name == "selection_wheel": m.queue_free()
+	## TESTING SELECTION WHEEL
+	if Input.is_action_just_pressed("toggle_toolset"): swap_to_menu("selection_wheel")
+	if Input.is_action_just_released("toggle_toolset"): swap_to_menu("HUD")
+
+func swap_to_menu(request_menu : String = "HUD"):
+	var menu_name = request_menu
+	for m in canvas.get_children():
+		if m.name == request_menu: menu_name = "HUD"
+		m.queue_free()
+	Global.menu_open = false if menu_name == "HUD" else true
+	var new_menu : Node = pause_menu.instantiate() if menu_name == "pause_menu" else inventory_menu.instantiate() if menu_name == "inventory_menu" else selection_wheel.instantiate() if menu_name == "selection_wheel" else HUD.instantiate()
+	canvas.add_child(new_menu)
+	new_menu.name = menu_name
 
 @rpc("any_peer", "call_local")
 func place_player(provided_spawn_positions):

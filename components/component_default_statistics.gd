@@ -49,6 +49,9 @@ class_name StatisticsComponent
 @export var DEFAULT_AIRDASH_STRENGTH = 20
 @export var DEFAULT_AIRDASH_DURATION = 0.5
 @export var DEFAULT_AIRDASH_DECCEL = 10
+@export_category("Menu Statistics")
+@export_subgroup("Menu Speeds")
+@export var DEFAULT_MENU_MOUSE_SPEED = 10
 
 ## STATISTICS
 var max_health = DEFAULT_MAX_HEALTH
@@ -81,6 +84,8 @@ var airdash_max = DEFAULT_AIRDASH_MAX
 var airdash_strength = DEFAULT_AIRDASH_STRENGTH
 var airdash_duration = DEFAULT_AIRDASH_DURATION
 var airdash_deccel = DEFAULT_AIRDASH_DECCEL
+
+var menu_mouse_speed = DEFAULT_MENU_MOUSE_SPEED
 
 ## IMPORTANT UNCHANGING STUFF
 const VAULT_DURATION = 0.2

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdk874x2idgv1"]
+
+[ext_resource type="Script" path="res://autoload/camera_transition.gd" id="1_yf8mv"]
+
+[node name="CameraTransition" type="Node"]
+script = ExtResource("1_yf8mv")
+
+[node name="Camera3D" type="Camera3D" parent="."]

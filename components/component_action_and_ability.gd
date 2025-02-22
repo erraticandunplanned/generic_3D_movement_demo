@@ -14,7 +14,7 @@ func _process(delta):
 	pass
 
 func _physics_process(_delta):
-	if not is_multiplayer_authority() or Global.paused: return
+	if not is_multiplayer_authority() or Global.paused or Global.menu_open: return
 
 	if Input.is_action_just_pressed("use_active_left"): 
 		for action in grip_left.find_children("*","ActiveAbility",false):

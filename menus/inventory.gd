@@ -17,15 +17,11 @@ var armorslot_positions = [
 var base_inventory_position = Vector2(1672,334)
 var base_inventory_size = Vector2(8,10)
 
-func _enter_tree():
+func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player = get_parent().get_parent()
 	statistics = player.statistics
-
-func _exit_tree():
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-func _ready():
+	
 	for i in range(0,19):
 		var newslot = Sprite2D.new()
 		slots_node.add_child(newslot)

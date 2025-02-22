@@ -8,15 +8,10 @@ extends Control
 var player : CharacterBody3D
 var statistics : StatisticsComponent
 
-func _enter_tree():
+func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player = get_parent().get_parent()
 	statistics = player.statistics
-
-func _exit_tree():
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-func _ready():
 	swapmenu(0)
 	## ENSURE ALL TOGGLES ARE ALLIGNED WITH STATISTICS
 	first_person_toggle.button_pressed = statistics.first_person_camera
@@ -28,8 +23,9 @@ func swapmenu(menu : int):
 ## MAIN PAUSE MENU
 
 func _on_resume_button_pressed():
-	Global.paused = false
-	queue_free()
+	player.swap_to_menu("HUD")
+	#Global.paused = false
+	#queue_free()
 
 func _on_settings_button_pressed():
 	swapmenu(1)

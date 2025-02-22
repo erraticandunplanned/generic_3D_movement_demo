@@ -25,7 +25,7 @@ var accept_inputs = true
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	if Global.paused: return
-	if Global.inventory_open: return
+	if Global.menu_open: return
 	
 	## HANDLE CAMERA MOVEMENT FROM MOUSE
 	# has to be done in _unhandled_input() for some reason
@@ -50,7 +50,7 @@ func _physics_process(_delta):
 	# prevent inputs from controlling other player characters
 	# prevent inputs from registering if the game is paused (but physics still applies)
 	if not is_multiplayer_authority(): return
-	accept_inputs = false if Global.paused or Global.inventory_open else true
+	accept_inputs = false if Global.paused or Global.menu_open else true
 	
 	## ONE-TIME VARIABLE SETUP
 	# these variables are used at multiple points throughout the script,

@@ -5,7 +5,8 @@ var upnp = UPNP.new()
 
 var gravity = 20
 var paused = false
-var inventory_open = false
+var menu_open = false
+# var inventory_open = false
 
 var jump_on_release = false
 var directional_walljump = false
