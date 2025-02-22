@@ -40,3 +40,5 @@ grow_vertical = 2
 
 [node name="the_wheel" type="Control" parent="screenspace/CenterContainer"]
 layout_mode = 2
+
+[node name="actions" type="Node" parent="."]

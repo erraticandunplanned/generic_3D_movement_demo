@@ -1,6 +1,9 @@
 extends Control
 
 @onready var wheel_node = $screenspace/CenterContainer/the_wheel
+@onready var action_node = $actions
+
+@onready var create_cube = preload("res://player/create_cube/create_cube.tscn")
 
 var player : CharacterBody3D
 var statistics : StatisticsComponent
@@ -13,11 +16,13 @@ const section_offset = 10
 
 var wheel_contents = []
 var wheel_dict = {}
+var action_dict = {}
 var selection_vector = Vector2.ZERO
 var selection : int = -1
 var screen_size : Vector2
 var screen_center : Vector2
-var mouse_location : Vector2
+var mouse_location_raw : Vector2
+var mouse_location_clamp : Vector2
 var cursor_location : Vector2
 
 func _ready():
@@ -26,24 +31,44 @@ func _ready():
 	statistics = player.statistics
 	screen_size = get_viewport_rect().size
 	screen_center = get_viewport_rect().size / 2
-	mouse_location = screen_center
+	mouse_location_raw = screen_center
+	mouse_location_clamp = screen_center
 	
-	generate_wheel([],7)
+	## THE FOLLOWING IS FOR DEMO PURPOSES ONLY
+	generate_wheel([],4)
+	var cube_action = create_cube.instantiate()
+	action_node.add_child(cube_action)
+	cube_action.name = "0"
+	var new_dict_entry = {0:cube_action}
+	action_dict.merge(new_dict_entry)
+
+func _exit_tree():
+	if selection == -1: return
+	
+	print("perform action ", selection)
+	if action_dict.keys().has(selection):
+		action_dict[selection]._on_action_press()
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		mouse_location.x += event.relative.x * 2
-		mouse_location.y += event.relative.y * 2
-		mouse_location.x = clamp(mouse_location.x, screen_center.x - outer_rim_size, screen_center.x + outer_rim_size)
-		mouse_location.y = clamp(mouse_location.y, screen_center.y - outer_rim_size, screen_center.y + outer_rim_size)
+		mouse_location_raw.x += event.relative.x * 1.5
+		mouse_location_raw.y += event.relative.y * 1.5
+		mouse_location_raw.x = clamp(mouse_location_raw.x, screen_center.x - outer_rim_size, screen_center.x + outer_rim_size)
+		mouse_location_raw.y = clamp(mouse_location_raw.y, screen_center.y - outer_rim_size, screen_center.y + outer_rim_size)
+		
+		var cursor_vector = mouse_location_raw - screen_center
+		if cursor_vector.length() > outer_rim_size: 
+			mouse_location_clamp = screen_center + ( cursor_vector.normalized() * inner_rim_size)
+		else:
+			mouse_location_clamp = mouse_location_raw
 
 func _process(delta):
 	var joystick_selection_input = Input.get_vector("ui_selectionwheel_left","ui_selectionwheel_right","ui_selectionwheel_up","ui_selectionwheel_down")
 	if joystick_selection_input == Vector2.ZERO:
-		cursor_location = mouse_location
+		cursor_location = mouse_location_clamp
 	else:
-		mouse_location = screen_center
-		cursor_location = screen_center + ( joystick_selection_input * outer_rim_size )
+		mouse_location_raw = screen_center
+		cursor_location = screen_center + ( joystick_selection_input * inner_rim_size )
 	
 	selection_vector = Vector2(cursor_location.x - screen_center.x, -(cursor_location.y - screen_center.y)).normalized()
 	if selection_vector != Vector2.ZERO:
@@ -52,8 +77,6 @@ func _process(delta):
 			var test_dist = abs(selection_vector.angle_to(wheel_dict[i]))
 			selection_array.append(test_dist)
 		selection = selection_array.find(selection_array.min())
-	#else:
-	#	selection = -1
 	
 	for i in wheel_contents.size():
 		if i == selection:
