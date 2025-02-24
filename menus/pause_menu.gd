@@ -40,10 +40,10 @@ func _on_quit_button_pressed():
 func _on_first_person_camera_toggled(toggled_on):
 	statistics.first_person_camera = toggled_on
 	
-	if statistics.first_person_camera:
-		player.camera.position.z = 0
-	else:
-		player.camera.position.z = 8
+	#if statistics.first_person_camera:
+	#	player.camera.position.z = 0
+	#else:
+	#	player.camera.position.z = 8
 
 func _on_return_button_pressed():
 	swapmenu(0)

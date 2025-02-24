@@ -7,7 +7,8 @@ extends CharacterBody3D
 
 @onready var canvas = $CanvasLayer
 @onready var statistics : StatisticsComponent = $ComponentDefaultStatistics
-@onready var camera = $head/Camera3D
+@onready var camera_1st = $head/eye_camera
+@onready var camera_3rd = $shoulder_pivot/SpringArm3D/shoulder_camera
 
 var last_used_spawns
 
@@ -17,17 +18,25 @@ func _ready():
 func _process(delta):
 	if Input.is_action_just_pressed("pause_game"): swap_to_menu("pause_menu")
 	if Input.is_action_just_pressed("open_inventory"): swap_to_menu("inventory_menu")
+	if Global.menu_open: return
 	
 	## TESTING SELECTION WHEEL
 	if Input.is_action_just_pressed("toggle_toolset"): swap_to_menu("selection_wheel")
 	if Input.is_action_just_released("toggle_toolset"): swap_to_menu("HUD")
+	
+	if Input.is_action_just_pressed("interact"):
+		statistics.first_person_camera = !statistics.first_person_camera
+		if statistics.first_person_camera:
+			CameraTransition.swap_camera(camera_3rd,camera_1st)
+		else:
+			CameraTransition.swap_camera(camera_1st,camera_3rd)
 
 func swap_to_menu(request_menu : String = "HUD"):
 	var menu_name = request_menu
 	for m in canvas.get_children():
 		if m.name == request_menu: menu_name = "HUD"
 		m.queue_free()
-	Global.menu_open = false if menu_name == "HUD" else true
+	Global.menu_open = false if menu_name == "HUD" else false if menu_name == "selection_wheel" else true
 	var new_menu : Node = pause_menu.instantiate() if menu_name == "pause_menu" else inventory_menu.instantiate() if menu_name == "inventory_menu" else selection_wheel.instantiate() if menu_name == "selection_wheel" else HUD.instantiate()
 	canvas.add_child(new_menu)
 	new_menu.name = menu_name

@@ -1,18 +1,79 @@
-[gd_scene load_steps=7 format=3 uid="uid://brpka74vi7axm"]
+[gd_scene load_steps=15 format=3 uid="uid://brpka74vi7axm"]
 
 [ext_resource type="Script" path="res://menus/inventory.gd" id="1_5orjq"]
 [ext_resource type="Texture2D" uid="uid://ys32rilefwa8" path="res://textures/TREES-john-towner.jpg" id="1_a8ipr"]
 [ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_27ofo"]
 [ext_resource type="Texture2D" uid="uid://5fa33oddr0sw" path="res://textures/inventory/empty_slot.png" id="4_jblma"]
+[ext_resource type="Texture2D" uid="uid://be7xho2m83lgs" path="res://textures/inventory/gear_sprites.png" id="5_peytv"]
+[ext_resource type="Texture2D" uid="uid://de47uthel7nrf" path="res://textures/inventory/slot_background.png" id="6_r2t3e"]
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_0mfnv"]
+tile_data = PackedInt32Array(0, 1, 0, 65536, 1, 1, 1, 65537, 0, 65537, 65537, 1)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_p7mct"]
+tile_data = PackedInt32Array(0, 131073, 0, 65536, 131073, 1, 1, 196609, 0, 65537, 196609, 1)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_c34dl"]
+tile_data = PackedInt32Array(65536, 65537, 4, 65537, 65537, 3, 65538, 65537, 2, 3, 1, 2, 65539, 1, 3, 131075, 1, 4, 196611, 1, 5, 262147, 1, 6, 327683, 1, 7, 65540, 131073, 2, 65541, 131073, 3, 65542, 131073, 4)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_vin2n"]
+tile_data = PackedInt32Array(65536, 65537, 7, 65537, 65537, 6, 65538, 65537, 5, 3, 196609, 2, 65539, 196609, 3, 131075, 196609, 4, 196611, 196609, 5, 262147, 196609, 6, 327683, 196609, 7, 65540, 131073, 5, 65541, 131073, 6, 65542, 131073, 7)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_urvbb"]
 texture = ExtResource("4_jblma")
+texture_region_size = Vector2i(136, 136)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_si4xq"]
+texture = ExtResource("5_peytv")
 texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_td8s3"]
+texture = ExtResource("6_r2t3e")
+texture_region_size = Vector2i(136, 136)
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_2xflr"]
 tile_size = Vector2i(128, 128)
 sources/0 = SubResource("TileSetAtlasSource_urvbb")
+sources/1 = SubResource("TileSetAtlasSource_si4xq")
+sources/2 = SubResource("TileSetAtlasSource_td8s3")
+pattern_0 = SubResource("TileMapPattern_0mfnv")
+pattern_1 = SubResource("TileMapPattern_p7mct")
+pattern_2 = SubResource("TileMapPattern_c34dl")
+pattern_3 = SubResource("TileMapPattern_vin2n")
 
 [node name="Inventory" type="Control"]
 layout_mode = 3
@@ -54,6 +115,32 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
+[node name="midground" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="midground"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 128
+theme_override_constants/margin_right = 1299
+theme_override_constants/margin_bottom = 128
+
+[node name="ColorRect2" type="ColorRect" parent="midground/MarginContainer"]
+modulate = Color(1, 1, 1, 0.25098)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
 [node name="images" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -63,15 +150,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="images"]
-position = Vector2(700, 700)
+position = Vector2(704, 824)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_27ofo")
-
-[node name="TileMap" type="TileMap" parent="images"]
-visible = false
-tile_set = SubResource("TileSet_2xflr")
-format = 2
-layer_0/tile_data = PackedInt32Array(262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 0, 0, 327685, 0, 0, 393221, 0, 0, 458757, 0, 0, 524293, 0, 0, 196613, 0, 0, 393224, 0, 0, 393223, 0, 0, 458759, 0, 0, 458760, 0, 0, 262148, 0, 0, 262147, 0, 0, 262146, 0, 0, 393218, 0, 0, 393219, 0, 0, 458755, 0, 0, 458754, 0, 0, 131085, 0, 0, 131086, 0, 0, 131087, 0, 0, 131088, 0, 0, 131089, 0, 0, 131090, 0, 0, 131091, 0, 0, 131092, 0, 0)
 
 [node name="slots" type="Control" parent="."]
 layout_mode = 1
@@ -80,3 +161,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TileMap" type="TileMap" parent="slots"]
+tile_set = SubResource("TileSet_2xflr")
+format = 2
+layer_0/name = "slot_borders"
+layer_0/z_index = 2
+layer_0/tile_data = PackedInt32Array(262149, 0, 0, 327685, 0, 0, 393221, 0, 0, 458757, 0, 0, 524293, 0, 0, 458759, 0, 0, 458760, 0, 0, 458755, 0, 0, 458754, 0, 0, 262156, 0, 0, 327692, 0, 0, 327693, 0, 0, 262157, 0, 0, 262158, 0, 0, 327694, 0, 0, 327695, 0, 0, 262159, 0, 0, 262160, 0, 0, 327696, 0, 0, 327697, 0, 0, 262161, 0, 0, 262162, 0, 0, 327698, 0, 0, 524290, 0, 0, 524291, 0, 0, 589829, 0, 0, 524295, 0, 0, 524296, 0, 0, 327688, 0, 0, 327687, 0, 0, 327686, 0, 0, 327684, 0, 0, 327683, 0, 0, 327682, 0, 0, 393228, 0, 0, 393229, 0, 0, 393230, 0, 0, 393231, 0, 0, 393232, 0, 0, 393233, 0, 0, 393234, 0, 0, 262155, 0, 0, 327691, 0, 0, 393227, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0)
+layer_1/name = "gear_icons"
+layer_1/modulate = Color(1, 1, 1, 0.501961)
+layer_1/z_index = 1
+layer_1/tile_data = PackedInt32Array(458754, 1, 0, 524290, 1, 1, 458755, 65537, 0, 524291, 65537, 1, 458759, 131073, 0, 524295, 131073, 1, 458760, 196609, 0, 524296, 196609, 1, 327682, 65537, 4, 327683, 65537, 3, 327684, 65537, 2, 262149, 1, 2, 327685, 1, 3, 393221, 1, 4, 458757, 1, 5, 524293, 1, 6, 589829, 1, 7, 327686, 131073, 2, 327687, 131073, 3, 327688, 131073, 4)
+layer_2/name = "background"
+layer_2/modulate = Color(1, 1, 1, 0.501961)
+layer_2/tile_data = PackedInt32Array(327688, 2, 0, 327687, 2, 0, 327686, 2, 0, 327685, 2, 0, 327684, 2, 0, 327683, 2, 0, 327682, 2, 0, 262149, 2, 0, 393221, 2, 0, 458757, 2, 0, 524293, 2, 0, 589829, 2, 0, 458755, 2, 0, 458754, 2, 0, 524290, 2, 0, 524291, 2, 0, 458759, 2, 0, 458760, 2, 0, 524296, 2, 0, 524295, 2, 0, 262155, 2, 0, 327691, 2, 0, 393227, 2, 0, 458763, 2, 0, 262156, 2, 0, 327692, 2, 0, 393228, 2, 0, 458764, 2, 0, 262157, 2, 0, 327693, 2, 0, 393229, 2, 0, 458765, 2, 0, 262158, 2, 0, 327694, 2, 0, 393230, 2, 0, 458766, 2, 0, 262159, 2, 0, 327695, 2, 0, 393231, 2, 0, 458767, 2, 0, 262160, 2, 0, 327696, 2, 0, 393232, 2, 0, 458768, 2, 0, 262161, 2, 0, 327697, 2, 0, 393233, 2, 0, 458769, 2, 0, 262162, 2, 0, 327698, 2, 0, 393234, 2, 0, 458770, 2, 0)
