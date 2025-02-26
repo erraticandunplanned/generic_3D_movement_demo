@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6f2a346k0q00"]
+
+[ext_resource type="Script" path="res://player/leap/leap.gd" id="1_7gwhg"]
+
+[node name="Leap" type="Node"]
+script = ExtResource("1_7gwhg")

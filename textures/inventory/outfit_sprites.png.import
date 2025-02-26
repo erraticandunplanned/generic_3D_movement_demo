@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://de47uthel7nrf"
-path="res://.godot/imported/slot_background.png-138243157f8c46605e11bbfa7d4d4252.ctex"
+uid="uid://byfy15kacumse"
+path="res://.godot/imported/outfit_sprites.png-1a77a2b05e38c1e3aaac25f2222433cd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/inventory/slot_background.png"
-dest_files=["res://.godot/imported/slot_background.png-138243157f8c46605e11bbfa7d4d4252.ctex"]
+source_file="res://textures/inventory/outfit_sprites.png"
+dest_files=["res://.godot/imported/outfit_sprites.png-1a77a2b05e38c1e3aaac25f2222433cd.ctex"]
 
 [params]
 

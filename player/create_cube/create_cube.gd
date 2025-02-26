@@ -1,5 +1,4 @@
-extends Node3D
-class_name ActiveAbility
+extends ActiveAbility
 
 @onready var the_cube = preload("res://player/create_cube/the_cube_in_question.tscn")
 

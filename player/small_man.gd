@@ -18,11 +18,12 @@ func _ready():
 func _process(delta):
 	if Input.is_action_just_pressed("pause_game"): swap_to_menu("pause_menu")
 	if Input.is_action_just_pressed("open_inventory"): swap_to_menu("inventory_menu")
-	if Global.menu_open: return
 	
 	## TESTING SELECTION WHEEL
-	if Input.is_action_just_pressed("toggle_toolset"): swap_to_menu("selection_wheel")
 	if Input.is_action_just_released("toggle_toolset"): swap_to_menu("HUD")
+	if Global.menu_open: return
+	if Input.is_action_just_pressed("toggle_toolset"): swap_to_menu("selection_wheel")
+	
 	
 	if Input.is_action_just_pressed("interact"):
 		statistics.first_person_camera = !statistics.first_person_camera
@@ -36,7 +37,7 @@ func swap_to_menu(request_menu : String = "HUD"):
 	for m in canvas.get_children():
 		if m.name == request_menu: menu_name = "HUD"
 		m.queue_free()
-	Global.menu_open = false if menu_name == "HUD" else false if menu_name == "selection_wheel" else true
+	Global.menu_open = false if menu_name == "HUD" else true # false if menu_name == "selection_wheel" else true
 	var new_menu : Node = pause_menu.instantiate() if menu_name == "pause_menu" else inventory_menu.instantiate() if menu_name == "inventory_menu" else selection_wheel.instantiate() if menu_name == "selection_wheel" else HUD.instantiate()
 	canvas.add_child(new_menu)
 	new_menu.name = menu_name

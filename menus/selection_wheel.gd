@@ -4,6 +4,7 @@ extends Control
 @onready var action_node = $actions
 
 @onready var create_cube = preload("res://player/create_cube/create_cube.tscn")
+@onready var leap = preload("res://player/leap/leap.tscn")
 
 var player : CharacterBody3D
 var statistics : StatisticsComponent
@@ -38,9 +39,15 @@ func _ready():
 	generate_wheel([],4)
 	var cube_action = create_cube.instantiate()
 	action_node.add_child(cube_action)
-	cube_action.name = "0"
-	var new_dict_entry = {0:cube_action}
-	action_dict.merge(new_dict_entry)
+	cube_action.name = "1"
+	var new_dict_entry_1 = {1:cube_action}
+	action_dict.merge(new_dict_entry_1)
+	
+	var leap_action = leap.instantiate()
+	action_node.add_child(leap_action)
+	leap_action.name = "0"
+	var new_dict_entry_0 = {0:leap_action}
+	action_dict.merge(new_dict_entry_0)
 
 func _exit_tree():
 	if selection == -1: return

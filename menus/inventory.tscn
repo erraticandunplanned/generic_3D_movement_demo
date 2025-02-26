@@ -1,79 +1,98 @@
-[gd_scene load_steps=15 format=3 uid="uid://brpka74vi7axm"]
+[gd_scene load_steps=13 format=3 uid="uid://brpka74vi7axm"]
 
 [ext_resource type="Script" path="res://menus/inventory.gd" id="1_5orjq"]
 [ext_resource type="Texture2D" uid="uid://ys32rilefwa8" path="res://textures/TREES-john-towner.jpg" id="1_a8ipr"]
 [ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_27ofo"]
 [ext_resource type="Texture2D" uid="uid://5fa33oddr0sw" path="res://textures/inventory/empty_slot.png" id="4_jblma"]
-[ext_resource type="Texture2D" uid="uid://be7xho2m83lgs" path="res://textures/inventory/gear_sprites.png" id="5_peytv"]
-[ext_resource type="Texture2D" uid="uid://de47uthel7nrf" path="res://textures/inventory/slot_background.png" id="6_r2t3e"]
+[ext_resource type="Texture2D" uid="uid://byfy15kacumse" path="res://textures/inventory/outfit_sprites.png" id="5_1v1mp"]
 
-[sub_resource type="TileMapPattern" id="TileMapPattern_0mfnv"]
-tile_data = PackedInt32Array(0, 1, 0, 65536, 1, 1, 1, 65537, 0, 65537, 65537, 1)
+[sub_resource type="TileMapPattern" id="TileMapPattern_x2u6i"]
+tile_data = PackedInt32Array(65536, 65539, 4, 65537, 65539, 3, 65538, 65539, 2, 3, 3, 2, 65539, 3, 3, 131075, 3, 4, 196611, 3, 5, 262147, 3, 6, 327683, 3, 7, 65540, 131075, 2, 65541, 131075, 3, 65542, 131075, 4)
 
-[sub_resource type="TileMapPattern" id="TileMapPattern_p7mct"]
-tile_data = PackedInt32Array(0, 131073, 0, 65536, 131073, 1, 1, 196609, 0, 65537, 196609, 1)
+[sub_resource type="TileMapPattern" id="TileMapPattern_1ke5r"]
+tile_data = PackedInt32Array(65536, 65539, 7, 65537, 65539, 6, 65538, 65539, 5, 3, 196611, 2, 65539, 196611, 3, 131075, 196611, 4, 196611, 196611, 5, 262147, 196611, 6, 327683, 196611, 7, 65540, 131075, 5, 65541, 131075, 6, 65542, 131075, 7)
 
-[sub_resource type="TileMapPattern" id="TileMapPattern_c34dl"]
-tile_data = PackedInt32Array(65536, 65537, 4, 65537, 65537, 3, 65538, 65537, 2, 3, 1, 2, 65539, 1, 3, 131075, 1, 4, 196611, 1, 5, 262147, 1, 6, 327683, 1, 7, 65540, 131073, 2, 65541, 131073, 3, 65542, 131073, 4)
+[sub_resource type="TileMapPattern" id="TileMapPattern_d1p8y"]
+tile_data = PackedInt32Array(65536, 327683, 4, 65537, 327683, 3, 65538, 327683, 2, 3, 262147, 2, 65539, 262147, 3, 131075, 262147, 4, 196611, 262147, 5, 262147, 262147, 6, 327683, 262147, 7, 65540, 393219, 2, 65541, 393219, 3, 65542, 327683, 4)
 
-[sub_resource type="TileMapPattern" id="TileMapPattern_vin2n"]
-tile_data = PackedInt32Array(65536, 65537, 7, 65537, 65537, 6, 65538, 65537, 5, 3, 196609, 2, 65539, 196609, 3, 131075, 196609, 4, 196611, 196609, 5, 262147, 196609, 6, 327683, 196609, 7, 65540, 131073, 5, 65541, 131073, 6, 65542, 131073, 7)
+[sub_resource type="TileMapPattern" id="TileMapPattern_tysp3"]
+tile_data = PackedInt32Array(65536, 327683, 7, 65537, 327683, 6, 65538, 327683, 5, 3, 458755, 2, 65539, 458755, 3, 131075, 458755, 4, 196611, 458755, 5, 262147, 458755, 6, 327683, 458755, 7, 65540, 393219, 5, 65541, 393219, 6, 65542, 327683, 7)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_urvbb"]
 texture = ExtResource("4_jblma")
 texture_region_size = Vector2i(136, 136)
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_si4xq"]
-texture = ExtResource("5_peytv")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_675tw"]
+texture = ExtResource("5_1v1mp")
 texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
-3:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
 0:2/0 = 0
 1:2/0 = 0
 2:2/0 = 0
 3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
 0:3/0 = 0
 1:3/0 = 0
 2:3/0 = 0
 3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
 0:4/0 = 0
 1:4/0 = 0
 2:4/0 = 0
 3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+7:4/0 = 0
 0:5/0 = 0
 1:5/0 = 0
 2:5/0 = 0
 3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
 0:6/0 = 0
 1:6/0 = 0
 2:6/0 = 0
 3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+7:6/0 = 0
 0:7/0 = 0
 1:7/0 = 0
 2:7/0 = 0
 3:7/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_td8s3"]
-texture = ExtResource("6_r2t3e")
-texture_region_size = Vector2i(136, 136)
-0:0/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+7:7/0 = 0
+3:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_2xflr"]
 tile_size = Vector2i(128, 128)
 sources/0 = SubResource("TileSetAtlasSource_urvbb")
-sources/1 = SubResource("TileSetAtlasSource_si4xq")
-sources/2 = SubResource("TileSetAtlasSource_td8s3")
-pattern_0 = SubResource("TileMapPattern_0mfnv")
-pattern_1 = SubResource("TileMapPattern_p7mct")
-pattern_2 = SubResource("TileMapPattern_c34dl")
-pattern_3 = SubResource("TileMapPattern_vin2n")
+sources/3 = SubResource("TileSetAtlasSource_675tw")
+pattern_0 = SubResource("TileMapPattern_x2u6i")
+pattern_1 = SubResource("TileMapPattern_1ke5r")
+pattern_2 = SubResource("TileMapPattern_d1p8y")
+pattern_3 = SubResource("TileMapPattern_tysp3")
 
 [node name="Inventory" type="Control"]
 layout_mode = 3
@@ -171,7 +190,7 @@ layer_0/tile_data = PackedInt32Array(262149, 0, 0, 327685, 0, 0, 393221, 0, 0, 4
 layer_1/name = "gear_icons"
 layer_1/modulate = Color(1, 1, 1, 0.501961)
 layer_1/z_index = 1
-layer_1/tile_data = PackedInt32Array(458754, 1, 0, 524290, 1, 1, 458755, 65537, 0, 524291, 65537, 1, 458759, 131073, 0, 524295, 131073, 1, 458760, 196609, 0, 524296, 196609, 1, 327682, 65537, 4, 327683, 65537, 3, 327684, 65537, 2, 262149, 1, 2, 327685, 1, 3, 393221, 1, 4, 458757, 1, 5, 524293, 1, 6, 589829, 1, 7, 327686, 131073, 2, 327687, 131073, 3, 327688, 131073, 4)
+layer_1/tile_data = PackedInt32Array(458754, 262147, 0, 524290, 262147, 1, 458755, 327683, 0, 524291, 327683, 1, 458759, 393219, 0, 524295, 393219, 1, 458760, 458755, 0, 524296, 458755, 1, 327682, 65539, 4, 327683, 65539, 3, 327684, 65539, 2, 262149, 3, 2, 327685, 3, 3, 393221, 3, 4, 458757, 3, 5, 524293, 3, 6, 589829, 3, 7, 327686, 131075, 2, 327687, 131075, 3, 327688, 131075, 4)
 layer_2/name = "background"
 layer_2/modulate = Color(1, 1, 1, 0.501961)
-layer_2/tile_data = PackedInt32Array(327688, 2, 0, 327687, 2, 0, 327686, 2, 0, 327685, 2, 0, 327684, 2, 0, 327683, 2, 0, 327682, 2, 0, 262149, 2, 0, 393221, 2, 0, 458757, 2, 0, 524293, 2, 0, 589829, 2, 0, 458755, 2, 0, 458754, 2, 0, 524290, 2, 0, 524291, 2, 0, 458759, 2, 0, 458760, 2, 0, 524296, 2, 0, 524295, 2, 0, 262155, 2, 0, 327691, 2, 0, 393227, 2, 0, 458763, 2, 0, 262156, 2, 0, 327692, 2, 0, 393228, 2, 0, 458764, 2, 0, 262157, 2, 0, 327693, 2, 0, 393229, 2, 0, 458765, 2, 0, 262158, 2, 0, 327694, 2, 0, 393230, 2, 0, 458766, 2, 0, 262159, 2, 0, 327695, 2, 0, 393231, 2, 0, 458767, 2, 0, 262160, 2, 0, 327696, 2, 0, 393232, 2, 0, 458768, 2, 0, 262161, 2, 0, 327697, 2, 0, 393233, 2, 0, 458769, 2, 0, 262162, 2, 0, 327698, 2, 0, 393234, 2, 0, 458770, 2, 0)
+layer_2/tile_data = PackedInt32Array(327688, 3, 0, 327687, 3, 0, 327686, 3, 0, 327685, 3, 0, 327684, 3, 0, 327683, 3, 0, 327682, 3, 0, 262149, 3, 0, 393221, 3, 0, 458757, 3, 0, 524293, 3, 0, 589829, 3, 0, 458755, 3, 0, 458754, 3, 0, 524290, 3, 0, 524291, 3, 0, 458759, 3, 0, 458760, 3, 0, 524296, 3, 0, 524295, 3, 0, 262155, 3, 0, 327691, 3, 0, 393227, 3, 0, 458763, 3, 0, 262156, 3, 0, 327692, 3, 0, 393228, 3, 0, 458764, 3, 0, 262157, 3, 0, 327693, 3, 0, 393229, 3, 0, 458765, 3, 0, 262158, 3, 0, 327694, 3, 0, 393230, 3, 0, 458766, 3, 0, 262159, 3, 0, 327695, 3, 0, 393231, 3, 0, 458767, 3, 0, 262160, 3, 0, 327696, 3, 0, 393232, 3, 0, 458768, 3, 0, 262161, 3, 0, 327697, 3, 0, 393233, 3, 0, 458769, 3, 0, 262162, 3, 0, 327698, 3, 0, 393234, 3, 0, 458770, 3, 0)

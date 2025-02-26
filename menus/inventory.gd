@@ -7,9 +7,9 @@ extends Control
 var player : CharacterBody3D
 var statistics : StatisticsComponent
 
-enum {ARMOR, CLOTHING, GEAR, CHARM}
+#enum {ARMOR, CLOTHING, GEAR, CHARM}
 
-var current_accessory_set = ARMOR
+var current_accessory_set = 0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -26,5 +26,5 @@ func change_accessory_set(dir : int):
 	if current_accessory_set < 0: current_accessory_set = 3
 	
 	print("current set: ", current_accessory_set)
-	var pattern = accessory_tilemap.tile_set.get_pattern(current_accessory_set+2)
+	var pattern = accessory_tilemap.tile_set.get_pattern(current_accessory_set)
 	accessory_tilemap.set_pattern(1, Vector2i(2,4),pattern)
