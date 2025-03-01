@@ -1,5 +1,6 @@
 extends Control
 
+@onready var screenspace = $screenspace
 @onready var wheel_node = $screenspace/CenterContainer/the_wheel
 @onready var action_node = $actions
 
@@ -8,6 +9,8 @@ extends Control
 
 var player : CharacterBody3D
 var statistics : StatisticsComponent
+
+var time_since_press = 0
 
 const wheel_size = 400
 const outer_rim_size = 475
@@ -34,6 +37,8 @@ func _ready():
 	screen_center = get_viewport_rect().size / 2
 	mouse_location_raw = screen_center
 	mouse_location_clamp = screen_center
+	selection = statistics.wanderer_ability_last_used
+	screenspace.visible = false
 	
 	## THE FOLLOWING IS FOR DEMO PURPOSES ONLY
 	generate_wheel([],4)
@@ -42,7 +47,6 @@ func _ready():
 	cube_action.name = "1"
 	var new_dict_entry_1 = {1:cube_action}
 	action_dict.merge(new_dict_entry_1)
-	
 	var leap_action = leap.instantiate()
 	action_node.add_child(leap_action)
 	leap_action.name = "0"
@@ -50,16 +54,12 @@ func _ready():
 	action_dict.merge(new_dict_entry_0)
 
 func _exit_tree():
-	if selection == -1: return
-	
-	print("perform action ", selection)
-	if action_dict.keys().has(selection):
-		action_dict[selection]._on_action_press()
+	pass
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		mouse_location_raw.x += event.relative.x * 1.5
-		mouse_location_raw.y += event.relative.y * 1.5
+		mouse_location_raw.x += event.relative.x * statistics.menu_mouse_speed
+		mouse_location_raw.y += event.relative.y * statistics.menu_mouse_speed
 		mouse_location_raw.x = clamp(mouse_location_raw.x, screen_center.x - outer_rim_size, screen_center.x + outer_rim_size)
 		mouse_location_raw.y = clamp(mouse_location_raw.y, screen_center.y - outer_rim_size, screen_center.y + outer_rim_size)
 		
@@ -70,7 +70,23 @@ func _input(event):
 			mouse_location_clamp = mouse_location_raw
 
 func _process(delta):
-	var joystick_selection_input = Input.get_vector("ui_selectionwheel_left","ui_selectionwheel_right","ui_selectionwheel_up","ui_selectionwheel_down")
+	if Input.is_action_just_released("wanderer_ability"): 
+		statistics.wanderer_ability_last_used = selection
+		
+		print("perform action ", selection)
+		if action_dict.keys().has(selection):
+			action_dict[selection]._on_action_press()
+		
+		player.swap_to_menu("HUD")
+	
+	time_since_press += delta
+	if screenspace.visible == false:
+		if time_since_press >= 0.1: 
+			screenspace.visible = true
+		else: return
+	
+	
+	var joystick_selection_input = Input.get_vector("ui_cursor_left","ui_cursor_right","ui_cursor_up","ui_cursor_down")
 	if joystick_selection_input == Vector2.ZERO:
 		cursor_location = mouse_location_clamp
 	else:
@@ -132,5 +148,6 @@ func generate_wheel(contents : Array, count : int = 0): #Array[PackedScene]
 		wheel_dict.merge(new_wheel_dict_entry)
 
 func _draw():
-	draw_circle(cursor_location,10,Color.WHITE)
-	draw_line(screen_center, cursor_location, Color.WHITE)
+	if screenspace.visible == true:
+		draw_circle(cursor_location,10,Color.WHITE)
+		draw_line(screen_center, cursor_location, Color.WHITE)

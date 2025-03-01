@@ -11,6 +11,7 @@ extends CharacterBody3D
 @onready var camera_3rd = $shoulder_pivot/SpringArm3D/shoulder_camera
 
 var last_used_spawns
+var time_since_wanderer_press = 0
 
 func _ready():
 	swap_to_menu("HUD")
@@ -18,12 +19,10 @@ func _ready():
 func _process(delta):
 	if Input.is_action_just_pressed("pause_game"): swap_to_menu("pause_menu")
 	if Input.is_action_just_pressed("open_inventory"): swap_to_menu("inventory_menu")
+	if Global.menu_open: return
 	
 	## TESTING SELECTION WHEEL
-	if Input.is_action_just_released("toggle_toolset"): swap_to_menu("HUD")
-	if Global.menu_open: return
-	if Input.is_action_just_pressed("toggle_toolset"): swap_to_menu("selection_wheel")
-	
+	if Input.is_action_just_pressed("wanderer_ability"): swap_to_menu("selection_wheel")
 	
 	if Input.is_action_just_pressed("interact"):
 		statistics.first_person_camera = !statistics.first_person_camera

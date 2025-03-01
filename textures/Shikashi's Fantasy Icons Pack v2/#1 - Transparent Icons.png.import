@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5fa33oddr0sw"
-path="res://.godot/imported/empty_slot.png-b06126be135b26f06c9634a566fa761c.ctex"
+uid="uid://klugmk7y3q6r"
+path="res://.godot/imported/#1 - Transparent Icons.png-df25285e1b9934431ff9ce195f83731a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/inventory/empty_slot.png"
-dest_files=["res://.godot/imported/empty_slot.png-b06126be135b26f06c9634a566fa761c.ctex"]
+source_file="res://textures/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png"
+dest_files=["res://.godot/imported/#1 - Transparent Icons.png-df25285e1b9934431ff9ce195f83731a.ctex"]
 
 [params]
 
