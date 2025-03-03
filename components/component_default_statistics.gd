@@ -56,7 +56,7 @@ class_name StatisticsComponent
 @export var DEFAULT_AIRDASH_DECCEL = 10
 @export_category("Menu Statistics")
 @export_subgroup("Menu Speeds")
-@export var DEFAULT_MENU_MOUSE_SPEED = 1.5
+@export var DEFAULT_MENU_MOUSE_SPEED = 1.0
 @export var DEFAULT_MENU_JOYSTICK_SPEED = 15
 
 ## STATISTICS
@@ -116,7 +116,7 @@ const VAULT_TRIGGER_RANGE = 200
 						## INVENTORY DICTIONARIES ##
 						############################
 
-var inv_slots = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
+var inv_slots = [null,{},null,null,null,null,null,null,null,null,null,null,null,null,null,null]
 var inv_armaments = {
 	"left":{
 		0: null,
