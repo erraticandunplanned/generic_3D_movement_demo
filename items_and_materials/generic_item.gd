@@ -18,14 +18,6 @@ class_name InventoryItem
 #@export var subtype : String
 #@export_group("Materials")
 #@export var materials : Array[String]
-#@export_category("Weapon Statistics")
-#@export var is_weapon : bool = false
-#@export_group("Range")
-#@export var min_reach : int = 0
-#@export var max_reach : int = 1
-#@export var min_range : int = 0
-#@export var max_range : int = 6
-#@export var thrown_range : int = 2
 
 func _ready():
 	pass
@@ -38,7 +30,6 @@ func get_item() -> Dictionary:
 	var item = {
 		## GENERIC STATS
 		"quantity": 1,
-		"item_texture2D" : item_texture2D,
 		# Name
 		"item_id" : item_id,
 		"item_name" : item_name,
@@ -49,19 +40,14 @@ func get_item() -> Dictionary:
 		#"subtype" : subtype,
 		# Materials
 		#"materials" : materials,
-		## WEAPON STATS
-		#"is_weapon" : is_weapon,
-		# Range
-		#"min_reach" : min_reach,
-		#"max_reach" : max_reach,
-		#"min_range" : min_range,
-		#"max_range" : max_range,
-		#"thrown_range" : thrown_range,
 	}
 	return item
 
 func set_item(input : Dictionary):
-	pass
+	quantity = input.get("quantity")
+	item_id = input.get("item_id")
+	item_name = input.get("item_name")
+	item_description = input.get("item_description")
 
 ### [1] ###
 # https://www.youtube.com/playlist?list=PL8VGDn5bxwDa8sAB-bz_l6aJbT_SnHrID

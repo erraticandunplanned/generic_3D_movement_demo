@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://b3rq4k60cgy46"]
+[gd_scene load_steps=11 format=3 uid="uid://b3rq4k60cgy46"]
 
 [ext_resource type="Script" path="res://player/small_man.gd" id="1_b0im8"]
 [ext_resource type="PackedScene" uid="uid://cu2ef7we4r66m" path="res://components/component_default_statistics.tscn" id="1_dywh5"]
 [ext_resource type="PackedScene" uid="uid://ebpgtvukckpf" path="res://components/component_move_and_jump.tscn" id="2_7620y"]
+[ext_resource type="PackedScene" uid="uid://drxholdq6layw" path="res://components/component_gear_and_inventory.tscn" id="3_5cgtk"]
 [ext_resource type="PackedScene" uid="uid://dr7gv14t8qgym" path="res://components/component_hitbox_cluster.tscn" id="3_l8wx6"]
 [ext_resource type="PackedScene" uid="uid://dqsjx4islw6jh" path="res://components/component_action_and_ability.tscn" id="4_bl7wd"]
 
@@ -51,6 +52,8 @@ target_position = Vector3(0, 0, -50)
 collision_mask = 3
 
 [node name="ComponentDefaultStatistics" parent="." instance=ExtResource("1_dywh5")]
+
+[node name="ComponentGearAndInventory" parent="." instance=ExtResource("3_5cgtk")]
 
 [node name="ComponentMoveAndJump" parent="." node_paths=PackedStringArray("player", "statistics", "hitbox", "head", "camera") instance=ExtResource("2_7620y")]
 player = NodePath("..")
