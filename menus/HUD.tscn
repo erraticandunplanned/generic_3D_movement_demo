@@ -151,6 +151,7 @@ layer_1/name = "slot_borders"
 layer_1/z_index = 2
 layer_1/tile_data = PackedInt32Array(983054, 0, 0, 983053, 0, 0, 983052, 0, 0, 983051, 0, 0, 983055, 0, 0, 983056, 0, 0, 983057, 0, 0, 983058, 0, 0, 917523, 65536, 0, 983059, 65536, 1, 917524, 131072, 0, 983060, 131072, 1, 917513, 65536, 0, 983049, 65536, 1, 917514, 131072, 0, 983050, 131072, 1)
 layer_2/name = "items"
+layer_2/z_index = 2
 layer_2/tile_data = PackedInt32Array()
 layer_3/name = "gear_icons"
 layer_3/modulate = Color(1, 1, 1, 0.501961)
@@ -160,4 +161,13 @@ layer_4/name = "background"
 layer_4/modulate = Color(1, 1, 1, 0.501961)
 layer_4/tile_data = PackedInt32Array(983051, 1, 0, 983052, 1, 0, 983053, 1, 0, 983054, 1, 0, 983055, 1, 0, 983056, 1, 0, 983057, 1, 0, 983058, 1, 0, 917523, 1, 0, 917524, 1, 0, 983060, 1, 0, 983059, 1, 0, 917514, 1, 0, 983050, 1, 0, 983049, 1, 0, 917513, 1, 0)
 
+[node name="armament_left" type="Sprite2D" parent="slot_map"]
+z_index = 2
+position = Vector2(1280, 1920)
+
+[node name="armament_right" type="Sprite2D" parent="slot_map"]
+z_index = 2
+position = Vector2(2560, 1920)
+
 [node name="items" type="Node2D" parent="slot_map"]
+z_index = 2

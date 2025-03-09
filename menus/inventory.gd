@@ -17,7 +17,7 @@ enum {SELECTION, BORDER, ITEMS, ICONS, BACKGROUND}
 
 const inventory_begin_location = Vector2i(11,4)
 
-var current_accessory_set = 0
+var current_accessory_set = 1
 var screen_size : Vector2
 var cursor_mode = true
 #var cursor_location : Vector2
@@ -41,6 +41,7 @@ func _ready():
 		accessory_tilemap.set_cell(BORDER,new_cell_location,0,Vector2i(0,0))
 		accessory_tilemap.set_cell(BACKGROUND,new_cell_location,1,Vector2i(0,0))
 		
+		## SET INVENTORY ITEMS INTO THE PROPER SLOTS
 		var check_item = inventory.inv_slots[i]
 		if check_item is Dictionary and check_item.has("item_id"):
 			var new_item_node = generic_item.instantiate()
@@ -49,8 +50,29 @@ func _ready():
 			new_item_node.set_item(check_item)
 			new_item_node.get_child(0).texture = load(item_texture_path + "sm_" + check_item.get("item_id") + ".png")
 	
+	## SET ARMAMENT ITEMS INTO ARMAMENT SLOTS
+	set_inventory_item(Vector2i(2,7), inventory.inv_armaments.get("left").get(0))
+	set_inventory_item(Vector2i(3,7), inventory.inv_armaments.get("left").get(1))
+	set_inventory_item(Vector2i(2,8), inventory.inv_armaments.get("left").get(2))
+	set_inventory_item(Vector2i(3,8), inventory.inv_armaments.get("left").get(3))
+	set_inventory_item(Vector2i(7,7), inventory.inv_armaments.get("right").get(0))
+	set_inventory_item(Vector2i(8,7), inventory.inv_armaments.get("right").get(1))
+	set_inventory_item(Vector2i(7,8), inventory.inv_armaments.get("right").get(2))
+	set_inventory_item(Vector2i(8,8), inventory.inv_armaments.get("right").get(3))
+	
+	## SET ACCESSORY ITEMS INTO ACCESSORY SLOTS
+	change_accessory_set(-1)
+	
 	## SET HOTBAR OUTLINE CORRECTLY
 	hotbar_outline.position.y = 512 + (floor(inventory.active_hotbar_start / 8) * 128)
+
+func set_inventory_item(screen_loc : Vector2, item : Dictionary):
+	if item == {}: return
+	var new_item_node = generic_item.instantiate()
+	inventory_node.add_child(new_item_node)
+	new_item_node.position = accessory_tilemap.map_to_local(screen_loc)
+	new_item_node.set_item(item)
+	new_item_node.get_child(0).texture = load(item_texture_path + "sm_" + item.get("item_id") + ".png")
 
 func _input(event):
 	## MOVE CURSOR ACCORDING TO CONTINUOUS MOUSE MOVEMENT
@@ -149,13 +171,8 @@ func _process(delta):
 			i.position = accessory_tilemap.map_to_local(tile_location)
 			i.scale = Vector2(1,1)
 			i.set_item(item_on_cursor)
-			## ADD ITEM TO PLAYER INVENTORY
-			var slot_to_add : Dictionary = map_to_inventory(tile_location)
-			if slot_to_add.has("dict") and slot_to_add.get("dict") == 0: 
-				var index = slot_to_add.get("cont")
-				inventory.inv_slots[index] = item_on_cursor.duplicate()
 		## REMOVE ITEM DATA
-		item_on_cursor.clear()
+		item_on_cursor = {}
 		## PICK UP AN ITEM FROM SLOT, IF ANY
 		if item_under_cursor != null:
 			inventory_node.remove_child(item_under_cursor)
@@ -164,11 +181,8 @@ func _process(delta):
 			item_under_cursor.scale = Vector2(1.2,1.2)
 			## GET ITEM DATA
 			item_on_cursor.merge(item_under_cursor.get_item(),true)
-			## REMOVE ITEM FROM PLAYER INVENTORY
-			var slot_to_remove : Dictionary = map_to_inventory(tile_location)
-			if slot_to_remove.has("dict") and slot_to_remove.get("dict") == 0: 
-				var index = slot_to_remove.get("cont")
-				inventory.inv_slots[index] = null
+		
+		send_to_inventory()
 
 func change_accessory_set(dir : int):
 	current_accessory_set += dir
@@ -177,46 +191,101 @@ func change_accessory_set(dir : int):
 	
 	var pattern = accessory_tilemap.tile_set.get_pattern(current_accessory_set)
 	accessory_tilemap.set_pattern(ICONS, Vector2i(2,4),pattern)
+	
+	for i in inventory_node.get_children():
+		var map_pos = accessory_tilemap.local_to_map(i.position)
+		if map_pos == Vector2i(5,4) or map_pos == Vector2i(5,5) or map_pos == Vector2i(5,6) or map_pos == Vector2i(5,7) or map_pos == Vector2i(5,8) or map_pos == Vector2i(5,9) or map_pos == Vector2i(4,5) or map_pos == Vector2i(3,5) or map_pos == Vector2i(2,5) or map_pos == Vector2i(6,5) or map_pos == Vector2i(7,5) or map_pos == Vector2i(8,5): i.queue_free()
+	
+	set_inventory_item(Vector2i(5,4), inventory.inv_accessories.get(current_accessory_set).get("head"))
+	set_inventory_item(Vector2i(5,5), inventory.inv_accessories.get(current_accessory_set).get("chest"))
+	set_inventory_item(Vector2i(5,6), inventory.inv_accessories.get(current_accessory_set).get("back"))
+	set_inventory_item(Vector2i(5,7), inventory.inv_accessories.get(current_accessory_set).get("hips"))
+	set_inventory_item(Vector2i(5,8), inventory.inv_accessories.get(current_accessory_set).get("legs"))
+	set_inventory_item(Vector2i(5,9), inventory.inv_accessories.get(current_accessory_set).get("feet"))
+	set_inventory_item(Vector2i(4,5), inventory.inv_accessories.get(current_accessory_set).get("l_shoulder"))
+	set_inventory_item(Vector2i(3,5), inventory.inv_accessories.get(current_accessory_set).get("l_arm"))
+	set_inventory_item(Vector2i(2,5), inventory.inv_accessories.get(current_accessory_set).get("l_hand"))
+	set_inventory_item(Vector2i(6,5), inventory.inv_accessories.get(current_accessory_set).get("r_shoulder"))
+	set_inventory_item(Vector2i(7,5), inventory.inv_accessories.get(current_accessory_set).get("r_arm"))
+	set_inventory_item(Vector2i(8,5), inventory.inv_accessories.get(current_accessory_set).get("r_hand"))
 
-						#####################################
-						## SLOT <-> DICTIONARY CONVERSIONS ##
-						#####################################
-
-## "map" slots are given as a Vector2i location in the inventory tilemap
-## "inventory" slots are given as a Dictionary hierarchy as follows:
-## {
-##     "dict" : 0,
-##     "cont" : CONTENT
-## }
-## where "dict" is an int, either 0 for inv_slots, 1 for inv_armaments, or 2 for inv_accessories
-## where "cont" is either an array index for inv_slots or a nexted Dictionary for inv_armaments or inv_accessories
-
-func map_to_inventory(map_loc : Vector2i) -> Dictionary:
-	var output_dict = {}
+func send_to_inventory():
+	## CLEAR INVENTORY
+	for i in inventory.inv_slots.size():
+		inventory.inv_slots[i] = {}
 	
-	## BASIC INVENTORY SLOTS
-	if map_loc.x > 9:
-		output_dict.merge({"dict":0})
-		var int_index = (map_loc.x - 11) + ((map_loc.y - 4) * 8)
-		output_dict.merge({"cont": int_index})
+	## SET A BUNCH OF VARs FOR ARMAMENT AND ACCESSORY SLOTS
+	var arm_R_0 = {}
+	var arm_R_1 = {}
+	var arm_R_2 = {}
+	var arm_R_3 = {}
+	var arm_L_0 = {}
+	var arm_L_1 = {}
+	var arm_L_2 = {}
+	var arm_L_3 = {}
+	var acc_he = {}
+	var acc_ch = {}
+	var acc_ba = {}
+	var acc_hi = {}
+	var acc_le = {}
+	var acc_fe = {}
+	var acc_ls = {}
+	var acc_la = {}
+	var acc_lh = {}
+	var acc_rs = {}
+	var acc_ra = {}
+	var acc_rh = {}
 	
-	## LEFT-HAND ARMAMENTS
-	elif map_loc.x < 4 and map_loc.y > 6:
-		output_dict.merge({"dict":1})
-		var left_slot = {"left":{0:null}} if map_loc == Vector2i(2,7) else {"left":{1:null}} if map_loc == Vector2i(3,7) else {"left":{2:null}} if map_loc == Vector2i(2,8) else {"left":{3:null}} if map_loc == Vector2i(3,8) else {}
-		output_dict.merge({"cont":left_slot})
+	for item in inventory_node.get_children():
+		## SORT ITEM BY LOCATION
+		var map_loc = accessory_tilemap.local_to_map(item.position)
+		## BASIC INVENTORY SLOTS
+		if map_loc.x > 9:
+			var int_index = (map_loc.x - 11) + ((map_loc.y - 4) * 8)
+			inventory.inv_slots[int_index] = item.get_item()
+		else:
+			match map_loc:
+				## ARMAMENTS
+				Vector2i(2,7): arm_L_0 = item.get_item()
+				Vector2i(2,8): arm_L_2 = item.get_item()
+				Vector2i(3,7): arm_L_1 = item.get_item()
+				Vector2i(3,8): arm_L_3 = item.get_item()
+				Vector2i(7,7): arm_R_0 = item.get_item()
+				Vector2i(8,7): arm_R_1 = item.get_item()
+				Vector2i(7,8): arm_R_2 = item.get_item()
+				Vector2i(8,8): arm_R_3 = item.get_item()
+				## ACCESSORIES
+				Vector2i(5,4): acc_he = item.get_item()
+				Vector2i(5,5): acc_ch = item.get_item()
+				Vector2i(5,6): acc_ba = item.get_item()
+				Vector2i(5,7): acc_hi = item.get_item()
+				Vector2i(5,8): acc_le = item.get_item()
+				Vector2i(5,9): acc_fe = item.get_item()
+				Vector2i(4,5): acc_ls = item.get_item()
+				Vector2i(3,5): acc_la = item.get_item()
+				Vector2i(2,5): acc_lh = item.get_item()
+				Vector2i(6,5): acc_rs = item.get_item()
+				Vector2i(7,5): acc_ra = item.get_item()
+				Vector2i(8,5): acc_rh = item.get_item()
 	
-	## RIGHT-HAND ARMAMENTS
-	elif map_loc.x > 6 and map_loc.y > 6:
-		output_dict.merge({"dict":1})
-		var right_slot = {"right":{0:null}} if map_loc == Vector2i(7,7) else {"right":{1:null}} if map_loc == Vector2i(8,7) else {"right":{2:null}} if map_loc == Vector2i(7,8) else {"right":{3:null}} if map_loc == Vector2i(8,8) else {}
-		output_dict.merge({"cont":right_slot})
-	
-	## ACCESSORIES
-	else:
-		output_dict.merge({"dict":2})
-	
-	return output_dict
-
-func inventory_to_map():
-	pass
+	## RECONSTRUCT ARMAMENT DICTIONARY
+	var reconstructed_armaments = {"left":{0:arm_L_0,1:arm_L_1,2:arm_L_2,3:arm_L_3},"right":{0:arm_R_0,1:arm_R_1,2:arm_R_2,3:arm_R_3}}
+	inventory.inv_armaments = reconstructed_armaments.duplicate()
+	var single_accessory_index = {current_accessory_set:{
+			"head" : acc_he,
+			"chest" : acc_ch,
+			"back" : acc_ba,
+			"hips" : acc_hi,
+			"legs" : acc_le,
+			"feet" : acc_fe,
+			"l_shoulder" : acc_ls,
+			"l_arm" : acc_la,
+			"l_hand" : acc_lh,
+			"r_shoulder" : acc_rs,
+			"r_arm" : acc_ra,
+			"r_hand" : acc_rh
+			}
+		}
+	var reconstructed_accessories = inventory.inv_accessories
+	reconstructed_accessories.merge(single_accessory_index, true)
+	inventory.inv_accessories = reconstructed_accessories.duplicate()
