@@ -15,6 +15,8 @@ var time_since_wanderer_press = 0
 
 func _ready():
 	swap_to_menu("HUD")
+	var inventory_node = $ComponentGearAndInventory
+	inventory_node.set_default_inventory()
 
 func _process(delta):
 	if Input.is_action_just_pressed("pause_game"): swap_to_menu("pause_menu")

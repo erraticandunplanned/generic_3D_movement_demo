@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://brpka74vi7axm"]
+[gd_scene load_steps=8 format=3 uid="uid://brpka74vi7axm"]
 
 [ext_resource type="Script" path="res://menus/inventory.gd" id="1_5orjq"]
 [ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_27ofo"]
 [ext_resource type="TileSet" uid="uid://v75ndap10oys" path="res://textures/inventory/gear_and_slot_icons.tres" id="3_j73jx"]
 [ext_resource type="Texture2D" uid="uid://bxnqbtqqt7p20" path="res://textures/inventory/hotbar_outline.png" id="4_niypd"]
+[ext_resource type="PackedScene" uid="uid://bdul88qxx3dx8" path="res://items_and_materials/generic_item.tscn" id="5_tn3nc"]
 
 [sub_resource type="Gradient" id="Gradient_qamkg"]
 offsets = PackedFloat32Array(0.650131, 0.746736)
@@ -94,5 +95,8 @@ z_index = 7
 
 [node name="Sprite2D" type="Sprite2D" parent="cursor"]
 texture = SubResource("GradientTexture2D_qptjv")
+
+[node name="GenericItem" parent="cursor" instance=ExtResource("5_tn3nc")]
+scale = Vector2(1.2, 1.2)
 
 [node name="object" type="Node2D" parent="cursor"]

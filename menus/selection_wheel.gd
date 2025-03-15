@@ -41,7 +41,7 @@ func _ready():
 	screenspace.visible = false
 	
 	## THE FOLLOWING IS FOR DEMO PURPOSES ONLY
-	generate_wheel([],4)
+	generate_wheel([],8)
 	var cube_action = create_cube.instantiate()
 	action_node.add_child(cube_action)
 	cube_action.name = "1"

@@ -1,5 +1,4 @@
 extends Node2D
-class_name InventoryItem
 
 ## NODE PATH
 @onready var item_sprite = $Sprite2D
