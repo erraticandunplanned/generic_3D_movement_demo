@@ -10,7 +10,7 @@ var statistics : StatisticsComponent
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	player = get_parent().get_parent()
+	player = get_parent().get_parent().get_parent()
 	statistics = player.statistics
 	swapmenu(0)
 	## ENSURE ALL TOGGLES ARE ALLIGNED WITH STATISTICS

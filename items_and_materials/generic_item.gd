@@ -18,13 +18,6 @@ extends Node2D
 #@export_group("Materials")
 #@export var materials : Array[String]
 
-func _ready():
-	pass
-	#item_sprite.texture = item_texture2D
-
-func _process(delta):
-	pass
-
 func get_item() -> Dictionary:
 	var item = {
 		## GENERIC STATS

@@ -62,10 +62,11 @@ hitbox = NodePath("../ComponentHitboxCluster")
 head = NodePath("../head")
 camera = NodePath("../head/eye_camera")
 
-[node name="ComponentActionAndAbility" parent="." node_paths=PackedStringArray("player", "head", "statistics", "grip_left", "grip_right") instance=ExtResource("4_bl7wd")]
+[node name="ComponentActionAndAbility" parent="." node_paths=PackedStringArray("player", "head", "statistics", "inventory", "grip_left", "grip_right") instance=ExtResource("4_bl7wd")]
 player = NodePath("..")
 head = NodePath("../head")
 statistics = NodePath("../ComponentDefaultStatistics")
+inventory = NodePath("../ComponentGearAndInventory")
 grip_left = NodePath("../hands/grip_left")
 grip_right = NodePath("../hands/grip_right")
 
@@ -101,3 +102,10 @@ shape = SubResource("BoxShape3D_ux6xp")
 [node name="grip_right" type="Node3D" parent="hands"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

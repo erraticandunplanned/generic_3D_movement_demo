@@ -1,4 +1,4 @@
-extends Control
+extends Node2D
 
 @onready var accessory_tilemap = $slot_map/TileMap
 @onready var hotbar_outline = $slot_map/hotbar_outline
@@ -29,14 +29,12 @@ var current_cursor_item : BasicItem = null
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	player = get_parent().get_parent()
+	player = get_parent().get_parent().get_parent()
 	statistics = player.statistics
 	inventory = player.find_child("ComponentGearAndInventory", false)
 	
 	screen_size = get_viewport_rect().size
 	cursor_node.position = accessory_tilemap.map_to_local(inventory_begin_location)
-	
-	cursor_item_texture.texture = null
 	
 	node_array_inventory.resize(inventory.inv_slots.size())
 	node_array_equipment.resize(equipment_location_array.size())
@@ -64,10 +62,10 @@ func _ready():
 		new_item.name = "EQUIP_" + str(i)
 		node_array_equipment[i] = new_item
 	
-	update_inventory_and_equipment()
-	
 	## SET HOTBAR OUTLINE CORRECTLY
 	hotbar_outline.position.y = 512 + (floor(inventory.active_hotbar_start / 8) * 128)
+	
+	update_inventory_and_equipment()
 
 func _input(event):
 	## MOVE CURSOR ACCORDING TO CONTINUOUS MOUSE MOVEMENT
@@ -78,7 +76,7 @@ func _input(event):
 		cursor_node.position.x = clamp(cursor_node.position.x, 0, screen_size.x)
 		cursor_node.position.y = clamp(cursor_node.position.y, 0, screen_size.y)
 
-func _process(delta):
+func _process(_delta):
 	## TAB THROUGH ACCESSORY SETS
 	if Input.is_action_just_pressed("ui_tab_left"): change_accessory_set(-1)
 	if Input.is_action_just_pressed("ui_tab_right"): change_accessory_set(1)
@@ -201,10 +199,6 @@ func _process(delta):
 		
 		## UPDATE CURSOR TEXTURE AND SLOT TEXTURES FROM INVENTORY DATA
 		update_inventory_and_equipment()
-		if current_cursor_item is BasicItem and current_cursor_item.item_id != "blank":
-			cursor_item_texture.texture = load(item_texture_path + "sm_" + current_cursor_item.item_id + ".png")
-		else:
-			cursor_item_texture.texture = null
 
 func update_inventory_and_equipment(accessories_only = false):
 	## UPDATE ACCESSORIES
@@ -235,6 +229,12 @@ func update_inventory_and_equipment(accessories_only = false):
 			node_array_equipment[i+12].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_armaments[i].item_id + ".png")
 		else:
 			node_array_equipment[i+12].get_child(0).texture = null
+	
+	## UPDATE CURSOR
+	if current_cursor_item is BasicItem and current_cursor_item.item_id != "blank":
+		cursor_item_texture.texture = load(item_texture_path + "sm_" + current_cursor_item.item_id + ".png")
+	else:
+		cursor_item_texture.texture = null
 
 func change_accessory_set(dir : int):
 	current_accessory_set += dir

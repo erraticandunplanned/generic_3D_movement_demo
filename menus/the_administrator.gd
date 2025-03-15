@@ -22,7 +22,7 @@ func begin_game(multiplayer_game : bool = false):
 	enet_peer.create_server(Global.PORT)
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
-	var player = add_player(multiplayer.get_unique_id())
+	var _player = add_player(multiplayer.get_unique_id())
 
 	## HOST ONLY
 	if multiplayer_game:

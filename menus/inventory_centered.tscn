@@ -1,66 +1,34 @@
-[gd_scene load_steps=8 format=3 uid="uid://brpka74vi7axm"]
+[gd_scene load_steps=8 format=3 uid="uid://c3i8nl7nf3nmb"]
 
-[ext_resource type="Script" path="res://menus/inventory.gd" id="1_5orjq"]
-[ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_27ofo"]
-[ext_resource type="TileSet" uid="uid://v75ndap10oys" path="res://textures/inventory/gear_and_slot_icons.tres" id="3_j73jx"]
-[ext_resource type="Texture2D" uid="uid://bxnqbtqqt7p20" path="res://textures/inventory/hotbar_outline.png" id="4_niypd"]
-[ext_resource type="PackedScene" uid="uid://bdul88qxx3dx8" path="res://items_and_materials/generic_item.tscn" id="5_tn3nc"]
+[ext_resource type="Script" path="res://menus/inventory_centered.gd" id="1_c2a3x"]
+[ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_0cxma"]
+[ext_resource type="TileSet" uid="uid://v75ndap10oys" path="res://textures/inventory/gear_and_slot_icons.tres" id="3_vhwlq"]
+[ext_resource type="Texture2D" uid="uid://bxnqbtqqt7p20" path="res://textures/inventory/hotbar_outline.png" id="4_2mmm7"]
+[ext_resource type="PackedScene" uid="uid://bdul88qxx3dx8" path="res://items_and_materials/generic_item.tscn" id="5_ydo57"]
 
 [sub_resource type="Gradient" id="Gradient_qamkg"]
 offsets = PackedFloat32Array(0.650131, 0.746736)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_qptjv"]
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_q2ijt"]
 gradient = SubResource("Gradient_qamkg")
 width = 16
 height = 16
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
-[node name="Inventory" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_5orjq")
+[node name="InventoryCentered" type="Node2D"]
+script = ExtResource("1_c2a3x")
 
-[node name="background" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="background"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 128
-theme_override_constants/margin_top = 128
-theme_override_constants/margin_right = 1299
-theme_override_constants/margin_bottom = 128
-
-[node name="ColorRect2" type="ColorRect" parent="background/MarginContainer"]
-modulate = Color(1, 1, 1, 0.25098)
-layout_mode = 2
-color = Color(0, 0, 0, 1)
-
-[node name="vitruvian" type="Sprite2D" parent="background"]
+[node name="vitruvian" type="Sprite2D" parent="."]
 position = Vector2(704, 824)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_27ofo")
+texture = ExtResource("2_0cxma")
 
 [node name="slot_map" type="Node2D" parent="."]
 
 [node name="TileMap" type="TileMap" parent="slot_map"]
-tile_set = ExtResource("3_j73jx")
+tile_set = ExtResource("3_vhwlq")
 format = 2
 layer_0/name = "selection"
 layer_0/modulate = Color(0.5, 0.375, 0.75, 1)
@@ -83,7 +51,7 @@ layer_4/tile_data = PackedInt32Array(262149, 1, 0, 327685, 1, 0, 393221, 1, 0, 4
 modulate = Color(0.0588235, 0.294118, 0.984314, 1)
 z_index = 6
 position = Vector2(1408, 512)
-texture = ExtResource("4_niypd")
+texture = ExtResource("4_2mmm7")
 centered = false
 offset = Vector2(-12, -12)
 
@@ -94,9 +62,9 @@ z_index = 5
 z_index = 7
 
 [node name="Sprite2D" type="Sprite2D" parent="cursor"]
-texture = SubResource("GradientTexture2D_qptjv")
+texture = SubResource("GradientTexture2D_q2ijt")
 
-[node name="GenericItem" parent="cursor" instance=ExtResource("5_tn3nc")]
+[node name="GenericItem" parent="cursor" instance=ExtResource("5_ydo57")]
 scale = Vector2(1.2, 1.2)
 
 [node name="object" type="Node2D" parent="cursor"]

@@ -1,0 +1,102 @@
+[gd_scene load_steps=8 format=3 uid="uid://brpka74vi7axm"]
+
+[ext_resource type="Script" path="res://DEPRECIATED/inventory.gd" id="1_5orjq"]
+[ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_27ofo"]
+[ext_resource type="TileSet" uid="uid://v75ndap10oys" path="res://textures/inventory/gear_and_slot_icons.tres" id="3_j73jx"]
+[ext_resource type="Texture2D" uid="uid://bxnqbtqqt7p20" path="res://textures/inventory/hotbar_outline.png" id="4_niypd"]
+[ext_resource type="PackedScene" uid="uid://bdul88qxx3dx8" path="res://items_and_materials/generic_item.tscn" id="5_tn3nc"]
+
+[sub_resource type="Gradient" id="Gradient_f1tcs"]
+offsets = PackedFloat32Array(0.650131, 0.746736)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qptjv"]
+gradient = SubResource("Gradient_f1tcs")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5orjq")
+
+[node name="background" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 128
+theme_override_constants/margin_right = 1299
+theme_override_constants/margin_bottom = 128
+
+[node name="ColorRect2" type="ColorRect" parent="background/MarginContainer"]
+modulate = Color(1, 1, 1, 0.25098)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="vitruvian" type="Sprite2D" parent="background"]
+position = Vector2(704, 824)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_27ofo")
+
+[node name="slot_map" type="Node2D" parent="."]
+
+[node name="TileMap" type="TileMap" parent="slot_map"]
+tile_set = ExtResource("3_j73jx")
+format = 2
+layer_0/name = "selection"
+layer_0/modulate = Color(0.5, 0.375, 0.75, 1)
+layer_0/z_index = 4
+layer_1/name = "border"
+layer_1/z_index = 3
+layer_1/tile_data = PackedInt32Array(327682, 0, 0, 327683, 0, 0, 327684, 0, 0, 327685, 0, 0, 327686, 0, 0, 327687, 0, 0, 327688, 0, 0, 262149, 0, 0, 393221, 0, 0, 458757, 0, 0, 524293, 0, 0, 589829, 0, 0, 458754, 0, 0, 458755, 0, 0, 524291, 0, 0, 524290, 0, 0, 458759, 0, 0, 458760, 0, 0, 524296, 0, 0, 524295, 0, 0)
+layer_2/name = "items"
+layer_2/z_index = 2
+layer_2/tile_data = PackedInt32Array()
+layer_3/name = "icons"
+layer_3/modulate = Color(1, 1, 1, 0.501961)
+layer_3/z_index = 1
+layer_3/tile_data = PackedInt32Array(458754, 262145, 0, 524290, 262145, 1, 458755, 327681, 0, 524291, 327681, 1, 458759, 393217, 0, 524295, 393217, 1, 458760, 458753, 0, 524296, 458753, 1, 327682, 65537, 4, 327683, 65537, 3, 327684, 65537, 2, 262149, 1, 2, 327685, 1, 3, 393221, 1, 4, 458757, 1, 5, 524293, 1, 6, 589829, 1, 7, 327686, 131073, 2, 327687, 131073, 3, 327688, 131073, 4)
+layer_4/name = "background"
+layer_4/modulate = Color(1, 1, 1, 0.501961)
+layer_4/tile_data = PackedInt32Array(262149, 1, 0, 327685, 1, 0, 393221, 1, 0, 458757, 1, 0, 524293, 1, 0, 589829, 1, 0, 327682, 1, 0, 327683, 1, 0, 327684, 1, 0, 327686, 1, 0, 327687, 1, 0, 327688, 1, 0, 458759, 1, 0, 458760, 1, 0, 524296, 1, 0, 524295, 1, 0, 458755, 1, 0, 458754, 1, 0, 524290, 1, 0, 524291, 1, 0)
+
+[node name="hotbar_outline" type="Sprite2D" parent="slot_map"]
+modulate = Color(0.0588235, 0.294118, 0.984314, 1)
+z_index = 6
+position = Vector2(1408, 512)
+texture = ExtResource("4_niypd")
+centered = false
+offset = Vector2(-12, -12)
+
+[node name="inventory" type="Node2D" parent="."]
+z_index = 5
+
+[node name="cursor" type="Node2D" parent="."]
+z_index = 7
+
+[node name="Sprite2D" type="Sprite2D" parent="cursor"]
+texture = SubResource("GradientTexture2D_qptjv")
+
+[node name="GenericItem" parent="cursor" instance=ExtResource("5_tn3nc")]
+scale = Vector2(1.2, 1.2)
+
+[node name="object" type="Node2D" parent="cursor"]

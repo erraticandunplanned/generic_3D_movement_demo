@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b4fyhq8h3awoo"]
 
-[ext_resource type="Script" path="res://menus/selection_wheel.gd" id="1_i4s6f"]
+[ext_resource type="Script" path="res://DEPRECIATED/selection_wheel.gd" id="1_i4s6f"]
 
 [node name="SelectionWheel" type="Control"]
 layout_mode = 3

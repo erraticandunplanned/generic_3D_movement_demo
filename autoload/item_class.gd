@@ -10,3 +10,5 @@ var name_description : String
 
 var materials : Array[String] = [""]
 var textures : Array[Texture2D]
+
+var item_scene_path : String

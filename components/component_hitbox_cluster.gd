@@ -29,7 +29,7 @@ func object_exists_at_eyes():
 			object_exists = true
 	return object_exists
 
-func find_nearest_surface_normal(closest_valid_object):
+func find_nearest_surface_normal(_closest_valid_object):
 	pass
 
 ### BIBLIOGRAPHY ###

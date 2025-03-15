@@ -31,7 +31,15 @@ var cursor_location : Vector2
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	player = get_parent().get_parent()
+	
+	var attempt_to_get_player = get_parent()
+	for i in range(10):
+		if attempt_to_get_player is CharacterBody3D:
+			player = attempt_to_get_player
+			break
+		else:
+			attempt_to_get_player = attempt_to_get_player.get_parent()
+	
 	statistics = player.statistics
 	screen_size = get_viewport_rect().size
 	screen_center = get_viewport_rect().size / 2
@@ -39,6 +47,8 @@ func _ready():
 	mouse_location_clamp = screen_center
 	selection = statistics.wanderer_ability_last_used
 	screenspace.visible = false
+	
+	
 	
 	## THE FOLLOWING IS FOR DEMO PURPOSES ONLY
 	generate_wheel([],8)
