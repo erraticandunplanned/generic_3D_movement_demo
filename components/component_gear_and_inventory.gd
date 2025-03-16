@@ -31,13 +31,13 @@ func set_default_inventory():
 	var new_item_1 = BasicItem.new()
 	new_item_1.quantity = 1
 	new_item_1.item_id = "gold_sword"
-	new_item_1.item_scene_path = "res://player/create_cube/create_cube.tscn"
+	new_item_1.item_scene_path = "res://items_and_materials/create_cube/create_cube.tscn"
 	inv_armaments[0] = new_item_1
 	
 	var new_item_2 = BasicItem.new()
 	new_item_2.quantity = 1
 	new_item_2.item_id = "sulfur_slab"
-	new_item_2.item_scene_path = "res://player/leap/leap.tscn"
+	new_item_2.item_scene_path = "res://items_and_materials/leap/leap.tscn"
 	inv_slots[7] = new_item_2
 	
 	var new_item_3 = BasicItem.new()
@@ -54,3 +54,13 @@ func set_default_inventory():
 	new_item_5.quantity = 1
 	new_item_5.item_id = "amethyst_staff"
 	inv_armaments[1] = new_item_5
+	
+	var new_item_6 = BasicItem.new()
+	new_item_6.quantity = 1
+	new_item_6.item_id = "amethyst_shard"
+	inv_slots[3] = new_item_6
+	
+	var new_item_7 = BasicItem.new()
+	new_item_7.quantity = 1
+	new_item_7.item_id = "amethyst_shard"
+	inv_slots[4] = new_item_7

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cthqq2ey33ibm"]
 
-[ext_resource type="Script" path="res://player/create_cube/the_cube_in_question.gd" id="1_185ar"]
+[ext_resource type="Script" path="res://items_and_materials/create_cube/the_cube_in_question.gd" id="1_185ar"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ch454"]
 

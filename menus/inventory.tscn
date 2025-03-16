@@ -1,10 +1,10 @@
 [gd_scene load_steps=8 format=3 uid="uid://c3i8nl7nf3nmb"]
 
-[ext_resource type="Script" path="res://menus/inventory_centered.gd" id="1_c2a3x"]
-[ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_0cxma"]
-[ext_resource type="TileSet" uid="uid://v75ndap10oys" path="res://textures/inventory/gear_and_slot_icons.tres" id="3_vhwlq"]
-[ext_resource type="Texture2D" uid="uid://bxnqbtqqt7p20" path="res://textures/inventory/hotbar_outline.png" id="4_2mmm7"]
-[ext_resource type="PackedScene" uid="uid://bdul88qxx3dx8" path="res://items_and_materials/generic_item.tscn" id="5_ydo57"]
+[ext_resource type="Script" path="res://menus/inventory.gd" id="1_somlf"]
+[ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="2_5pcq4"]
+[ext_resource type="TileSet" uid="uid://v75ndap10oys" path="res://textures/inventory/gear_and_slot_icons.tres" id="3_fqm7q"]
+[ext_resource type="Texture2D" uid="uid://bxnqbtqqt7p20" path="res://textures/inventory/hotbar_outline.png" id="4_kptra"]
+[ext_resource type="PackedScene" uid="uid://b4py7ylemv4xy" path="res://items_and_materials/inventory_item_texture.tscn" id="5_yrfva"]
 
 [sub_resource type="Gradient" id="Gradient_qamkg"]
 offsets = PackedFloat32Array(0.650131, 0.746736)
@@ -18,17 +18,17 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [node name="InventoryCentered" type="Node2D"]
-script = ExtResource("1_c2a3x")
+script = ExtResource("1_somlf")
 
 [node name="vitruvian" type="Sprite2D" parent="."]
 position = Vector2(704, 824)
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_0cxma")
+texture = ExtResource("2_5pcq4")
 
 [node name="slot_map" type="Node2D" parent="."]
 
 [node name="TileMap" type="TileMap" parent="slot_map"]
-tile_set = ExtResource("3_vhwlq")
+tile_set = ExtResource("3_fqm7q")
 format = 2
 layer_0/name = "selection"
 layer_0/modulate = Color(0.5, 0.375, 0.75, 1)
@@ -51,7 +51,7 @@ layer_4/tile_data = PackedInt32Array(262149, 1, 0, 327685, 1, 0, 393221, 1, 0, 4
 modulate = Color(0.0588235, 0.294118, 0.984314, 1)
 z_index = 6
 position = Vector2(1408, 512)
-texture = ExtResource("4_2mmm7")
+texture = ExtResource("4_kptra")
 centered = false
 offset = Vector2(-12, -12)
 
@@ -61,10 +61,10 @@ z_index = 5
 [node name="cursor" type="Node2D" parent="."]
 z_index = 7
 
-[node name="Sprite2D" type="Sprite2D" parent="cursor"]
+[node name="dot" type="Sprite2D" parent="cursor"]
 texture = SubResource("GradientTexture2D_q2ijt")
 
-[node name="GenericItem" parent="cursor" instance=ExtResource("5_ydo57")]
+[node name="InventoryItemTexture" parent="cursor" instance=ExtResource("5_yrfva")]
 scale = Vector2(1.2, 1.2)
 
 [node name="object" type="Node2D" parent="cursor"]

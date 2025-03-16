@@ -1,6 +1,6 @@
 extends ActiveAbility
 
-@onready var the_cube = preload("res://player/create_cube/the_cube_in_question.tscn")
+@onready var the_cube = preload("res://items_and_materials/create_cube/the_cube_in_question.tscn")
 
 var player : CharacterBody3D
 var world : Node

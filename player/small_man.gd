@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 @onready var pause_menu = preload("res://menus/pause_menu.tscn")
-@onready var inventory_menu = preload("res://menus/inventory_centered.tscn")
-@onready var HUD = preload("res://menus/HUD_centered.tscn")
+@onready var inventory_menu = preload("res://menus/inventory.tscn")
+@onready var HUD = preload("res://menus/HUD.tscn")
 
 @onready var canvas = $CanvasLayer/CenterContainer
 @onready var statistics : StatisticsComponent = $ComponentDefaultStatistics
@@ -13,9 +13,9 @@ var last_used_spawns
 var time_since_wanderer_press = 0
 
 func _ready():
-	swap_to_menu("HUD")
 	var inventory_node = $ComponentGearAndInventory
 	inventory_node.set_default_inventory()
+	swap_to_menu("HUD")
 
 func _process(_delta):
 	if Input.is_action_just_pressed("pause_game"): swap_to_menu("pause_menu")

@@ -3,10 +3,11 @@ extends Node
 const PORT = 8910
 var upnp = UPNP.new()
 
-var gravity = 20
+const gravity = 20
+
+#var controller_mode = false
 var paused = false
 var menu_open = false
-# var inventory_open = false
 
 var jump_on_release = false
 var directional_walljump = false

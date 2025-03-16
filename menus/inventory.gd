@@ -4,8 +4,8 @@ extends Node2D
 @onready var hotbar_outline = $slot_map/hotbar_outline
 @onready var inventory_node = $inventory
 @onready var cursor_node = $cursor
-@onready var cursor_item_texture = $cursor/GenericItem/Sprite2D
-@onready var generic_item = preload("res://items_and_materials/generic_item.tscn")
+@onready var cursor_item_texture = $cursor/InventoryItemTexture
+@onready var item_texture_node = preload("res://items_and_materials/inventory_item_texture.tscn")
 @onready var item_texture_path = "res://textures/item_images/"
 
 var player : CharacterBody3D
@@ -48,7 +48,8 @@ func _ready():
 		accessory_tilemap.set_cell(BACKGROUND,new_cell_location,1,Vector2i(0,0))
 		
 		## SET INVENTORY ITEMS INTO THE PROPER SLOTS
-		var new_item = generic_item.instantiate()
+		#var new_item = generic_item.instantiate()
+		var new_item = item_texture_node.instantiate()
 		inventory_node.add_child(new_item)
 		new_item.position = accessory_tilemap.map_to_local(new_cell_location)
 		new_item.name = "INV_" + str(i)
@@ -56,7 +57,8 @@ func _ready():
 	
 	## SET ACCESSORY ITEMS INTO ACCESSORY SLOTS
 	for i in range(20):
-		var new_item = generic_item.instantiate()
+		#var new_item = generic_item.instantiate()
+		var new_item = item_texture_node.instantiate()
 		inventory_node.add_child(new_item)
 		new_item.position = accessory_tilemap.map_to_local(equipment_location_array[i])
 		new_item.name = "EQUIP_" + str(i)
@@ -77,6 +79,9 @@ func _input(event):
 		cursor_node.position.y = clamp(cursor_node.position.y, 0, screen_size.y)
 
 func _process(_delta):
+	## RETURN TO GAME ON CANCEL PRESS
+	if Input.is_action_just_pressed("ui_cancel"): player.swap_to_menu("HUD")
+	
 	## TAB THROUGH ACCESSORY SETS
 	if Input.is_action_just_pressed("ui_tab_left"): change_accessory_set(-1)
 	if Input.is_action_just_pressed("ui_tab_right"): change_accessory_set(1)
@@ -156,6 +161,8 @@ func _process(_delta):
 						## PICKING UP, PLACING DOWN, AND SWAPPING ITEMS ON THE CURSOR ##
 						################################################################
 	
+	#### BASIC SELECT (LEFT CLICK, CONTROLLER BUTTON 0 / BOTTOM ACTION) ####
+	
 	if Input.is_action_just_pressed("ui_select") and tile_location != Vector2i(-1,-1) and accessory_tilemap.get_cell_tile_data(BORDER,tile_location) != null:
 		## PLACE CURSOR ITEM IN A BOX FOR LATER
 		var liminal_cursor_item = current_cursor_item
@@ -164,20 +171,28 @@ func _process(_delta):
 		var index = ( tile_location.x - inventory_begin_location.x ) + ( ( tile_location.y - inventory_begin_location.y ) * 8) if tile_location.x > 9 else equipment_location_array.find(tile_location)
 		if index == -1: print("ERROR! invalid slot index.")
 		
-		## PICK UP ITEM
+		## IDENTIFY THE ITEM UNDER THE CURSOR
+		var item_under_cursor : BasicItem
 		if tile_location.x > 9: ## INVENTORY
-			current_cursor_item = inventory.inv_slots[index]
+			item_under_cursor = inventory.inv_slots[index]
 			inventory.inv_slots[index] = null
 		elif index < 12: ## ACCESSORIES
 			match current_accessory_set:
-				0: current_cursor_item = inventory.inv_accessory_armor[index]
-				1: current_cursor_item = inventory.inv_accessory_cloth[index]
-				2: current_cursor_item = inventory.inv_accessory_gears[index]
-				3: current_cursor_item = inventory.inv_accessory_charm[index]
+				0: item_under_cursor = inventory.inv_accessory_armor[index]
+				1: item_under_cursor = inventory.inv_accessory_cloth[index]
+				2: item_under_cursor = inventory.inv_accessory_gears[index]
+				3: item_under_cursor = inventory.inv_accessory_charm[index]
 		else: ## ARMAMENTS
-			current_cursor_item = inventory.inv_armaments[index-12]
+			item_under_cursor = inventory.inv_armaments[index-12]
 		
-		## PLACE ITEM
+		## STACK ITEM IF IT IS THE SAME AS CURSOR ITEM
+		if item_under_cursor is BasicItem and liminal_cursor_item is BasicItem and item_under_cursor.item_id == liminal_cursor_item.item_id:
+			liminal_cursor_item.quantity += 1
+		## ELSE, PICK UP ITEM
+		else:
+			current_cursor_item = item_under_cursor
+		
+		## PLACE ITEM INTO SLOT
 		if tile_location.x > 9: ## INVENTORY
 			inventory.inv_slots[index] = liminal_cursor_item
 			liminal_cursor_item = null
@@ -199,6 +214,16 @@ func _process(_delta):
 		
 		## UPDATE CURSOR TEXTURE AND SLOT TEXTURES FROM INVENTORY DATA
 		update_inventory_and_equipment()
+	
+	#### ALTERNATE SELECT (RIGHT CLICK, CONTROLLER BUTTON 2 / LEFT ACTION) ####
+	
+	if Input.is_action_just_pressed("ui_select_alternate") and tile_location != Vector2i(-1,-1) and accessory_tilemap.get_cell_tile_data(BORDER,tile_location) != null:
+		pass
+	
+	#### STACK SELECT (SHIFT + LEFT CLICK, CONTROLLER BUTTON 3 / TOP ACTION) ####
+	
+	if Input.is_action_just_pressed("ui_select_stack") and tile_location != Vector2i(-1,-1) and accessory_tilemap.get_cell_tile_data(BORDER,tile_location) != null:
+		pass
 
 func update_inventory_and_equipment(accessories_only = false):
 	## UPDATE ACCESSORIES
@@ -211,8 +236,10 @@ func update_inventory_and_equipment(accessories_only = false):
 	for i in range(12):
 		if temp_accessory_set[i] is BasicItem and temp_accessory_set[i].item_id != "blank":
 			node_array_equipment[i].get_child(0).texture = load(item_texture_path + "sm_" + temp_accessory_set[i].item_id + ".png")
+			node_array_equipment[i].get_child(1).text = str(temp_accessory_set[i].quantity)
 		else:
 			node_array_equipment[i].get_child(0).texture = null
+			node_array_equipment[i].get_child(1).text = ""
 	
 	if accessories_only: return
 	
@@ -220,21 +247,27 @@ func update_inventory_and_equipment(accessories_only = false):
 	for i in inventory.inv_slots.size():
 		if inventory.inv_slots[i] is BasicItem and inventory.inv_slots[i].item_id != "blank":
 			node_array_inventory[i].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_slots[i].item_id + ".png")
+			node_array_inventory[i].get_child(1).text = str(inventory.inv_slots[i].quantity)
 		else:
 			node_array_inventory[i].get_child(0).texture = null
+			node_array_inventory[i].get_child(1).text = ""
 	
 	## UPDATE ARMAMENTS
 	for i in range(8):
 		if inventory.inv_armaments[i] is BasicItem and inventory.inv_armaments[i].item_id != "blank":
 			node_array_equipment[i+12].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_armaments[i].item_id + ".png")
+			node_array_equipment[i+12].get_child(1).text = str(inventory.inv_armaments[i].quantity)
 		else:
 			node_array_equipment[i+12].get_child(0).texture = null
+			node_array_equipment[i+12].get_child(1).text = ""
 	
 	## UPDATE CURSOR
 	if current_cursor_item is BasicItem and current_cursor_item.item_id != "blank":
-		cursor_item_texture.texture = load(item_texture_path + "sm_" + current_cursor_item.item_id + ".png")
+		cursor_item_texture.get_child(0).texture = load(item_texture_path + "sm_" + current_cursor_item.item_id + ".png")
+		cursor_item_texture.get_child(1).text = str(current_cursor_item.quantity)
 	else:
-		cursor_item_texture.texture = null
+		cursor_item_texture.get_child(0).texture = null
+		cursor_item_texture.get_child(1).text = ""
 
 func change_accessory_set(dir : int):
 	current_accessory_set += dir

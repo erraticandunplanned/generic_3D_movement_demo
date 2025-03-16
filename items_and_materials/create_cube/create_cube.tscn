@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://lx83dij2hnrd"]
 
-[ext_resource type="Script" path="res://player/create_cube/create_cube.gd" id="1_vd1nm"]
+[ext_resource type="Script" path="res://items_and_materials/create_cube/create_cube.gd" id="1_vd1nm"]
 
 [node name="CreateCube" type="Node3D"]
 script = ExtResource("1_vd1nm")
