@@ -13,7 +13,7 @@ enum {START, PLAY, MULTIPLAYER, SETTINGS}
 func _ready():
 	# these two are for debug only
 	get_viewport().size = Vector2(1920,1080)
-	get_window().position = Vector2(100,100)
+	get_window().position = Vector2(1000,100)
 	
 	swap_menu(START)
 

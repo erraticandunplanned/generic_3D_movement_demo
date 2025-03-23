@@ -46,7 +46,7 @@ func _ready():
 		new_item.position = hotbar_index_loc[i]
 		new_item.name = "INV_"+str(i)
 		hotbar_node_index[i] = new_item
-		if check_item is BasicItem and check_item.item_id != "blank":
+		if check_item.item_id != "blank":
 			new_item.get_child(0).texture = load(item_texture_path + "sm_" + check_item.item_id + ".png")
 			new_item.get_child(1).text = str(check_item.quantity)
 		else:
@@ -97,7 +97,7 @@ func _process(delta):
 		for i in hotbar_index_loc.size():
 			var check_item : BasicItem = inventory.inv_slots[inventory.active_hotbar_start + i]
 			var slot_item = hotbar_node_index[i]
-			if check_item is BasicItem and check_item.item_id != "blank":
+			if check_item.item_id != "blank":
 				slot_item.get_child(0).texture = load(item_texture_path + "sm_" + check_item.item_id + ".png")
 				slot_item.get_child(1).text = str(check_item.quantity)
 			else:
@@ -123,9 +123,9 @@ func open_weapon_selection_wheel(left : bool):
 	var selection_texture_array : Array[String] = []
 	selection_texture_array.resize(4)
 	for i in range(4):
-		if left and inventory.inv_armaments[i] is BasicItem:
+		if left and inventory.inv_armaments[i].item_id != "blank":
 			selection_texture_array[i] = item_texture_path + "lg_" + inventory.inv_armaments[i].item_id + ".png" 
-		elif not left and inventory.inv_armaments[i+4] is BasicItem:
+		elif not left and inventory.inv_armaments[i+4].item_id != "blank":
 			selection_texture_array[i] = item_texture_path + "lg_" + inventory.inv_armaments[i+4].item_id + ".png" 
 		else:
 			selection_texture_array[i] = "blank"
@@ -147,14 +147,14 @@ func set_new_armament_from_wheel(left : bool):
 func set_armaments():
 	## SET ARMAMENT TEXTURES
 	var left_armament : BasicItem = inventory.inv_armaments[inventory.active_armament_left]
-	if left_armament is BasicItem and left_armament.item_id != "blank":
+	if left_armament.item_id != "blank":
 		armament_left_slot.texture = load(item_texture_path + "lg_" + left_armament.item_id + ".png")
 		#armament_left_slot.get_child(1).text = str(left_armament.quantity)
 	else:
 		armament_left_slot.texture = null
 		#armament_left_slot.get_child(1).text = ""
 	var right_armament : BasicItem = inventory.inv_armaments[4 + inventory.active_armament_right]
-	if right_armament is BasicItem and right_armament.item_id != "blank":
+	if right_armament.item_id != "blank":
 		armament_right_slot.texture = load(item_texture_path + "lg_" + right_armament.item_id + ".png")
 		#armament_right_slot.get_child(1).text = str(right_armament.quantity)
 	else:
@@ -166,11 +166,11 @@ func set_armaments():
 		i.queue_free()
 	for i in grip_right.get_children():
 		i.queue_free()
-	if left_armament is BasicItem and left_armament.item_scene_path != "":
+	if left_armament.item_scene_path != "":
 		var new_ability_scene : PackedScene = load(left_armament.item_scene_path)
 		var new_ability = new_ability_scene.instantiate()
 		grip_left.add_child(new_ability)
-	if right_armament is BasicItem and right_armament.item_scene_path != "":
+	if right_armament.item_scene_path != "":
 		var new_ability_scene : PackedScene = load(right_armament.item_scene_path)
 		var new_ability = new_ability_scene.instantiate()
 		grip_right.add_child(new_ability)
