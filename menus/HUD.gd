@@ -10,10 +10,11 @@ extends Control
 @onready var item_texture_path = "res://textures/item_images/"
 
 var player : CharacterBody3D
-#var statistics : StatisticsComponent
+var statistics : StatisticsComponent
 var inventory : InventoryComponent
 var grip_left : Node3D
 var grip_right : Node3D
+var hotbar : Node3D
 
 enum {SELECTION, BORDER, ITEMS, ICONS, BACKGROUND}
 
@@ -27,14 +28,16 @@ var hotbar_node_index = []
 var selecting_weapon = false
 var wheel_open = false
 var selecting_weapon_timer = 0.0
-const selecting_weapon_threshold = 0.25
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	player = get_parent().get_parent().get_parent()
+	statistics = player.statistics
 	inventory = player.find_child("ComponentGearAndInventory", false)
-	grip_left = player.find_child("hands").get_child(0)
-	grip_right = player.find_child("hands").get_child(1)
+	var hands : Node3D = player.find_child("hands")
+	grip_left = hands.get_child(0)
+	grip_right = hands.get_child(1)
+	hotbar = hands.get_child(2)
 	
 	## SET HOTBAR
 	hotbar_node_index.resize(inventory.inv_slots.size())
@@ -46,7 +49,7 @@ func _ready():
 		new_item.position = hotbar_index_loc[i]
 		new_item.name = "INV_"+str(i)
 		hotbar_node_index[i] = new_item
-		if check_item.item_id != "blank":
+		if check_item.item_id != "":
 			new_item.get_child(0).texture = load(item_texture_path + "sm_" + check_item.item_id + ".png")
 			new_item.get_child(1).text = str(check_item.quantity)
 		else:
@@ -82,7 +85,7 @@ func _process(delta):
 	## SELECT WEAPON
 	if Input.is_action_pressed("weapon_select_L") or Input.is_action_pressed("weapon_select_R"):
 		selecting_weapon_timer += delta
-		selecting_weapon = true if selecting_weapon_timer > selecting_weapon_threshold else false
+		selecting_weapon = true if selecting_weapon_timer > statistics.HOLD_BUTTON_TIME_THRESHOLD else false
 		if not wheel_open and selecting_weapon and Input.is_action_pressed("weapon_select_L"): open_weapon_selection_wheel(true)
 		if not wheel_open and selecting_weapon and Input.is_action_pressed("weapon_select_R"): open_weapon_selection_wheel(false)
 	else:
@@ -97,12 +100,14 @@ func _process(delta):
 		for i in hotbar_index_loc.size():
 			var check_item : BasicItem = inventory.inv_slots[inventory.active_hotbar_start + i]
 			var slot_item = hotbar_node_index[i]
-			if check_item.item_id != "blank":
+			if check_item.item_id != "":
 				slot_item.get_child(0).texture = load(item_texture_path + "sm_" + check_item.item_id + ".png")
 				slot_item.get_child(1).text = str(check_item.quantity)
 			else:
 				slot_item.get_child(0).texture = null
 				slot_item.get_child(1).text = ""
+		
+		update_hotbar_selection(inventory.active_hotbar_item, false)
 
 func update_hotbar_selection(amt : int, add : bool = true):
 	## SELECTION CAN BE "ADDED" WHERE SELECTION IS MODIFIED BY +1 OR -1
@@ -114,6 +119,15 @@ func update_hotbar_selection(amt : int, add : bool = true):
 		inventory.active_hotbar_item = amt
 	hotbar_tilemap.clear_layer(SELECTION)
 	hotbar_tilemap.set_cell(SELECTION,hotbar_index_map[inventory.active_hotbar_item],0,Vector2i(0,1))
+	
+	## ADD HOTBAR SCRIPT TO HOTBAR NODE
+	var script_path = inventory.inv_slots[inventory.active_hotbar_start + inventory.active_hotbar_item].hotbar_script_path
+	if script_path != "":
+		var new_hotbar_script : Script = load(script_path)
+		hotbar.set_script(new_hotbar_script)
+		hotbar._ready()
+	else:
+		hotbar.set_script(null)
 
 func open_weapon_selection_wheel(left : bool):
 	wheel_open = true
@@ -123,12 +137,12 @@ func open_weapon_selection_wheel(left : bool):
 	var selection_texture_array : Array[String] = []
 	selection_texture_array.resize(4)
 	for i in range(4):
-		if left and inventory.inv_armaments[i].item_id != "blank":
+		if left and inventory.inv_armaments[i].item_id != "":
 			selection_texture_array[i] = item_texture_path + "lg_" + inventory.inv_armaments[i].item_id + ".png" 
-		elif not left and inventory.inv_armaments[i+4].item_id != "blank":
+		elif not left and inventory.inv_armaments[i+4].item_id != "":
 			selection_texture_array[i] = item_texture_path + "lg_" + inventory.inv_armaments[i+4].item_id + ".png" 
 		else:
-			selection_texture_array[i] = "blank"
+			selection_texture_array[i] = ""
 	
 	new_wheel.selection = inventory.active_armament_left if left else inventory.active_armament_right
 	new_wheel.generate_wheel(selection_texture_array)
@@ -147,30 +161,24 @@ func set_new_armament_from_wheel(left : bool):
 func set_armaments():
 	## SET ARMAMENT TEXTURES
 	var left_armament : BasicItem = inventory.inv_armaments[inventory.active_armament_left]
-	if left_armament.item_id != "blank":
+	if left_armament.item_id != "":
 		armament_left_slot.texture = load(item_texture_path + "lg_" + left_armament.item_id + ".png")
-		#armament_left_slot.get_child(1).text = str(left_armament.quantity)
 	else:
 		armament_left_slot.texture = null
-		#armament_left_slot.get_child(1).text = ""
 	var right_armament : BasicItem = inventory.inv_armaments[4 + inventory.active_armament_right]
-	if right_armament.item_id != "blank":
+	if right_armament.item_id != "":
 		armament_right_slot.texture = load(item_texture_path + "lg_" + right_armament.item_id + ".png")
-		#armament_right_slot.get_child(1).text = str(right_armament.quantity)
 	else:
 		armament_right_slot.texture = null
-		#armament_right_slot.get_child(1).text = ""
 	
 	## SET ARMAMENTS IN PLAYER'S HAND TO ACTIVATE
-	for i in grip_left.get_children():
-		i.queue_free()
-	for i in grip_right.get_children():
-		i.queue_free()
-	if left_armament.item_scene_path != "":
-		var new_ability_scene : PackedScene = load(left_armament.item_scene_path)
-		var new_ability = new_ability_scene.instantiate()
-		grip_left.add_child(new_ability)
-	if right_armament.item_scene_path != "":
-		var new_ability_scene : PackedScene = load(right_armament.item_scene_path)
-		var new_ability = new_ability_scene.instantiate()
-		grip_right.add_child(new_ability)
+	if left_armament.armament_script_path != "":
+		var new_ability_script : Script = load(left_armament.armament_script_path)
+		grip_left.set_script(new_ability_script)
+		grip_left._ready()
+	else: grip_left.set_script(null)
+	if right_armament.armament_script_path != "":
+		var new_ability_script : Script = load(right_armament.armament_script_path)
+		grip_right.set_script(new_ability_script)
+		grip_right._ready()
+	else: grip_right.set_script(null)

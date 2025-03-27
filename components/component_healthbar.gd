@@ -8,11 +8,13 @@ class_name HealthComponent
 func _ready():
 	pass
 
-func _process(delta):
+func _process(_delta):
 	pass
 
-func recieve_damage(amount : int, type : String):
-	pass
+func recieve_damage(a_input : AttackClass):
+	statistics.health -= a_input.amount
+	print("health: ", statistics.health)
 
-func recieve_healing(amount : int):
-	pass
+func recieve_healing(a_input : int):
+	statistics.health += a_input
+	print("health: ", statistics.health)

@@ -4,6 +4,7 @@ const PORT = 8910
 var upnp = UPNP.new()
 
 const gravity = 20
+const base_fall_damage = 1.0
 
 #var controller_mode = false
 var paused = false

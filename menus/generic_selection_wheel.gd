@@ -122,4 +122,4 @@ func generate_wheel(contents : Array, count : int = -1):
 		var new_sprite = Sprite2D.new()
 		texture_node.add_child(new_sprite)
 		new_sprite.position = new_pos * ( inner_rim_size + outer_rim_size ) / 2
-		new_sprite.texture = load(contents[i]) if contents[i] != "blank" else null
+		new_sprite.texture = load(contents[i]) if contents[i] != "" else null

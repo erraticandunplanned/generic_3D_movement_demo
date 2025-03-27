@@ -7,6 +7,7 @@ extends Node
 @export var inventory : InventoryComponent
 @export var grip_left : Node3D
 @export var grip_right : Node3D
+@export var hotbar : Node3D
 
 @onready var selection_wheel = preload("res://menus/generic_selection_wheel.tscn")
 
@@ -14,7 +15,6 @@ var canvas : CenterContainer
 
 var selecting_ability = false
 var selecting_ability_timer = 0.0
-const selecting_ability_threshold = 0.2
 var the_wheel_itself : CanvasItem
 
 func _ready():
@@ -34,7 +34,7 @@ func _process(delta):
 	## REVEAL WHEEL AFTER A SMALL DELAY
 	if Input.is_action_pressed("wanderer_ability"):
 		selecting_ability_timer += delta
-		if selecting_ability_timer > selecting_ability_threshold:
+		if selecting_ability_timer > statistics.HOLD_BUTTON_TIME_THRESHOLD:
 			the_wheel_itself.visible = true
 	else:
 		selecting_ability_timer = 0.0
@@ -49,24 +49,11 @@ func _process(delta):
 	if Global.menu_open: return
 	
 	## ACTIVATE ARMAMENTS
-	if Input.is_action_just_pressed("use_active_left"):
-		#var active_armament = inventory.inv_armaments[inventory.active_armament_left]
-		for action in grip_left.get_children():
-			action._on_action_press()
-	if Input.is_action_just_pressed("use_active_right"):
-		#var active_armament = inventory.inv_armaments[4 + inventory.active_armament_right]
-		for action in grip_right.get_children():
-			action._on_action_press()
-
-#func _physics_process(_delta):
-#	if not is_multiplayer_authority() or Global.paused or Global.menu_open: return
-#
-#	if Input.is_action_just_pressed("use_active_left"): 
-#		for action in grip_left.find_children("*","ActiveAbility",false):
-#			action._on_action_press()
-#	if Input.is_action_just_pressed("use_active_right"):
-#		for action in grip_right.find_children("*","ActiveAbility",false):
-#			action._on_action_press()
+	if Input.is_action_just_pressed("use_active_left") and grip_left.get_script() != null: grip_left._on_action_press()
+	if Input.is_action_just_pressed("use_active_right") and grip_right.get_script() != null: grip_right._on_action_press()
+	
+	## ACTIVATE HOTBAR ITEM
+	if Input.is_action_just_released("use_hotbar_item") and hotbar.get_script() != null: hotbar._on_action_press()
 
 func activate_wanderer_ability(index : int):
 	print("use ability ", index)

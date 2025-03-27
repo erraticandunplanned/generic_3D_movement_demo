@@ -10,17 +10,15 @@ extends Node
 var since_on_floor = 0
 var air_jump_used = 0
 var is_vaulting = false
-var is_airdashing = false
-var is_sliding = false
+var is_lunging = false
 var input_dir = Vector2.ZERO
 var direction = Vector3.ZERO
 var last_kicked_on
 var used_wall_jump = 0
-var used_airdash = 0
-var since_slide = 100
-var queue_slide = false
-var queue_unslide = false
+var used_lunge_in_air = 0
 var accept_inputs = true
+var height_previous = 0.0
+var height_highest = 0.0
 
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
@@ -35,8 +33,6 @@ func _unhandled_input(event):
 		head.rotation.x = clamp(head.rotation.x, -PI/2, PI/2)
 
 func _process(delta):
-	since_slide += get_physics_process_delta_time()
-	
 	## ADJUSTS DYNAMIC FIELD-OF-VIEW IF ENABLED
 	### [1] ###
 	if Global.dynamic_fov == true: 
@@ -55,7 +51,7 @@ func _physics_process(_delta):
 	## ONE-TIME VARIABLE SETUP
 	# these variables are used at multiple points throughout the script,
 	# but shouldn't follow over from one frame to the next.
-	var closest_valid_object = hitbox.find_closest_object(statistics.WALLJUMP_MAX_RANGE)
+	var closest_valid_object = hitbox.find_closest_object(statistics.NEARBY_MAX_RANGE)
 	var effective_gravity = Global.gravity
 	var effective_accel = statistics.accel
 	var effective_max_speed = statistics.max_speed
@@ -65,10 +61,9 @@ func _physics_process(_delta):
 		since_on_floor = 0
 		air_jump_used = 0
 		used_wall_jump = 0
-		used_airdash = 0
+		used_lunge_in_air = 0
 		last_kicked_on = 0
 		is_vaulting = false
-		#is_airdashing = false
 	
 									###################
 									## HANDLE INPUTS ##
@@ -91,10 +86,9 @@ func _physics_process(_delta):
 	## HANDLE JUMP INPUT
 	# different action based on if the player is on the floor, next to a wall, or in the air
 	if Input.is_action_just_pressed("jump") and accept_inputs: 
-		queue_unslide = true
 		# is on floor
-		if since_on_floor < statistics.coyote_time: 
-			since_on_floor = statistics.coyote_time
+		if since_on_floor < statistics.COYOTE_TIME: 
+			since_on_floor = statistics.COYOTE_TIME
 			player.velocity.y = statistics.jump_velocity
 		
 		# is next to wall
@@ -123,84 +117,57 @@ func _physics_process(_delta):
 	if Input.is_action_pressed("sprint") and accept_inputs and player.is_on_floor():
 		effective_max_speed *= statistics.sprint_multi
 		effective_accel *= statistics.sprint_multi
-	# perform airdash when in the air
-	#if Input.is_action_just_pressed("lunge") and not player.is_on_floor() and not is_airdashing and used_airdash < statistics.airdash_max:
-	if Input.is_action_just_pressed("lunge") and accept_inputs and not is_airdashing and used_airdash < statistics.airdash_max:
-		is_airdashing = true
-		used_airdash += 1
-		# airdash returns after a cooldown (cools down instantly if player is grounded)
-		await get_tree().create_timer(statistics.airdash_duration).timeout
-		is_airdashing = false
+	# perform lunge on release
+	if Input.is_action_just_released("lunge") and accept_inputs and not is_lunging and used_lunge_in_air < statistics.lunge_in_air_max:
+		is_lunging = true
+		used_lunge_in_air += 1
+		# lunge returns after a cooldown (cools down instantly if player is grounded)
+		await get_tree().create_timer(statistics.lunge_duration).timeout
+		is_lunging = false
 	
-	## HANDLE SNEAK INPUT
-	if Input.is_action_pressed("crouch") and accept_inputs:
+	## HANDLE DIVE INPUT
+	if Input.is_action_pressed("dive") and accept_inputs and not player.is_on_floor():
 		# perform a "dive" in the air (fall faster)
-		if not player.is_on_floor():
-			effective_gravity *= statistics.dive_gravity_multi
-			effective_accel *= 0.5
-		# perform a "slide" on the ground
-		else:
-			queue_slide = true
-	if Input.is_action_just_released("crouch") and accept_inputs:
-		queue_unslide = true
+		effective_gravity *= statistics.dive_gravity_multi
+		effective_accel *= 0.5
 	
 									#################
 									## MOVE PLAYER ##
 									#################
 	
-	## HANDLE GRAVITY
+	## HANDLE GRAVITY; DEAL WITH FALL DAMAGE
 	if closest_valid_object != null: 
 		effective_gravity *= statistics.wall_gravity_reduction
-	if not player.is_on_floor():
+	var height_current = player.position.y
+	if player.is_on_floor():
+		var fall_distance = height_highest - height_current
+		if fall_distance > 0.0: 
+			print("fall distance: ", floor(fall_distance))
+			var fall_damage = AttackClass.new()
+			fall_damage.amount = floor ( maxf( fall_distance - statistics.fall_height_ignore , 0.0 ) * Global.base_fall_damage * statistics.fall_damage_multiplier )
+			if fall_damage.amount > 0.0:
+				print("fall damage: ", fall_damage.amount)
+				player.healthbar.recieve_damage(fall_damage)
+		height_previous = 0.0
+		height_highest = 0.0
+	else:
 		player.velocity.y -= effective_gravity * get_physics_process_delta_time()
 		since_on_floor += get_physics_process_delta_time()
+		if height_current > height_highest or height_current > height_previous:
+			height_highest = height_current
+		height_previous = height_current
 	
-	## CONTINUE AIRDASH AND SLIDE
-	# finish slide if necessary
-	# if an airdash or slide is in progress, exit the function to ignore other inputs.
-	# quickly deccelerates after performing the action
-	if queue_unslide or player.velocity.length() < 10:
-		queue_unslide = false
-		is_sliding = false
-		#camera.position.y = 0.5
-	#if is_sliding or is_airdashing:
-		#var effective_deccel = statistics.airdash_deccel if is_airdashing else statistics.slide_deccel
-		#player.velocity.x = move_toward(player.velocity.x, 0, effective_deccel * get_physics_process_delta_time())
-		#player.velocity.y = move_toward(player.velocity.y, 0, effective_deccel * get_physics_process_delta_time())
-		#player.velocity.z = move_toward(player.velocity.z, 0, effective_deccel * get_physics_process_delta_time())
-		#return
-	
-	## PERFORM AIRDASH
-	if is_airdashing:
+	## PERFORM LUNGE
+	if is_lunging:
 		# get head rotation and then multiply it by the player's "basis"
 		# i'm not sure exactly why this works. I kind of brute-forced my way here.
 		var head_rotation = -(head.transform.basis.z)
-		var dash_direction_global = (player.transform.basis * head_rotation).normalized()
+		var lunge_direction_global = (player.transform.basis * head_rotation).normalized()
 		
-		# apply the airdash to player velocity
-		player.velocity.x = dash_direction_global.x * statistics.airdash_strength
-		player.velocity.y = dash_direction_global.y * statistics.airdash_strength
-		player.velocity.z = dash_direction_global.z * statistics.airdash_strength
-	
-	## PERFORM SLIDE
-	if player.is_on_floor() and queue_slide and since_slide > statistics.slide_cooldown:
-		is_sliding = true
-		queue_slide = false
-		since_slide = 0
-		#camera.position.y = -0.5
-		
-		# set the slide direction to straight forward, or according to WASD input
-		var slide_direction
-		if input_dir == Vector2.ZERO: 
-			slide_direction = Vector2(0,-1)
-		else:
-			slide_direction = input_dir
-		var slide_direction_global = (player.transform.basis * Vector3(slide_direction.x, 0, slide_direction.y)).normalized()
-		
-		# apply the slide to player velocity
-		player.velocity.x = slide_direction_global.x * statistics.slide_strength
-		player.velocity.z = slide_direction_global.z * statistics.slide_strength
-	elif queue_slide: queue_slide = false
+		# apply the lunge to player velocity
+		player.velocity.x = lunge_direction_global.x * statistics.lunge_strength
+		player.velocity.y = lunge_direction_global.y * statistics.lunge_strength
+		player.velocity.z = lunge_direction_global.z * statistics.lunge_strength
 	
 	## MOVE PLAYER BY VELOCITY
 	# TODO: make it so controller inputs can create a vector whose length is less than 1
@@ -227,7 +194,7 @@ func _physics_process(_delta):
 	## VAULT OVER SMALL LEDGES
 	# can happen once. must ground before doing it again.
 	# TODO: make the vault only happen if you are FACING the ledge
-	if accept_inputs and closest_valid_object != null and not is_vaulting and since_on_floor >= statistics.coyote_time and player.velocity.y <= 0 and not hitbox.object_exists_at_eyes():
+	if accept_inputs and closest_valid_object != null and not is_vaulting and since_on_floor >= statistics.COYOTE_TIME and player.velocity.y <= 0 and not hitbox.object_exists_at_eyes():
 		is_vaulting = true
 		player.velocity.y = max(player.velocity.y, statistics.jump_velocity)
 	

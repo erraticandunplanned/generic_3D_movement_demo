@@ -30,25 +30,47 @@ enum {HEAD, CHEST, BACK, HIPS, LEGS, FEET, L_SHOULDER, L_ARM, L_HAND, R_SHOULDER
 func set_default_inventory():
 	inv_slots[0].quantity = 1
 	inv_slots[0].item_id = "gold_sword"
-	inv_slots[0].item_scene_path = "res://items_and_materials/create_cube/create_cube.tscn"
+	inv_slots[0].supertype = "equipment"
+	inv_slots[0].type = "armament"
+	inv_slots[0].subtype = "melee_standard"
+	inv_slots[0].armament_script_path = "res://items_and_materials/active_ability_scripts/create_cube.gd"
 	
 	inv_slots[7].quantity = 1
 	inv_slots[7].item_id = "sulfur_slab"
-	inv_slots[7].item_scene_path = "res://items_and_materials/leap/leap.tscn"
+	inv_slots[7].supertype = "component"
+	inv_slots[7].type = "geological"
+	inv_slots[7].hotbar_script_path = "res://items_and_materials/active_ability_scripts/leap.gd"
 	
 	inv_slots[2].quantity = 1
 	inv_slots[2].item_id = "amethyst_shard"
+	inv_slots[2].supertype = "component"
+	inv_slots[2].type = "crystalline"
 	inv_slots[3].quantity = 4
 	inv_slots[3].item_id = "amethyst_shard"
+	inv_slots[3].supertype = "component"
+	inv_slots[3].type = "crystalline"
 	inv_slots[4].quantity = 8
 	inv_slots[4].item_id = "amethyst_shard"
+	inv_slots[4].supertype = "component"
+	inv_slots[4].type = "crystalline"
 	
 	inv_accessory_armor[0].quantity = 1
 	inv_accessory_armor[0].item_id = "gold_helmet"
+	inv_accessory_armor[0].supertype = "equipment"
+	inv_accessory_armor[0].type = "armor"
+	inv_accessory_armor[0].subtype = "head"
 	
 	inv_armaments[0].quantity = 1
 	inv_armaments[0].item_id = "amethyst_staff"
+	inv_armaments[0].supertype = "equipment"
+	inv_armaments[0].type = "armament"
+	inv_armaments[0].subtype = "spellcasting"
 	
 	#inv_slots[0].quantity = 1
 	#inv_slots[0].item_id = ""
-	#inv_slots[0].item_scene_path = ""
+	#inv_slots[0].supertype = ""
+	#inv_slots[0].type = ""
+	#inv_slots[0].subtype = ""
+	#inv_slots[0].hotbar_script_path = ""
+	#inv_slots[0].armament_script_path = ""
+	#inv_slots[0].accessory_script_path = ""

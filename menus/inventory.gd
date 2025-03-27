@@ -221,7 +221,7 @@ func _process(_delta):
 	
 	if Input.is_action_just_pressed("ui_select_alternate") and index != -1:
 		## PICK UP HALF QUANTITY
-		if current_cursor_item.item_id == "blank":
+		if current_cursor_item.item_id == "":
 			current_cursor_item = item_under_cursor.duplicate()
 			var half_quantity_floor = item_under_cursor.quantity / 2
 			var half_quantity_ceil = item_under_cursor.quantity - half_quantity_floor
@@ -244,7 +244,7 @@ func _process(_delta):
 			item_under_cursor.quantity += 1
 			current_cursor_item.quantity -= 1
 		## ADD 1 TO SIMILAR STACK
-		elif item_under_cursor.item_id == "blank":
+		elif item_under_cursor.item_id == "":
 			current_cursor_item.quantity -= 1
 			if tile_location.x > 9: ## INVENTORY
 				inventory.inv_slots[index] = current_cursor_item.duplicate()
@@ -286,7 +286,7 @@ func update_inventory_and_equipment(accessories_only = false):
 		2: temp_accessory_set = inventory.inv_accessory_gears
 		3: temp_accessory_set = inventory.inv_accessory_charm
 	for i in range(12):
-		if temp_accessory_set[i].item_id != "blank":
+		if temp_accessory_set[i].item_id != "":
 			node_array_equipment[i].get_child(0).texture = load(item_texture_path + "sm_" + temp_accessory_set[i].item_id + ".png")
 			node_array_equipment[i].get_child(1).text = str(temp_accessory_set[i].quantity)
 		else:
@@ -297,7 +297,7 @@ func update_inventory_and_equipment(accessories_only = false):
 	
 	## UPDATE INVENTORY
 	for i in inventory.inv_slots.size():
-		if inventory.inv_slots[i].item_id != "blank":
+		if inventory.inv_slots[i].item_id != "":
 			node_array_inventory[i].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_slots[i].item_id + ".png")
 			node_array_inventory[i].get_child(1).text = str(inventory.inv_slots[i].quantity)
 		else:
@@ -306,7 +306,7 @@ func update_inventory_and_equipment(accessories_only = false):
 	
 	## UPDATE ARMAMENTS
 	for i in range(8):
-		if inventory.inv_armaments[i].item_id != "blank":
+		if inventory.inv_armaments[i].item_id != "":
 			node_array_equipment[i+12].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_armaments[i].item_id + ".png")
 			node_array_equipment[i+12].get_child(1).text = str(inventory.inv_armaments[i].quantity)
 		else:
@@ -314,7 +314,7 @@ func update_inventory_and_equipment(accessories_only = false):
 			node_array_equipment[i+12].get_child(1).text = ""
 	
 	## UPDATE CURSOR
-	if current_cursor_item.item_id != "blank":
+	if current_cursor_item.item_id != "":
 		cursor_item_texture.get_child(0).texture = load(item_texture_path + "sm_" + current_cursor_item.item_id + ".png")
 		cursor_item_texture.get_child(1).text = str(current_cursor_item.quantity)
 	else:

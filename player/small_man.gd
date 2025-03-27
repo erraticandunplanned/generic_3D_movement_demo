@@ -6,6 +6,7 @@ extends CharacterBody3D
 
 @onready var canvas = $CanvasLayer/CenterContainer
 @onready var statistics : StatisticsComponent = $ComponentDefaultStatistics
+@onready var healthbar : HealthComponent = $ComponentHealthbar
 @onready var camera_1st = $head/eye_camera
 @onready var camera_3rd = $shoulder_pivot/SpringArm3D/shoulder_camera
 
@@ -23,11 +24,15 @@ func _process(_delta):
 	if Global.menu_open: return
 	
 	if Input.is_action_just_pressed("interact"):
-		statistics.first_person_camera = !statistics.first_person_camera
-		if statistics.first_person_camera:
-			CameraTransition.swap_camera(camera_3rd,camera_1st)
-		else:
-			CameraTransition.swap_camera(camera_1st,camera_3rd)
+		var new_attack = AttackClass.new()
+		new_attack.amount = 10
+		healthbar.recieve_damage(new_attack)
+		
+		#statistics.first_person_camera = !statistics.first_person_camera
+		#if statistics.first_person_camera:
+		#	CameraTransition.swap_camera(camera_3rd,camera_1st)
+		#else:
+		#	CameraTransition.swap_camera(camera_1st,camera_3rd)
 
 func swap_to_menu(request_menu : String = "HUD"):
 	var menu_name = request_menu

@@ -2,8 +2,6 @@ extends ActiveAbility
 
 var player : CharacterBody3D
 var statistics : StatisticsComponent
-#var world : Node
-#var sight_ray : RayCast3D
 
 func _ready():
 	## LOCATE ALL THE RELEVANT NODES RELATIVE TO SELF
