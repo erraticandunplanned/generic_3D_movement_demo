@@ -41,8 +41,8 @@ class_name StatisticsComponent
 @export var DEFAULT_DIVE_GRAVITY_MULTI = 3
 @export_subgroup("Lunge")
 @export var DEFAULT_LUNGE_IN_AIR_MAX = 1
-@export var DEFAULT_LUNGE_STRENGTH = 20
-@export var DEFAULT_LUNGE_DURATION = 0.5
+@export var DEFAULT_LUNGE_STRENGTH = 8
+@export var DEFAULT_LUNGE_DURATION = 0.1
 @export_category("Menu Statistics")
 @export_subgroup("Menu Speeds")
 @export var DEFAULT_MENU_MOUSE_SPEED = 1.0

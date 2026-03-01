@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://b4py7ylemv4xy"]
 
-[node name="InventoryItemTexture" type="Node2D"]
+[ext_resource type="Script" uid="uid://duel0it5scv4p" path="res://items_and_materials/inventory_item_texture.gd" id="1_b3j7l"]
 
-[node name="texture" type="Sprite2D" parent="."]
+[node name="InventoryItemTexture" type="Node2D" unique_id=1798469762]
+script = ExtResource("1_b3j7l")
 
-[node name="quantity" type="Label" parent="."]
+[node name="texture" type="Sprite2D" parent="." unique_id=643778773]
+
+[node name="quantity" type="Label" parent="." unique_id=1510472395]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

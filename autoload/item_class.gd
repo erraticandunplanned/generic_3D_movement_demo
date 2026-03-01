@@ -8,6 +8,8 @@ class_name BasicItem
 @export var type : String
 @export var subtype : String
 
+@export var container : Array
+
 @export var hotbar_script_path : String
 @export var armament_script_path : String
 @export var accessory_script_path : String
@@ -18,12 +20,13 @@ class_name BasicItem
 #var materials : Array[String] = [""]
 #var textures : Array[Texture2D]
 
-func _init(p_quantity = 0, p_item_id = "", p_supertype = "", p_type = "", p_subtype = "", p_hotbar_script_path = "", p_armament_script_path = "", p_accessory_script_path = ""):
+func _init(p_quantity = 0, p_item_id = "", p_supertype = "", p_type = "", p_subtype = "", p_container = [], p_hotbar_script_path = "", p_armament_script_path = "", p_accessory_script_path = ""):
 	quantity = p_quantity
 	item_id = p_item_id
 	supertype = p_supertype
 	type = p_type
 	subtype = p_subtype
+	container = p_container
 	hotbar_script_path = p_hotbar_script_path
 	armament_script_path = p_armament_script_path
 	accessory_script_path = p_accessory_script_path
@@ -59,4 +62,3 @@ func _init(p_quantity = 0, p_item_id = "", p_supertype = "", p_type = "", p_subt
 # KEY_ITEM SUBTYPES: 
 # OTHER SUBTYPES: 
 # TOOLSET SUBTYPES: 
-

@@ -9,9 +9,11 @@ var statistics : StatisticsComponent
 
 var time_since_press = 0
 
-const wheel_size = 400
-const outer_rim_size = 475
-const inner_rim_size = 300
+var wheel_scale     : float = 0.4
+var wheel_thickness : float = 100.0
+var wheel_size      : int
+var outer_rim_size  : int
+var inner_rim_size  : int
 const wheel_draw_precision = 22.5
 const section_offset = 10
 
@@ -26,6 +28,8 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	Global.menu_open = true
 	
+	## STATISTICS GET
+	## recursively search the tree above us to get the player and then get their statistics component
 	var attempt_to_get_player = get_parent()
 	for i in range(10):
 		if attempt_to_get_player is CharacterBody3D:
@@ -34,6 +38,13 @@ func _ready():
 		else:
 			attempt_to_get_player = attempt_to_get_player.get_parent()
 	statistics = player.statistics
+	
+	## SET CIRCLE SIZE
+	var SCREENSIZE = get_viewport_rect().size
+	var small_side = SCREENSIZE.y / 2 if SCREENSIZE.y < SCREENSIZE.x else SCREENSIZE.x / 2
+	wheel_size = small_side * wheel_scale
+	outer_rim_size = wheel_size + ( wheel_thickness / 2 )
+	inner_rim_size = wheel_size - ( wheel_thickness / 2 )
 	
 	## THE FOLLOWING IS FOR DEMO PURPOSES ONLY
 	#generate_wheel([],4)

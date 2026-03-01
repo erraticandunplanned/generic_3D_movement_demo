@@ -1,0 +1,23 @@
+[gd_scene format=4 uid="uid://dn6m3sset830m"]
+
+[ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="1_gt5ks"]
+[ext_resource type="TileSet" uid="uid://b5rjs04frd7qx" path="res://textures/inventory/inventory_slots_64.tres" id="2_cppcl"]
+[ext_resource type="TileSet" uid="uid://bk4u2y8yq1jgv" path="res://textures/inventory/outfit_icons_64.tres" id="3_1yf3r"]
+
+[node name="EquipmentLayout" type="Node2D" unique_id=254687645]
+
+[node name="vitruvian" type="Sprite2D" parent="." unique_id=193711794]
+position = Vector2(224, 160)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_gt5ks")
+
+[node name="slotmap_64" type="Node2D" parent="." unique_id=103403608]
+
+[node name="slot_background" type="TileMapLayer" parent="slotmap_64" unique_id=1979244348]
+tile_map_data = PackedByteArray("AAAAAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAEAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAEAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAEAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAA=")
+tile_set = ExtResource("2_cppcl")
+
+[node name="gear_icons" type="TileMapLayer" parent="slotmap_64" unique_id=83643092]
+modulate = Color(1, 1, 1, 0.501961)
+tile_map_data = PackedByteArray("AAAAAAEAAAABAAQAAAABAAEAAAABAAMAAAACAAEAAAABAAIAAAADAAAAAAAAAAIAAAADAAEAAAAAAAMAAAADAAIAAAAAAAQAAAADAAMAAAAAAAUAAAADAAQAAAAAAAYAAAADAAUAAAAAAAcAAAAEAAEAAAACAAIAAAAFAAEAAAACAAMAAAAGAAEAAAACAAQAAAA=")
+tile_set = ExtResource("3_1yf3r")

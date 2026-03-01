@@ -70,12 +70,13 @@ func _physics_process(_delta):
 									###################
 	
 	## HANDLE JOYSTICK CAMERA
-	var joystick_camera_input = Input.get_vector("camera_joystick_left", "camera_joystick_right", "camera_joystick_up", "camera_joystick_down")
-	if accept_inputs and joystick_camera_input != Vector2.ZERO:
-		if !Global.joystick_camera_lock or Global.first_person_camera:
-			player.rotate_y(-joystick_camera_input.x * statistics.joystick_camera_sensitivity_x * get_physics_process_delta_time())
-			head.rotate_x(-joystick_camera_input.y * statistics.joystick_camera_sensitivity_y * get_physics_process_delta_time())
-			head.rotation.x = clamp(head.rotation.x, -PI/2, PI/2)
+	#var joystick_camera_input = Input.get_vector("camera_joystick_left", "camera_joystick_right", "camera_joystick_up", "camera_joystick_down")
+	#joystick_camera_input *= Vector2(statistics.joystick_camera_sensitivity_x,statistics.joystick_camera_sensitivity_y)
+	#if accept_inputs and joystick_camera_input != Vector2.ZERO:
+	#	if !Global.joystick_camera_lock or Global.first_person_camera:
+	#		player.rotate_y(-joystick_camera_input.x * get_physics_process_delta_time())
+	#		head.rotate_x(-joystick_camera_input.y * get_physics_process_delta_time())
+	#		head.rotation.x = clamp(head.rotation.x, -PI/2, PI/2)
 	
 	## HANDLE WASD INPUTS
 	# sets input_dir to a Vector2 product of WASD or Left Joystick, reults in only 8-directional movement for WASD
@@ -117,6 +118,7 @@ func _physics_process(_delta):
 	if Input.is_action_pressed("sprint") and accept_inputs and player.is_on_floor():
 		effective_max_speed *= statistics.sprint_multi
 		effective_accel *= statistics.sprint_multi
+	## HANDLE LUNGE INPUT
 	# perform lunge on release
 	if Input.is_action_just_released("lunge") and accept_inputs and not is_lunging and used_lunge_in_air < statistics.lunge_in_air_max:
 		is_lunging = true
@@ -165,9 +167,9 @@ func _physics_process(_delta):
 		var lunge_direction_global = (player.transform.basis * head_rotation).normalized()
 		
 		# apply the lunge to player velocity
-		player.velocity.x = lunge_direction_global.x * statistics.lunge_strength
-		player.velocity.y = lunge_direction_global.y * statistics.lunge_strength
-		player.velocity.z = lunge_direction_global.z * statistics.lunge_strength
+		player.velocity.x += lunge_direction_global.x * statistics.lunge_strength
+		player.velocity.y += lunge_direction_global.y * statistics.lunge_strength
+		player.velocity.z += lunge_direction_global.z * statistics.lunge_strength
 	
 	## MOVE PLAYER BY VELOCITY
 	# TODO: make it so controller inputs can create a vector whose length is less than 1

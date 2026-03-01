@@ -23,16 +23,18 @@ func _process(_delta):
 	if Input.is_action_just_pressed("open_inventory"): swap_to_menu("inventory_menu")
 	if Global.menu_open: return
 	
+	if Input.is_action_just_released("swap_camera"):
+		statistics.first_person_camera = !statistics.first_person_camera
+		if statistics.first_person_camera:
+			CameraTransition.swap_camera(camera_3rd,camera_1st)
+		else:
+			CameraTransition.swap_camera(camera_1st,camera_3rd)
+	
+	## DEBUG PURPOSES
 	if Input.is_action_just_pressed("interact"):
 		var new_attack = AttackClass.new()
 		new_attack.amount = 10
 		healthbar.recieve_damage(new_attack)
-		
-		#statistics.first_person_camera = !statistics.first_person_camera
-		#if statistics.first_person_camera:
-		#	CameraTransition.swap_camera(camera_3rd,camera_1st)
-		#else:
-		#	CameraTransition.swap_camera(camera_1st,camera_3rd)
 
 func swap_to_menu(request_menu : String = "HUD"):
 	var menu_name = request_menu

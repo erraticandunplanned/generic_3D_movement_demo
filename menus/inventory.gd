@@ -1,12 +1,20 @@
-extends Node2D
+extends Control
 
+ #TODO: delete?
 @onready var accessory_tilemap = $slot_map/TileMap
 @onready var hotbar_outline = $slot_map/hotbar_outline
-@onready var inventory_node = $inventory
-@onready var cursor_node = $cursor
-@onready var cursor_item_texture = $cursor/InventoryItemTexture
-@onready var item_texture_node = preload("res://items_and_materials/inventory_item_texture.tscn")
-@onready var item_texture_path = "res://textures/item_images/"
+var node_array_inventory = []
+var node_array_equipment = []
+# end delete
+
+@onready var inventory_node          : Node2D = $inventory
+@onready var container_node          : Node2D = $slotmap/containers
+@onready var selection_tilemap : TileMapLayer = $slotmap/slot_selection
+@onready var cursor_node             : Node2D = $cursor
+@onready var cursor_item_texture     : Node2D = $cursor/InventoryItemTexture
+@onready var item_texture_path       : String = "res://textures/item_images/"
+@onready var item_texture_node  : PackedScene = preload("res://items_and_materials/inventory_item_texture.tscn")
+@onready var single_container   : PackedScene = preload("res://menus/single_inventory_container.tscn")
 
 var player : CharacterBody3D
 var statistics : StatisticsComponent
@@ -14,12 +22,11 @@ var inventory : InventoryComponent
 
 enum {SELECTION, BORDER, ITEMS, ICONS, BACKGROUND}
 #enum {ARMOR, CLOTHING, GEAR, CHARM}
-const inventory_begin_location = Vector2i(11,4)
+const inventory_begin_location = Vector2i(0,0)
 const equipment_location_array = [Vector2i(5,4),Vector2i(5,5),Vector2i(5,6),Vector2i(5,7),Vector2i(5,8),Vector2i(5,9),Vector2i(4,5),Vector2i(3,5),Vector2i(2,5),Vector2i(6,5),Vector2i(7,5),Vector2i(8,5),Vector2i(2,7),Vector2i(3,7),Vector2i(2,8),Vector2i(3,8),Vector2i(7,7),Vector2i(8,7),Vector2i(7,8),Vector2i(8,8)]
 #enum {HEAD, CHEST, BACK, HIPS, LEGS, FEET, L_SHOULDER, L_ARM, L_HAND, R_SHOULDER, R_ARM, R_HAND, A_L0, A_L1, A_L2, A_L3, A_R0, A_R1, A_R2, A_R3}
 
-var node_array_inventory = []
-var node_array_equipment = []
+const hotbar_vertical_offset = 64
 
 var current_accessory_set = 0
 var screen_size : Vector2
@@ -28,44 +35,67 @@ var tile_location : Vector2i
 var current_cursor_item : BasicItem = BasicItem.new()
 
 func _ready():
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	## STATISTICS SETUP
 	player = get_parent().get_parent().get_parent()
 	statistics = player.statistics
 	inventory = player.find_child("ComponentGearAndInventory", false)
 	
-	screen_size = get_viewport_rect().size
-	cursor_node.position = accessory_tilemap.map_to_local(inventory_begin_location)
+	## MOUSE SETUP
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	screen_size = get_viewport_rect().size / 2
+	cursor_node.position = selection_tilemap.map_to_local(inventory_begin_location) + $slotmap.global_position
 	
+	#TODO: delete?
 	node_array_inventory.resize(inventory.inv_slots.size())
 	node_array_equipment.resize(equipment_location_array.size())
 	
+	update_inventory_containers()
+
 	## CREATE THE SLOT SQUARE
-	for i in inventory.inv_slots.size():
-		var row = floor(i / 8)
-		var column = i % 8
-		var new_cell_location = inventory_begin_location + Vector2i(column, row)
-		accessory_tilemap.set_cell(BORDER,new_cell_location,0,Vector2i(0,0))
-		accessory_tilemap.set_cell(BACKGROUND,new_cell_location,1,Vector2i(0,0))
-		
-		## SET INVENTORY ITEMS INTO THE PROPER SLOTS
-		var new_item = item_texture_node.instantiate()
-		inventory_node.add_child(new_item)
-		new_item.position = accessory_tilemap.map_to_local(new_cell_location)
-		new_item.name = "INV_" + str(i)
-		node_array_inventory[i] = new_item
+	#for i in inventory.inv_slots.size():
+		#var row = floor(i / 8)
+		#var column = i % 8
+		#var new_cell_location = inventory_begin_location + Vector2i(column, row)
+		#accessory_tilemap.set_cell(BORDER,new_cell_location,0,Vector2i(0,0))
+		#accessory_tilemap.set_cell(BACKGROUND,new_cell_location,1,Vector2i(0,0))
+		#
+		### SET INVENTORY ITEMS INTO THE PROPER SLOTS
+		#var new_item = item_texture_node.instantiate()
+		#inventory_node.add_child(new_item)
+		#new_item.position = accessory_tilemap.map_to_local(new_cell_location)
+		#new_item.name = "INV_" + str(i)
+		#node_array_inventory[i] = new_item
 	
 	## SET ACCESSORY ITEMS INTO ACCESSORY SLOTS
-	for i in range(20):
-		var new_item = item_texture_node.instantiate()
-		inventory_node.add_child(new_item)
-		new_item.position = accessory_tilemap.map_to_local(equipment_location_array[i])
-		new_item.name = "EQUIP_" + str(i)
-		node_array_equipment[i] = new_item
+	#for i in range(20):
+		#var new_item = item_texture_node.instantiate()
+		#inventory_node.add_child(new_item)
+		#new_item.position = accessory_tilemap.map_to_local(equipment_location_array[i])
+		#new_item.name = "EQUIP_" + str(i)
+		#node_array_equipment[i] = new_item
 	
 	## SET HOTBAR OUTLINE CORRECTLY
-	hotbar_outline.position.y = 512 + (floor(inventory.active_hotbar_start / 8) * 128)
+	#hotbar_outline.position.y = 512 + (floor(inventory.active_hotbar_start / 8) * 128)
 	
-	update_inventory_and_equipment()
+	#update_inventory_and_equipment()
+
+func update_inventory_containers():
+	## SEARCH ALL ARMAMENT AND EQUIPMENT SLOTS FOR CONTAINER ITEMS.
+	## APPEND ALL SLOT COUNTS TO container_item_list ARRAY
+	var container_item_list : Array[int] = []
+	for equipment_array : Array[BasicItem] in [inventory.inv_armaments,inventory.inv_accessory_armor,inventory.inv_accessory_cloth,inventory.inv_accessory_gears,inventory.inv_accessory_charm]:
+		for item : BasicItem in equipment_array:
+			if item.container != []: 
+				var new_container_size : int = item.container.size()
+				container_item_list.append(new_container_size)
+	
+	## CLEAR CONTAINERS AND REMAKE FROM SCRATCH
+	for i in container_node.get_children(): i.queue_free()
+	for i in container_item_list.size():
+		var new_container = single_container.instantiate()
+		container_node.add_child(new_container)
+		new_container.position = Vector2(0,i*hotbar_vertical_offset)
+		new_container._set_size(container_item_list[i])
 
 func _input(event):
 	## MOVE CURSOR ACCORDING TO CONTINUOUS MOUSE MOVEMENT
@@ -73,11 +103,11 @@ func _input(event):
 		cursor_mode = true
 		cursor_node.position.x += event.relative.x * statistics.menu_mouse_speed
 		cursor_node.position.y += event.relative.y * statistics.menu_mouse_speed
-		cursor_node.position.x = clamp(cursor_node.position.x, 0, screen_size.x)
-		cursor_node.position.y = clamp(cursor_node.position.y, 0, screen_size.y)
+		cursor_node.position.x = clamp(cursor_node.position.x, -screen_size.x, screen_size.x)
+		cursor_node.position.y = clamp(cursor_node.position.y, -screen_size.y, screen_size.y)
 
 func _process(_delta):
-	
+	return
 	## RETURN TO GAME ON CANCEL PRESS
 	if Input.is_action_just_pressed("ui_cancel"): player.swap_to_menu("HUD")
 	
@@ -215,7 +245,7 @@ func _process(_delta):
 			liminal_cursor_item = null
 		
 		## UPDATE CURSOR TEXTURE AND SLOT TEXTURES FROM INVENTORY DATA
-		update_inventory_and_equipment()
+		#update_inventory_and_equipment()
 	
 	#### ALTERNATE SELECT (RIGHT CLICK, CONTROLLER BUTTON 2 / LEFT ACTION) ####
 	
