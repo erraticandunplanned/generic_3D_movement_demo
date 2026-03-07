@@ -4,6 +4,8 @@ extends Control
 @onready var texture_node = $CenterContainer/textures
 @onready var action_node = $actions
 
+var item_texture_scene = preload("res://items_and_materials/inventory_item_texture.tscn")
+
 var player : CharacterBody3D
 var statistics : StatisticsComponent
 
@@ -128,9 +130,15 @@ func generate_wheel(contents : Array, count : int = -1):
 		wheel_vector_dict.merge(new_wheel_dict_entry)
 		
 		## ADD TEXTURE SPRITE
-		# skip if a blank array way generated
+		# skip if a blank array was generated
 		if count != -1: continue
-		var new_sprite = Sprite2D.new()
+		#var new_sprite = Sprite2D.new()
+		#texture_node.add_child(new_sprite)
+		#new_sprite.position = new_pos * ( inner_rim_size + outer_rim_size ) / 2
+		#new_sprite.texture = load(contents[i]) if contents[i] != "" else null
+		
+		var new_sprite = item_texture_scene.instantiate()
 		texture_node.add_child(new_sprite)
 		new_sprite.position = new_pos * ( inner_rim_size + outer_rim_size ) / 2
-		new_sprite.texture = load(contents[i]) if contents[i] != "" else null
+		var set_texture = contents[i] if contents[i] is ItemTexture else ItemTexture.new()
+		new_sprite.set_item_texture(set_texture)

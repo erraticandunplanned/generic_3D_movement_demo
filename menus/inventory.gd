@@ -50,21 +50,6 @@ func _ready():
 	node_array_equipment.resize(equipment_location_array.size())
 	
 	update_inventory_containers()
-
-	## CREATE THE SLOT SQUARE
-	#for i in inventory.inv_slots.size():
-		#var row = floor(i / 8)
-		#var column = i % 8
-		#var new_cell_location = inventory_begin_location + Vector2i(column, row)
-		#accessory_tilemap.set_cell(BORDER,new_cell_location,0,Vector2i(0,0))
-		#accessory_tilemap.set_cell(BACKGROUND,new_cell_location,1,Vector2i(0,0))
-		#
-		### SET INVENTORY ITEMS INTO THE PROPER SLOTS
-		#var new_item = item_texture_node.instantiate()
-		#inventory_node.add_child(new_item)
-		#new_item.position = accessory_tilemap.map_to_local(new_cell_location)
-		#new_item.name = "INV_" + str(i)
-		#node_array_inventory[i] = new_item
 	
 	## SET ACCESSORY ITEMS INTO ACCESSORY SLOTS
 	#for i in range(20):
@@ -78,24 +63,6 @@ func _ready():
 	#hotbar_outline.position.y = 512 + (floor(inventory.active_hotbar_start / 8) * 128)
 	
 	#update_inventory_and_equipment()
-
-func update_inventory_containers():
-	## SEARCH ALL ARMAMENT AND EQUIPMENT SLOTS FOR CONTAINER ITEMS.
-	## APPEND ALL SLOT COUNTS TO container_item_list ARRAY
-	var container_item_list : Array[int] = []
-	for equipment_array : Array[BasicItem] in [inventory.inv_armaments,inventory.inv_accessory_armor,inventory.inv_accessory_cloth,inventory.inv_accessory_gears,inventory.inv_accessory_charm]:
-		for item : BasicItem in equipment_array:
-			if item.container != []: 
-				var new_container_size : int = item.container.size()
-				container_item_list.append(new_container_size)
-	
-	## CLEAR CONTAINERS AND REMAKE FROM SCRATCH
-	for i in container_node.get_children(): i.queue_free()
-	for i in container_item_list.size():
-		var new_container = single_container.instantiate()
-		container_node.add_child(new_container)
-		new_container.position = Vector2(0,i*hotbar_vertical_offset)
-		new_container._set_size(container_item_list[i])
 
 func _input(event):
 	## MOVE CURSOR ACCORDING TO CONTINUOUS MOUSE MOVEMENT
@@ -300,32 +267,35 @@ func _process(_delta):
 		## REMOVE ITEM FROM CURSOR IF QUANTITY IS 0 OR LESS
 		if current_cursor_item.quantity <= 0: current_cursor_item = BasicItem.new()
 		## UPDATE CURSOR TEXTURE AND SLOT TEXTURES FROM INVENTORY DATA
-		update_inventory_and_equipment()
+		#update_inventory_and_equipment()----------------------------------------------------------------------------------------------------
 	
 	#### STACK SELECT (SHIFT + LEFT CLICK, CONTROLLER BUTTON 3 / TOP ACTION) ####
 	
 	if Input.is_action_just_pressed("ui_select_stack") and index != -1:
 		pass
 
-func update_inventory_and_equipment(accessories_only = false):
-	## UPDATE ACCESSORIES
-	var temp_accessory_set = []
-	match current_accessory_set:
-		0: temp_accessory_set = inventory.inv_accessory_armor
-		1: temp_accessory_set = inventory.inv_accessory_cloth
-		2: temp_accessory_set = inventory.inv_accessory_gears
-		3: temp_accessory_set = inventory.inv_accessory_charm
-	for i in range(12):
-		if temp_accessory_set[i].item_id != "":
-			node_array_equipment[i].get_child(0).texture = load(item_texture_path + "sm_" + temp_accessory_set[i].item_id + ".png")
-			node_array_equipment[i].get_child(1).text = str(temp_accessory_set[i].quantity)
-		else:
-			node_array_equipment[i].get_child(0).texture = null
-			node_array_equipment[i].get_child(1).text = ""
+func update_inventory_containers():
+	## SEARCH ALL ARMAMENT AND EQUIPMENT SLOTS FOR CONTAINER ITEMS.
+	## APPEND ALL SLOT COUNTS TO container_item_list ARRAY
+	var container_item_list : Array[int] = []
+	var equipment_array : Array = inventory.inv_armaments + inventory.inv_accessory_armor + inventory.inv_accessory_cloth + inventory.inv_accessory_gears + inventory.inv_accessory_charm
+	for item in equipment_array:
+		if item is BasicItem and item.container != []: 
+			var new_container_size : int = item.container.size()
+			container_item_list.append(new_container_size)
 	
-	if accessories_only: return
+	## CLEAR CONTAINERS AND REMAKE FROM SCRATCH
+	for i in container_node.get_children(): i.queue_free()
+	for i in container_item_list.size():
+		var new_container = single_container.instantiate()
+		container_node.add_child(new_container)
+		new_container.position = Vector2(0,i*hotbar_vertical_offset)
+		new_container._set_size(container_item_list[i])
 	
-	## UPDATE INVENTORY
+	## FILL CONTAINERS WITH RELEVANT ITEMS
+
+func update_inventory_items():
+	## VERSION 1 USING INV_SLOTS
 	for i in inventory.inv_slots.size():
 		if inventory.inv_slots[i].item_id != "":
 			node_array_inventory[i].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_slots[i].item_id + ".png")
@@ -333,23 +303,50 @@ func update_inventory_and_equipment(accessories_only = false):
 		else:
 			node_array_inventory[i].get_child(0).texture = null
 			node_array_inventory[i].get_child(1).text = ""
-	
-	## UPDATE ARMAMENTS
-	for i in range(8):
-		if inventory.inv_armaments[i].item_id != "":
-			node_array_equipment[i+12].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_armaments[i].item_id + ".png")
-			node_array_equipment[i+12].get_child(1).text = str(inventory.inv_armaments[i].quantity)
-		else:
-			node_array_equipment[i+12].get_child(0).texture = null
-			node_array_equipment[i+12].get_child(1).text = ""
-	
-	## UPDATE CURSOR
-	if current_cursor_item.item_id != "":
-		cursor_item_texture.get_child(0).texture = load(item_texture_path + "sm_" + current_cursor_item.item_id + ".png")
-		cursor_item_texture.get_child(1).text = str(current_cursor_item.quantity)
-	else:
-		cursor_item_texture.get_child(0).texture = null
-		cursor_item_texture.get_child(1).text = ""
+
+#func update_inventory_and_equipment(accessories_only = false):
+	### UPDATE ACCESSORIES
+	#var temp_accessory_set = []
+	#match current_accessory_set:
+		#0: temp_accessory_set = inventory.inv_accessory_armor
+		#1: temp_accessory_set = inventory.inv_accessory_cloth
+		#2: temp_accessory_set = inventory.inv_accessory_gears
+		#3: temp_accessory_set = inventory.inv_accessory_charm
+	#for i in range(12):
+		#if temp_accessory_set[i].item_id != "":
+			#node_array_equipment[i].get_child(0).texture = load(item_texture_path + "sm_" + temp_accessory_set[i].item_id + ".png")
+			#node_array_equipment[i].get_child(1).text = str(temp_accessory_set[i].quantity)
+		#else:
+			#node_array_equipment[i].get_child(0).texture = null
+			#node_array_equipment[i].get_child(1).text = ""
+	#
+	#if accessories_only: return
+	#
+	### UPDATE INVENTORY
+	#for i in inventory.inv_slots.size():
+		#if inventory.inv_slots[i].item_id != "":
+			#node_array_inventory[i].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_slots[i].item_id + ".png")
+			#node_array_inventory[i].get_child(1).text = str(inventory.inv_slots[i].quantity)
+		#else:
+			#node_array_inventory[i].get_child(0).texture = null
+			#node_array_inventory[i].get_child(1).text = ""
+	#
+	### UPDATE ARMAMENTS
+	#for i in range(8):
+		#if inventory.inv_armaments[i].item_id != "":
+			#node_array_equipment[i+12].get_child(0).texture = load(item_texture_path + "sm_" + inventory.inv_armaments[i].item_id + ".png")
+			#node_array_equipment[i+12].get_child(1).text = str(inventory.inv_armaments[i].quantity)
+		#else:
+			#node_array_equipment[i+12].get_child(0).texture = null
+			#node_array_equipment[i+12].get_child(1).text = ""
+	#
+	### UPDATE CURSOR
+	#if current_cursor_item.item_id != "":
+		#cursor_item_texture.get_child(0).texture = load(item_texture_path + "sm_" + current_cursor_item.item_id + ".png")
+		#cursor_item_texture.get_child(1).text = str(current_cursor_item.quantity)
+	#else:
+		#cursor_item_texture.get_child(0).texture = null
+		#cursor_item_texture.get_child(1).text = ""
 
 func change_accessory_set(dir : int):
 	current_accessory_set += dir
@@ -361,4 +358,4 @@ func change_accessory_set(dir : int):
 	accessory_tilemap.set_pattern(ICONS, Vector2i(2,4),pattern)
 	
 	## SET TEXTURES FROM INVENTORY DATA
-	update_inventory_and_equipment(true)
+	#update_inventory_and_equipment(true)-----------------------------------------------------------------------------------------------

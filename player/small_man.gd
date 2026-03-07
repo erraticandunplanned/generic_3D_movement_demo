@@ -3,6 +3,7 @@ extends CharacterBody3D
 @onready var pause_menu = preload("res://menus/pause_menu.tscn")
 @onready var inventory_menu = preload("res://menus/inventory.tscn")
 @onready var HUD = preload("res://menus/HUD.tscn")
+@onready var camera_swap_scene = preload("res://player/camera_transition.tscn")
 
 @onready var canvas = $CanvasLayer/CenterContainer
 @onready var statistics : StatisticsComponent = $ComponentDefaultStatistics
@@ -24,11 +25,13 @@ func _process(_delta):
 	if Global.menu_open: return
 	
 	if Input.is_action_just_released("swap_camera"):
+		var camera_transition = camera_swap_scene.instantiate()
+		self.add_child(camera_transition)
 		statistics.first_person_camera = !statistics.first_person_camera
 		if statistics.first_person_camera:
-			CameraTransition.swap_camera(camera_3rd,camera_1st)
+			camera_transition.swap_camera(camera_3rd,camera_1st)
 		else:
-			CameraTransition.swap_camera(camera_1st,camera_3rd)
+			camera_transition.swap_camera(camera_1st,camera_3rd)
 	
 	## DEBUG PURPOSES
 	if Input.is_action_just_pressed("interact"):

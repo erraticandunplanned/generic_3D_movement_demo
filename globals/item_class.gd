@@ -3,6 +3,8 @@ class_name BasicItem
 
 @export var quantity : int
 @export var item_id : String
+@export var unique_id : int
+@export var texture : ItemTexture
 
 @export var supertype : String
 @export var type : String
@@ -20,9 +22,11 @@ class_name BasicItem
 #var materials : Array[String] = [""]
 #var textures : Array[Texture2D]
 
-func _init(p_quantity = 0, p_item_id = "", p_supertype = "", p_type = "", p_subtype = "", p_container = [], p_hotbar_script_path = "", p_armament_script_path = "", p_accessory_script_path = ""):
+func _init(p_quantity : int = 0, p_item_id := "", p_unique_id : int = 0, p_texture := ItemTexture.new(), p_supertype := "", p_type := "", p_subtype := "", p_container := [], p_hotbar_script_path := "", p_armament_script_path := "", p_accessory_script_path := ""):
 	quantity = p_quantity
 	item_id = p_item_id
+	unique_id = p_unique_id
+	texture = p_texture
 	supertype = p_supertype
 	type = p_type
 	subtype = p_subtype

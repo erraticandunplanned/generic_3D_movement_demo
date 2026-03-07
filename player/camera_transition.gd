@@ -30,6 +30,7 @@ func swap_camera(from_camera : Camera3D, to_camera : Camera3D, duration : float 
 	await tween.finished
 	to_camera.current = true
 	transitioning = false
+	self.queue_free()
 
 ## [1] ##
 # https://www.youtube.com/watch?v=8Lj3pUYuVe8

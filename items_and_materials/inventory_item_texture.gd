@@ -1,10 +1,19 @@
 extends Node2D
 
-func _set_texture(coord : Vector2, fill_A_color : Color = Color.WHITE, fill_B_color : Color = Color.WHITE):
-	for sprite in [$texture,$fill_A,$fill_B]:
-		sprite.texture.region = Rect2(coord.x, coord.y, 64, 64)
-	$fill_A.modulate = fill_A_color
-	$fill_B.modulate = fill_B_color
+@onready var lines_texture = $lines
+@onready var fillA_texture = $fill_A
+@onready var fillB_texture = $fill_B
 
-func _set_quantity(amt : int, add : bool = false):
-	$quantity.text = int($quantity.text) + amt if add else amt
+@onready var image_stack = [lines_texture, fillA_texture, fillB_texture]
+
+func set_item_texture(tex : ItemTexture):
+	for i in range(3):
+		var ref_image = load("res://textures/item_images/" + tex.atlas_id[i])
+		image_stack[i].texture = AtlasTexture.new()
+		image_stack[i].texture.atlas = ref_image
+		image_stack[i].texture.set_region(Rect2(tex.atlas_coordinate.x * 64, tex.atlas_coordinate.y * 64, 64, 64))
+	fillA_texture.modulate = tex.fill_color_A
+	fillB_texture.modulate = tex.fill_color_B
+
+func set_item_quantity(amt : int, add : bool = false):
+	$quantity.text = str(int($quantity.text) + amt) if add else str(amt)

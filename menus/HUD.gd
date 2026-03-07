@@ -3,8 +3,8 @@ extends Control
 @onready var selection_node  : TileMapLayer = $slotmap_64/selection
 @onready var item_node             : Node2D = $slotmap_64/items
 @onready var selection_wheel_node : Control = $CenterContainer/selection_wheel
-@onready var armament_left_slot  : Sprite2D = $slotmap_64/armament_left
-@onready var armament_right_slot : Sprite2D = $slotmap_64/armament_right
+@onready var armament_left_slot  : Node2D = $slotmap_64/armament_L
+@onready var armament_right_slot : Node2D = $slotmap_64/armament_R
 @onready var item_texture_node = preload("res://items_and_materials/inventory_item_texture.tscn")
 @onready var selection_wheel = preload("res://menus/generic_selection_wheel.tscn")
 @onready var item_texture_path = "res://textures/item_images/"
@@ -37,19 +37,19 @@ func _ready():
 	
 	## SET HOTBAR
 	hotbar_node_index.resize(inventory.inv_slots.size())
-	for i in range(0,inventory.hotbar_width):
-		var check_item : BasicItem = inventory.inv_slots[inventory.active_hotbar_start + i]
-		var new_item = item_texture_node.instantiate()
-		item_node.add_child(new_item)
-		new_item.position = selection_node.map_to_local(hotbar_index_map[i])
-		new_item.name = "INV_"+str(i)
-		hotbar_node_index[i] = new_item
-		if check_item.item_id != "":
-			new_item.get_child(0).texture = load(item_texture_path + "sm_" + check_item.item_id + ".png")
-			new_item.get_child(1).text = str(check_item.quantity)
-		else:
-			new_item.get_child(0).texture = null
-			new_item.get_child(1).text = ""
+	#for i in range(0,inventory.hotbar_width):
+		#var check_item : BasicItem = inventory.inv_slots[inventory.active_hotbar_start + i]
+		#var new_item = item_texture_node.instantiate()
+		#item_node.add_child(new_item)
+		#new_item.position = selection_node.map_to_local(hotbar_index_map[i])
+		#new_item.name = "INV_"+str(i)
+		#hotbar_node_index[i] = new_item
+		#if check_item.item_id != "":
+			#new_item.get_child(0).texture = load(item_texture_path + "sm_" + check_item.item_id + ".png")
+			#new_item.get_child(1).text = str(check_item.quantity)
+		#else:
+			#new_item.get_child(0).texture = null
+			#new_item.get_child(1).text = ""
 	## SET ACTIVE SLOT
 	selection_node.clear()
 	selection_node.set_cell(hotbar_index_map[inventory.active_hotbar_item],0,selection_atlas_coord)
@@ -132,15 +132,11 @@ func open_weapon_selection_wheel(left : bool):
 	var new_wheel = selection_wheel.instantiate()
 	selection_wheel_node.add_child(new_wheel)
 	
-	var selection_texture_array : Array[String] = []
-	selection_texture_array.resize(4)
+	var selection_texture_array : Array[ItemTexture] = []
 	for i in range(4):
-		if left and inventory.inv_armaments[i].item_id != "":
-			selection_texture_array[i] = item_texture_path + "lg_" + inventory.inv_armaments[i].item_id + ".png" 
-		elif not left and inventory.inv_armaments[i+4].item_id != "":
-			selection_texture_array[i] = item_texture_path + "lg_" + inventory.inv_armaments[i+4].item_id + ".png" 
-		else:
-			selection_texture_array[i] = ""
+		var selection_index = i if left else i+4
+		var new_texture : ItemTexture = inventory.inv_armaments[selection_index].texture if inventory.inv_armaments[selection_index] is BasicItem else ItemTexture.new()
+		selection_texture_array.append(new_texture)
 	
 	new_wheel.selection = inventory.active_armament_left if left else inventory.active_armament_right
 	new_wheel.generate_wheel(selection_texture_array)
@@ -158,24 +154,24 @@ func set_new_armament_from_wheel(left : bool):
 
 func set_armaments():
 	## SET ARMAMENT TEXTURES
-	var left_armament : BasicItem = inventory.inv_armaments[inventory.active_armament_left]
-	if left_armament.item_id != "":
-		armament_left_slot.texture = load(item_texture_path + "sm_" + left_armament.item_id + ".png")
+	var left_armament = inventory.inv_armaments[inventory.active_armament_left]
+	if left_armament is BasicItem:
+		armament_left_slot.set_item_texture(left_armament.texture)
 	else:
-		armament_left_slot.texture = null
-	var right_armament : BasicItem = inventory.inv_armaments[4 + inventory.active_armament_right]
-	if right_armament.item_id != "":
-		armament_right_slot.texture = load(item_texture_path + "sm_" + right_armament.item_id + ".png")
+		armament_left_slot.set_item_texture(ItemTexture.new())
+	var right_armament = inventory.inv_armaments[4 + inventory.active_armament_right]
+	if right_armament is BasicItem:
+		armament_right_slot.set_item_texture(right_armament.texture)
 	else:
-		armament_right_slot.texture = null
+		armament_right_slot.set_item_texture(ItemTexture.new())
 	
 	## SET ARMAMENTS IN PLAYER'S HAND TO ACTIVATE
-	if left_armament.armament_script_path != "":
+	if left_armament is BasicItem and left_armament.armament_script_path != "":
 		var new_ability_script : Script = load(left_armament.armament_script_path)
 		grip_left.set_script(new_ability_script)
 		grip_left._ready()
 	else: grip_left.set_script(null)
-	if right_armament.armament_script_path != "":
+	if right_armament is BasicItem and right_armament.armament_script_path != "":
 		var new_ability_script : Script = load(right_armament.armament_script_path)
 		grip_right.set_script(new_ability_script)
 		grip_right._ready()

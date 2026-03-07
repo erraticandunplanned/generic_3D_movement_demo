@@ -17,13 +17,11 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 config/name="Generic 3d Movement Demo"
 run/main_scene="res://menus/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://cc0fnfg5ypluj"
 
 [autoload]
 
-Global="*res://autoload/global.gd"
-CameraTransition="*res://autoload/camera_transition.tscn"
-ObjectData="*uid://bd41hl3vo2ytv"
+Global="*res://globals/global.gd"
 
 [display]
 

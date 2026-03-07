@@ -1,10 +1,13 @@
 [gd_scene format=4 uid="uid://dn6m3sset830m"]
 
+[ext_resource type="Script" uid="uid://y1xbr1bohguo" path="res://menus/equipment_layout.gd" id="1_1yf3r"]
 [ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="1_gt5ks"]
 [ext_resource type="TileSet" uid="uid://b5rjs04frd7qx" path="res://textures/inventory/inventory_slots_64.tres" id="2_cppcl"]
 [ext_resource type="TileSet" uid="uid://bk4u2y8yq1jgv" path="res://textures/inventory/outfit_icons_64.tres" id="3_1yf3r"]
+[ext_resource type="PackedScene" uid="uid://b4py7ylemv4xy" path="res://items_and_materials/inventory_item_texture.tscn" id="4_cppcl"]
 
 [node name="EquipmentLayout" type="Node2D" unique_id=254687645]
+script = ExtResource("1_1yf3r")
 
 [node name="vitruvian" type="Sprite2D" parent="." unique_id=193711794]
 position = Vector2(224, 160)
@@ -21,3 +24,65 @@ tile_set = ExtResource("2_cppcl")
 modulate = Color(1, 1, 1, 0.501961)
 tile_map_data = PackedByteArray("AAAAAAEAAAABAAQAAAABAAEAAAABAAMAAAACAAEAAAABAAIAAAADAAAAAAAAAAIAAAADAAEAAAAAAAMAAAADAAIAAAAAAAQAAAADAAMAAAAAAAUAAAADAAQAAAAAAAYAAAADAAUAAAAAAAcAAAAEAAEAAAACAAIAAAAFAAEAAAACAAMAAAAGAAEAAAACAAQAAAA=")
 tile_set = ExtResource("3_1yf3r")
+
+[node name="textures" type="Node2D" parent="." unique_id=1706240537]
+
+[node name="HEAD" parent="textures" unique_id=1798469762 instance=ExtResource("4_cppcl")]
+position = Vector2(224, 32)
+
+[node name="CHEST" parent="textures" unique_id=1010123034 instance=ExtResource("4_cppcl")]
+position = Vector2(224, 96)
+
+[node name="BACK" parent="textures" unique_id=177463319 instance=ExtResource("4_cppcl")]
+position = Vector2(224, 160)
+
+[node name="HIPS" parent="textures" unique_id=1694537555 instance=ExtResource("4_cppcl")]
+position = Vector2(224, 224)
+
+[node name="LEGS" parent="textures" unique_id=1862080530 instance=ExtResource("4_cppcl")]
+position = Vector2(224, 288)
+
+[node name="FEET" parent="textures" unique_id=2112067927 instance=ExtResource("4_cppcl")]
+position = Vector2(224, 352)
+
+[node name="L_SHOULDER" parent="textures" unique_id=1278189079 instance=ExtResource("4_cppcl")]
+position = Vector2(160, 96)
+
+[node name="L_ARM" parent="textures" unique_id=1509046550 instance=ExtResource("4_cppcl")]
+position = Vector2(96, 96)
+
+[node name="L_HAND" parent="textures" unique_id=885379305 instance=ExtResource("4_cppcl")]
+position = Vector2(32, 96)
+
+[node name="R_SHOULDER" parent="textures" unique_id=783023129 instance=ExtResource("4_cppcl")]
+position = Vector2(288, 96)
+
+[node name="R_ARM" parent="textures" unique_id=518389938 instance=ExtResource("4_cppcl")]
+position = Vector2(352, 96)
+
+[node name="R_HAND" parent="textures" unique_id=2107493868 instance=ExtResource("4_cppcl")]
+position = Vector2(416, 96)
+
+[node name="A_L0" parent="textures" unique_id=243297717 instance=ExtResource("4_cppcl")]
+position = Vector2(32, 224)
+
+[node name="A_L1" parent="textures" unique_id=1560102875 instance=ExtResource("4_cppcl")]
+position = Vector2(96, 224)
+
+[node name="A_L2" parent="textures" unique_id=865139740 instance=ExtResource("4_cppcl")]
+position = Vector2(32, 288)
+
+[node name="A_L3" parent="textures" unique_id=1631815575 instance=ExtResource("4_cppcl")]
+position = Vector2(96, 288)
+
+[node name="A_R0" parent="textures" unique_id=1552707116 instance=ExtResource("4_cppcl")]
+position = Vector2(352, 224)
+
+[node name="A_R1" parent="textures" unique_id=314697140 instance=ExtResource("4_cppcl")]
+position = Vector2(416, 224)
+
+[node name="A_R2" parent="textures" unique_id=1180873816 instance=ExtResource("4_cppcl")]
+position = Vector2(352, 288)
+
+[node name="A_R3" parent="textures" unique_id=548536378 instance=ExtResource("4_cppcl")]
+position = Vector2(416, 288)
