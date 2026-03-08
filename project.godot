@@ -23,6 +23,10 @@ config/icon="uid://cc0fnfg5ypluj"
 
 Global="*res://globals/global.gd"
 
+[debug]
+
+gdscript/warnings/int_as_enum_without_cast=0
+
 [display]
 
 window/size/viewport_width=1920

@@ -40,6 +40,27 @@ func _init(p_quantity : int = 0, p_item_id := "", p_unique_id : int = 0, p_textu
 	#materials : Array[String] = [""]
 	#textures : Array[Texture2D]
 
+func _insert_item(item : BasicItem, index : int = -1) -> bool:
+	if container.size() < index: return false
+	## IF INDEX == -1, FIND FIRST OPEN SLOT AND PLACE WITHIN. RETURN FALSE IF NO OPEN SLOTS ARE AVAILABLE
+	if index == -1:
+		for i in container.size():
+			if container[i] == null: 
+				container.set(i, item)
+				return true
+		return false
+	## IF INDEX IS A VALUE, PLACE ITEM IN THAT EMPTY SLOT. RETURN FALSE IF ALREADY FILLED
+	else:
+		if container[index] is BasicItem: return false
+		else: 
+			container.set(index, item)
+			print("set item ", item, " in slot ", index,".")
+			print("0", container[0])
+			print("1", container[1])
+			print("2", container[2])
+			print("3", container[3])
+			return true
+
 #### SUPERTYPES: "Component", "Equipment", "Structure", "Tool"
 ## COMPONENT TYPES: "Botanical", "Crystalline", "Generic", "Geological", "Metallic", "Synthetic", "Water", "Zoological"
 # BOTANICAL SUBTYPES: "Plant Fiber", "Wood"

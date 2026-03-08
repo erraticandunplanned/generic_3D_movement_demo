@@ -1,8 +1,7 @@
 [gd_scene format=4 uid="uid://cs22px6ip61p2"]
 
-[ext_resource type="TileSet" uid="uid://b5rjs04frd7qx" path="res://textures/inventory/inventory_slots_64.tres" id="1_cwrak"]
 [ext_resource type="Script" uid="uid://73evlqpf3hyl" path="res://menus/single_inventory_container.gd" id="1_k4cm8"]
-[ext_resource type="TileSet" uid="uid://cdixjai7wmvq3" path="res://textures/inventory/inventory_selection.tres" id="1_l18kt"]
+[ext_resource type="TileSet" uid="uid://bkadrcse05ywp" path="res://textures/inventory/inventory_slots.tres" id="2_l18kt"]
 [ext_resource type="PackedScene" uid="uid://b4py7ylemv4xy" path="res://items_and_materials/inventory_item_texture.tscn" id="4_k4cm8"]
 
 [node name="SingleInventoryContainer" type="Node2D" unique_id=1887190479]
@@ -10,14 +9,17 @@ script = ExtResource("1_k4cm8")
 
 [node name="slotmap_64" type="Node2D" parent="." unique_id=1968338733]
 
-[node name="container_background" type="TileMapLayer" parent="slotmap_64" unique_id=2058165410]
-modulate = Color(0.55, 0.3116667, 0.19250001, 1)
-tile_map_data = PackedByteArray("AAACAAAAAQAAAAAAAAADAAAAAQAAAAAAAAAEAAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAFAAAAAQAAAAAAAAAGAAAAAQAAAAAAAAAHAAAAAQAAAAAAAAAIAAAAAQAAAAAAAAAJAAAAAQAAAAAAAAAKAAAAAQAAAAAAAAALAAAAAQAAAAAAAAA=")
-tile_set = ExtResource("1_l18kt")
+[node name="slot_background" type="TileMapLayer" parent="slotmap_64" unique_id=2058165410]
+tile_map_data = PackedByteArray("AAACAAAAAAAAAAEAAAADAAAAAAAAAAEAAAAEAAAAAAAAAAEAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAFAAAAAAAAAAEAAAAGAAAAAAAAAAEAAAAHAAAAAAAAAAEAAAAIAAAAAAAAAAEAAAAJAAAAAAAAAAEAAAAKAAAAAAAAAAEAAAALAAAAAAAAAAEAAAA=")
+tile_set = ExtResource("2_l18kt")
 
-[node name="slot_background" type="TileMapLayer" parent="slotmap_64" unique_id=1047438717]
+[node name="slot_chamfer" type="TileMapLayer" parent="slotmap_64" unique_id=1047438717]
+tile_map_data = PackedByteArray("AAAAAAAAAAABAAMAAAABAAAAAAABAAMAAAACAAAAAAABAAMAAAADAAAAAAABAAMAAAAEAAAAAAABAAMAAAAFAAAAAAABAAMAAAAGAAAAAAABAAMAAAAHAAAAAAABAAMAAAAIAAAAAAABAAMAAAAJAAAAAAABAAMAAAAKAAAAAAABAAMAAAALAAAAAAABAAMAAAA=")
+tile_set = ExtResource("2_l18kt")
+
+[node name="container_border" type="TileMapLayer" parent="slotmap_64" unique_id=406795632]
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAA=")
-tile_set = ExtResource("1_cwrak")
+tile_set = ExtResource("2_l18kt")
 
 [node name="items" type="Node2D" parent="." unique_id=1309465265]
 

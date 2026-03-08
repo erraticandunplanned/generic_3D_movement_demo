@@ -30,9 +30,7 @@ var equipment : Dictionary[int,Array] = {
 
 var inv_slots = [] ##remove
 
-var container_matrix = [
-		[]
-	]
+var container_matrix = [[]]
 
 
 						#############################
@@ -40,11 +38,13 @@ var container_matrix = [
 						#############################
 
 func set_default_inventory():
-	equipment.get(ARMAMENTS)[0] = DataManager.create_item("ore")
-	equipment.get(ARMAMENTS)[2] = DataManager.create_item("slab")
-	equipment.get(ARMAMENTS)[3] = DataManager.create_item("shell")
-	equipment.get(ARMAMENTS)[4] = DataManager.create_item("shard")
-
+	equipment[ARMAMENTS][0] = DataManager.create_item("ore")
+	equipment[ARMAMENTS][2] = DataManager.create_item("slab")
+	equipment[ARMAMENTS][3] = DataManager.create_item("shell")
+	equipment[ARMAMENTS][4] = DataManager.create_item("shard")
+	
+	equipment[ARMAMENTS][3]._insert_item(DataManager.create_item("shard"), 1)
+	
 	_add_container_to_matrix(Vector2i(4,3), equipment.get(ARMAMENTS)[3].container.size())
 
 func _add_container_to_matrix(new_container_location: Vector2i, new_container_size : int):
@@ -70,9 +70,7 @@ func _relocate_container_in_slot(from_slot : Vector2i, to_slot : Vector2i):
 	for i in container_matrix:
 		for j : Dictionary in i:
 			if j.get("slot") == from_slot: 
-				j.erase("slot")
-				var new_slot = {"slot":to_slot}
-				j.merge(new_slot)
+				j.set("slot",to_slot)
 				return
 	push_warning("container ", from_slot, "not found in container_matrix.")
 

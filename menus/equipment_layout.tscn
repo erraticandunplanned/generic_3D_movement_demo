@@ -1,9 +1,9 @@
 [gd_scene format=4 uid="uid://dn6m3sset830m"]
 
 [ext_resource type="Script" uid="uid://y1xbr1bohguo" path="res://menus/equipment_layout.gd" id="1_1yf3r"]
-[ext_resource type="Texture2D" uid="uid://cra0urkf5tugw" path="res://textures/inventory/Armor_UI_HD.png" id="1_gt5ks"]
-[ext_resource type="TileSet" uid="uid://b5rjs04frd7qx" path="res://textures/inventory/inventory_slots_64.tres" id="2_cppcl"]
+[ext_resource type="Texture2D" uid="uid://kj2an3q1nxa7" path="res://textures/inventory/Armor_UI_64.png" id="2_1yf3r"]
 [ext_resource type="TileSet" uid="uid://bk4u2y8yq1jgv" path="res://textures/inventory/outfit_icons_64.tres" id="3_1yf3r"]
+[ext_resource type="TileSet" uid="uid://bkadrcse05ywp" path="res://textures/inventory/inventory_slots.tres" id="3_l614i"]
 [ext_resource type="PackedScene" uid="uid://b4py7ylemv4xy" path="res://items_and_materials/inventory_item_texture.tscn" id="4_cppcl"]
 
 [node name="EquipmentLayout" type="Node2D" unique_id=254687645]
@@ -11,14 +11,13 @@ script = ExtResource("1_1yf3r")
 
 [node name="vitruvian" type="Sprite2D" parent="." unique_id=193711794]
 position = Vector2(224, 160)
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("1_gt5ks")
+texture = ExtResource("2_1yf3r")
 
 [node name="slotmap_64" type="Node2D" parent="." unique_id=103403608]
 
 [node name="slot_background" type="TileMapLayer" parent="slotmap_64" unique_id=1979244348]
-tile_map_data = PackedByteArray("AAAAAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAEAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAEAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAEAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAA=")
-tile_set = ExtResource("2_cppcl")
+tile_map_data = PackedByteArray("AAAAAAEAAAAAAAMAAAACAAEAAAAAAAMAAAADAAAAAAAAAAMAAAADAAEAAAAAAAMAAAABAAEAAAAAAAMAAAADAAIAAAAAAAMAAAADAAMAAAAAAAMAAAADAAQAAAAAAAMAAAADAAUAAAAAAAMAAAAEAAEAAAAAAAMAAAAFAAEAAAAAAAMAAAAGAAEAAAAAAAMAAAAEAAQAAAAAAAMAAAAFAAMAAAAAAAMAAAAFAAUAAAAAAAMAAAAGAAQAAAAAAAMAAAAAAAQAAAAAAAMAAAABAAMAAAAAAAMAAAABAAUAAAAAAAMAAAACAAQAAAAAAAMAAAA=")
+tile_set = ExtResource("3_l614i")
 
 [node name="gear_icons" type="TileMapLayer" parent="slotmap_64" unique_id=83643092]
 modulate = Color(1, 1, 1, 0.501961)
@@ -64,25 +63,25 @@ position = Vector2(352, 96)
 position = Vector2(416, 96)
 
 [node name="A_L0" parent="textures" unique_id=243297717 instance=ExtResource("4_cppcl")]
-position = Vector2(32, 224)
-
-[node name="A_L1" parent="textures" unique_id=1560102875 instance=ExtResource("4_cppcl")]
 position = Vector2(96, 224)
 
+[node name="A_L1" parent="textures" unique_id=1560102875 instance=ExtResource("4_cppcl")]
+position = Vector2(160, 288)
+
 [node name="A_L2" parent="textures" unique_id=865139740 instance=ExtResource("4_cppcl")]
-position = Vector2(32, 288)
+position = Vector2(96, 352)
 
 [node name="A_L3" parent="textures" unique_id=1631815575 instance=ExtResource("4_cppcl")]
-position = Vector2(96, 288)
+position = Vector2(32, 288)
 
 [node name="A_R0" parent="textures" unique_id=1552707116 instance=ExtResource("4_cppcl")]
 position = Vector2(352, 224)
 
 [node name="A_R1" parent="textures" unique_id=314697140 instance=ExtResource("4_cppcl")]
-position = Vector2(416, 224)
+position = Vector2(416, 288)
 
 [node name="A_R2" parent="textures" unique_id=1180873816 instance=ExtResource("4_cppcl")]
-position = Vector2(352, 288)
+position = Vector2(352, 352)
 
 [node name="A_R3" parent="textures" unique_id=548536378 instance=ExtResource("4_cppcl")]
-position = Vector2(416, 288)
+position = Vector2(288, 288)

@@ -7,6 +7,7 @@ extends Node2D
 @onready var image_stack = [lines_texture, fillA_texture, fillB_texture]
 
 func set_item_texture(tex : ItemTexture):
+	if tex.atlas_id[0] == "": return
 	for i in range(3):
 		var ref_image = load("res://textures/item_images/" + tex.atlas_id[i])
 		image_stack[i].texture = AtlasTexture.new()

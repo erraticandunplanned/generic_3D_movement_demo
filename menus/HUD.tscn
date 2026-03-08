@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://ha72oknnhgej"]
 
 [ext_resource type="Script" uid="uid://u8cnqnfw6t2k" path="res://menus/HUD.gd" id="1_evo51"]
-[ext_resource type="TileSet" uid="uid://b5rjs04frd7qx" path="res://textures/inventory/inventory_slots_64.tres" id="2_g0w5x"]
+[ext_resource type="TileSet" uid="uid://bkadrcse05ywp" path="res://textures/inventory/inventory_slots.tres" id="2_g0w5x"]
 [ext_resource type="TileSet" uid="uid://bk4u2y8yq1jgv" path="res://textures/inventory/outfit_icons_64.tres" id="3_nb5yt"]
 [ext_resource type="Texture2D" uid="uid://dwtx7rard7uvt" path="res://textures/item_images/sm_gold_sword.png" id="3_o4tq6"]
 [ext_resource type="Texture2D" uid="uid://bn8to66hgc0nx" path="res://textures/item_images/sm_sulfur_slab.png" id="4_e2awo"]
@@ -42,7 +42,7 @@ width = 1.0
 [node name="slotmap_64" type="Node2D" parent="." unique_id=1789990201]
 
 [node name="slot_background" type="TileMapLayer" parent="slotmap_64" unique_id=1188917265]
-tile_map_data = PackedByteArray("AAD8/wcAAAAAAAAAAAD9/wcAAAAAAAAAAAD+/wcAAAAAAAAAAAD//wcAAAAAAAAAAAAAAAcAAAAAAAAAAAABAAcAAAAAAAAAAAACAAcAAAAAAAAAAAADAAcAAAAAAAAAAAD4/wYAAAACAAAAAAD4/wcAAAACAAEAAAD5/wYAAAADAAAAAAD5/wcAAAADAAEAAAAGAAYAAAACAAAAAAAGAAcAAAACAAEAAAAHAAYAAAADAAAAAAAHAAcAAAADAAEAAAD7/wcAAAAAAAAAAAD6/wcAAAAAAAAAAAAEAAcAAAAAAAAAAAAFAAcAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD8/wcAAAAAAAMAAAD9/wcAAAAAAAMAAAD+/wcAAAAAAAMAAAD//wcAAAAAAAMAAAAAAAcAAAAAAAMAAAD7/wcAAAAAAAMAAAD6/wcAAAAAAAMAAAAGAAYAAAACAAIAAAAGAAcAAAACAAMAAAAHAAYAAAADAAIAAAAHAAcAAAADAAMAAAD4/wYAAAACAAIAAAD4/wcAAAACAAMAAAD5/wYAAAADAAIAAAD5/wcAAAADAAMAAAABAAcAAAAAAAMAAAACAAcAAAAAAAMAAAADAAcAAAAAAAMAAAAEAAcAAAAAAAMAAAAFAAcAAAAAAAMAAAA=")
 tile_set = ExtResource("2_g0w5x")
 
 [node name="armament_left" type="Sprite2D" parent="slotmap_64" unique_id=362017868]
@@ -109,7 +109,7 @@ position = Vector2(448, 448)
 
 [node name="selection" type="TileMapLayer" parent="slotmap_64" unique_id=1225833974]
 modulate = Color(0.676, 0.19, 1, 1)
-tile_map_data = PackedByteArray("AAD6/wcAAAABAAAAAAA=")
+tile_map_data = PackedByteArray("AAD6/wcAAAAAAAAAAAA=")
 tile_set = ExtResource("2_g0w5x")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=621612594]
