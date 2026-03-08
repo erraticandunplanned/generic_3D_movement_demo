@@ -62,7 +62,6 @@ func _ready():
 	## SLOT SETUP
 	update_inventory_containers()
 	update_equipment_layout()
-	#update_inventory_and_equipment()
 	
 	## SET HOTBAR OUTLINE CORRECTLY
 	pass

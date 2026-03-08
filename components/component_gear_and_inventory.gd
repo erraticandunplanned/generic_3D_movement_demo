@@ -28,8 +28,6 @@ var equipment : Dictionary[int,Array] = {
 	ARMAMENTS : [null, null, null, null, null, null, null, null]
 }
 
-var inv_slots = [] ##remove
-
 var container_matrix = [[]]
 
 
@@ -77,3 +75,28 @@ func _relocate_container_in_slot(from_slot : Vector2i, to_slot : Vector2i):
 func _relocate_container_in_matrix(from_index : Vector2i, to_index : Vector2i):
 	var entry = container_matrix[from_index.x].pop_at(from_index.y)
 	container_matrix[to_index.x].insert(to_index.y, entry)
+
+func get_hotbar_item_at_index(index : int) -> BasicItem:
+	## FIND CONTAINER_MATRIX ENTRY
+	var current_row = container_matrix[active_hotbar_index]
+	var row_size        := 0
+	var container_index := 0
+	for i in current_row.size():
+		## THIS SEARCHES EACH DICTIONARY ENTRY
+		## ADDS THE CONTAINER SIZE TO ROW_SIZE
+		row_size += current_row[i].get("size")
+		## IF THE ROW_SIZE IS GREATER THAN ACTIVE_HOTBAR, THAT MEANS THAT THE SLOT WE'RE LOOKING FOR IS IN THE MOST RECENT CONTAINER
+		if row_size >= index:
+			row_size -= current_row[i].get("size")
+			break
+		container_index += 1
+	var current_container = container_matrix[active_hotbar_index][container_index]
+	## FIND CONTAINER IN EQUIPMENT
+	var container_location : Vector2i = current_container.get("slot")
+	var container_item : BasicItem = equipment[container_location.x][container_location.y]
+	## FIND ITEM INSIDE CONTAINER
+	var entry_index = index - row_size
+	var new_item : BasicItem = container_item.container[entry_index]
+	return new_item
+	
+	

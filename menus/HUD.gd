@@ -1,13 +1,14 @@
 extends Control
 
-@onready var selection_node  : TileMapLayer = $slotmap_64/selection
+@onready var slot_background : TileMapLayer = $slotmap_64/slot_background
 @onready var item_node             : Node2D = $slotmap_64/items
+@onready var armament_left_slot    : Node2D = $slotmap_64/armament_L
+@onready var armament_right_slot   : Node2D = $slotmap_64/armament_R
+@onready var selection_node  : TileMapLayer = $slotmap_64/selection
 @onready var selection_wheel_node : Control = $CenterContainer/selection_wheel
-@onready var armament_left_slot  : Node2D = $slotmap_64/armament_L
-@onready var armament_right_slot : Node2D = $slotmap_64/armament_R
-@onready var item_texture_node = preload("res://items_and_materials/inventory_item_texture.tscn")
-@onready var selection_wheel = preload("res://menus/generic_selection_wheel.tscn")
-@onready var item_texture_path = "res://textures/item_images/"
+@onready var item_texture_node              = preload("res://items_and_materials/inventory_item_texture.tscn")
+@onready var selection_wheel                = preload("res://menus/generic_selection_wheel.tscn")
+@onready var item_texture_path              = "res://textures/item_images/"
 
 var player     : CharacterBody3D
 var statistics : StatisticsComponent
@@ -16,16 +17,17 @@ var grip_left  : Node3D
 var grip_right : Node3D
 var hotbar     : Node3D
 
-const selection_atlas_coord = Vector2i(1,0)
-const hotbar_index_map = [Vector2i(-6,7),Vector2i(-5,7),Vector2i(-4,7),Vector2i(-3,7),Vector2i(-2,7),Vector2i(-1,7),Vector2i(0,7),Vector2i(1,7),Vector2i(2,7),Vector2i(3,7),Vector2i(4,7),Vector2i(5,7)]
-#const hotbar_index_loc = [Vector2(-448,960),Vector2(-320,960),Vector2(-192,960),Vector2(-64,960),Vector2(64,960),Vector2(192,960),Vector2(320,960),Vector2(448,960)]
-var hotbar_node_index = []
+const selection_atlas_coord  := Vector2i(0,0)
+const background_atlas_coord := Vector2i(0,3)
+const hotbar_index_map : Array[Vector2i] = [Vector2i(-6,7),Vector2i(-5,7),Vector2i(-4,7),Vector2i(-3,7),Vector2i(-2,7),Vector2i(-1,7),Vector2i(0,7),Vector2i(1,7),Vector2i(2,7),Vector2i(3,7),Vector2i(4,7),Vector2i(5,7)]
+var current_hotbar_size := 0
 
-var selecting_weapon = false
-var wheel_open = false
-var selecting_weapon_timer = 0.0
+var selecting_weapon := false
+var wheel_open := false
+var selecting_weapon_timer := 0.0
 
 func _ready():
+	## VARIABLE SETUP
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	player = get_parent().get_parent().get_parent()
 	statistics = player.statistics
@@ -35,22 +37,8 @@ func _ready():
 	grip_right = hands.get_child(1)
 	hotbar = hands.get_child(2)
 	
-	## SET HOTBAR
-	hotbar_node_index.resize(inventory.inv_slots.size())
-	#for i in range(0,inventory.hotbar_width):
-		#var check_item : BasicItem = inventory.inv_slots[inventory.active_hotbar_start + i]
-		#var new_item = item_texture_node.instantiate()
-		#item_node.add_child(new_item)
-		#new_item.position = selection_node.map_to_local(hotbar_index_map[i])
-		#new_item.name = "INV_"+str(i)
-		#hotbar_node_index[i] = new_item
-		#if check_item.item_id != "":
-			#new_item.get_child(0).texture = load(item_texture_path + "sm_" + check_item.item_id + ".png")
-			#new_item.get_child(1).text = str(check_item.quantity)
-		#else:
-			#new_item.get_child(0).texture = null
-			#new_item.get_child(1).text = ""
-	## SET ACTIVE SLOT
+	## HOTBAR SETUP
+	cycle_hotbar(0,false)
 	selection_node.clear()
 	selection_node.set_cell(hotbar_index_map[inventory.active_hotbar_item],0,selection_atlas_coord)
 	
@@ -91,41 +79,75 @@ func _process(delta):
 	
 	## CYCLE HOTBAR
 	if Input.is_action_just_pressed("cycle_hotbar"):
-		inventory.active_hotbar_start += 8
-		if (inventory.active_hotbar_start + 7) > inventory.inv_slots.size(): inventory.active_hotbar_start = 0
-		
-		for i in range(0,inventory.hotbar_width):
-			var check_item : BasicItem = inventory.inv_slots[inventory.active_hotbar_start + i]
-			var slot_item = hotbar_node_index[i]
-			if check_item.item_id != "":
-				slot_item.get_child(0).texture = load(item_texture_path + "sm_" + check_item.item_id + ".png")
-				slot_item.get_child(1).text = str(check_item.quantity)
-			else:
-				slot_item.get_child(0).texture = null
-				slot_item.get_child(1).text = ""
-		
+		cycle_hotbar(1)
 		update_hotbar_selection(inventory.active_hotbar_item, false)
 
 func update_hotbar_selection(amt : int, add : bool = true):
 	## SELECTION CAN BE "ADDED" WHERE SELECTION IS MODIFIED BY +1 OR -1
 	if add:
 		inventory.active_hotbar_item += amt
-		inventory.active_hotbar_item = 0 if inventory.active_hotbar_item > inventory.hotbar_width else inventory.hotbar_width if inventory.active_hotbar_item < 0 else inventory.active_hotbar_item
+		inventory.active_hotbar_item = 0 if inventory.active_hotbar_item >= current_hotbar_size else ( current_hotbar_size - 1 ) if inventory.active_hotbar_item < 0 else inventory.active_hotbar_item
 	## SELECTION CAN BE "SET" BY SIMPLY SELECTING A SPECIFIC SLOT NUMBER
 	else:
-		inventory.active_hotbar_item = amt
+		inventory.active_hotbar_item = amt if amt <= current_hotbar_size else ( current_hotbar_size - 1 )
 	selection_node.clear()
 	selection_node.set_cell(hotbar_index_map[inventory.active_hotbar_item],0,selection_atlas_coord)
 	
 	## ADD HOTBAR SCRIPT TO HOTBAR NODE
 	## this allows whatever hotbar item is selected to be "used" when the [use hotbar item] key is pressed
-	var script_path = inventory.inv_slots[inventory.active_hotbar_start + inventory.active_hotbar_item].hotbar_script_path
+	var current_item = inventory.get_hotbar_item_at_index(inventory.active_hotbar_item)
+	var script_path = current_item.hotbar_script_path if current_item is BasicItem else ""
 	if script_path != "":
 		var new_hotbar_script : Script = load(script_path)
 		hotbar.set_script(new_hotbar_script)
 		hotbar._ready()
 	else:
 		hotbar.set_script(null)
+
+func cycle_hotbar(amt : int, add : bool = true):
+	## SET INDEX
+	var hotbar_index_max : int = inventory.container_matrix.size()
+	if add:
+		inventory.active_hotbar_index = 0 if inventory.active_hotbar_index + amt >= hotbar_index_max else ( hotbar_index_max - 1 ) if inventory.active_hotbar_index + amt < 0 else inventory.active_hotbar_index + amt
+	else:
+		inventory.active_hotbar_index = amt if amt <= hotbar_index_max else 0
+	## GET SIZE
+	current_hotbar_size = 0
+	for i : Dictionary in inventory.container_matrix[inventory.active_hotbar_index]:
+		current_hotbar_size += i.get("size")
+	## UPDATE SLOTS
+	for i in hotbar_index_map.size():
+		if i < current_hotbar_size: slot_background.set_cell(hotbar_index_map[i],0,background_atlas_coord)
+		else: slot_background.set_cell(hotbar_index_map[i],-1)
+	## UPDATE ITEMS
+	for i in range(current_hotbar_size):
+		var new_texture : ItemTexture = inventory.get_hotbar_item_at_index(i).texture if inventory.get_hotbar_item_at_index(i) is BasicItem else ItemTexture.new()
+		item_node.get_child(i).set_item_texture(new_texture)
+
+func set_armaments():
+	## SET ARMAMENT TEXTURES
+	var left_armament = inventory.equipment.get(inventory.ARMAMENTS)[inventory.active_armament_left] #inventory.inv_armaments[inventory.active_armament_left]
+	if left_armament is BasicItem:
+		armament_left_slot.set_item_texture(left_armament.texture)
+	else:
+		armament_left_slot.set_item_texture(ItemTexture.new())
+	var right_armament = inventory.equipment.get(inventory.ARMAMENTS)[4 + inventory.active_armament_right] #inventory.inv_armaments[4 + inventory.active_armament_right]
+	if right_armament is BasicItem:
+		armament_right_slot.set_item_texture(right_armament.texture)
+	else:
+		armament_right_slot.set_item_texture(ItemTexture.new())
+	
+	## SET ARMAMENTS IN PLAYER'S HAND TO ACTIVATE
+	if left_armament is BasicItem and left_armament.armament_script_path != "":
+		var new_ability_script : Script = load(left_armament.armament_script_path)
+		grip_left.set_script(new_ability_script)
+		grip_left._ready()
+	else: grip_left.set_script(null)
+	if right_armament is BasicItem and right_armament.armament_script_path != "":
+		var new_ability_script : Script = load(right_armament.armament_script_path)
+		grip_right.set_script(new_ability_script)
+		grip_right._ready()
+	else: grip_right.set_script(null)
 
 func open_weapon_selection_wheel(left : bool):
 	wheel_open = true
@@ -152,28 +174,3 @@ func set_new_armament_from_wheel(left : bool):
 	else:
 		inventory.active_armament_right = get_weapon if get_weapon <= 4 else 0
 	set_armaments()
-
-func set_armaments():
-	## SET ARMAMENT TEXTURES
-	var left_armament = inventory.equipment.get(inventory.ARMAMENTS)[inventory.active_armament_left] #inventory.inv_armaments[inventory.active_armament_left]
-	if left_armament is BasicItem:
-		armament_left_slot.set_item_texture(left_armament.texture)
-	else:
-		armament_left_slot.set_item_texture(ItemTexture.new())
-	var right_armament = inventory.equipment.get(inventory.ARMAMENTS)[4 + inventory.active_armament_right] #inventory.inv_armaments[4 + inventory.active_armament_right]
-	if right_armament is BasicItem:
-		armament_right_slot.set_item_texture(right_armament.texture)
-	else:
-		armament_right_slot.set_item_texture(ItemTexture.new())
-	
-	## SET ARMAMENTS IN PLAYER'S HAND TO ACTIVATE
-	if left_armament is BasicItem and left_armament.armament_script_path != "":
-		var new_ability_script : Script = load(left_armament.armament_script_path)
-		grip_left.set_script(new_ability_script)
-		grip_left._ready()
-	else: grip_left.set_script(null)
-	if right_armament is BasicItem and right_armament.armament_script_path != "":
-		var new_ability_script : Script = load(right_armament.armament_script_path)
-		grip_right.set_script(new_ability_script)
-		grip_right._ready()
-	else: grip_right.set_script(null)

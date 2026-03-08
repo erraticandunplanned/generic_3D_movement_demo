@@ -54,11 +54,6 @@ func _insert_item(item : BasicItem, index : int = -1) -> bool:
 		if container[index] is BasicItem: return false
 		else: 
 			container.set(index, item)
-			print("set item ", item, " in slot ", index,".")
-			print("0", container[0])
-			print("1", container[1])
-			print("2", container[2])
-			print("3", container[3])
 			return true
 
 #### SUPERTYPES: "Component", "Equipment", "Structure", "Tool"
