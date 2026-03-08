@@ -27,6 +27,7 @@ const equipment_location_array = [Vector2i(5,4),Vector2i(5,5),Vector2i(5,6),Vect
 #enum {HEAD, CHEST, BACK, HIPS, LEGS, FEET, L_SHOULDER, L_ARM, L_HAND, R_SHOULDER, R_ARM, R_HAND, A_L0, A_L1, A_L2, A_L3, A_R0, A_R1, A_R2, A_R3}
 
 const hotbar_vertical_offset = 64
+const hotbar_horizontal_offset = 64
 
 var current_accessory_set = 0
 var screen_size : Vector2
@@ -275,22 +276,37 @@ func _process(_delta):
 		pass
 
 func update_inventory_containers():
-	## SEARCH ALL ARMAMENT AND EQUIPMENT SLOTS FOR CONTAINER ITEMS.
-	## APPEND ALL SLOT COUNTS TO container_item_list ARRAY
-	var container_item_list : Array[int] = []
-	var equipment_array : Array = inventory.inv_armaments + inventory.inv_accessory_armor + inventory.inv_accessory_cloth + inventory.inv_accessory_gears + inventory.inv_accessory_charm
-	for item in equipment_array:
-		if item is BasicItem and item.container != []: 
-			var new_container_size : int = item.container.size()
-			container_item_list.append(new_container_size)
-	
-	## CLEAR CONTAINERS AND REMAKE FROM SCRATCH
+	## CLEAR CONTAINERS AND REMAKE FROM CONTAINER_MATRIX
 	for i in container_node.get_children(): i.queue_free()
-	for i in container_item_list.size():
-		var new_container = single_container.instantiate()
-		container_node.add_child(new_container)
-		new_container.position = Vector2(0,i*hotbar_vertical_offset)
-		new_container._set_size(container_item_list[i])
+	var current_row = 0
+	for row in inventory.container_matrix.size():
+		current_row = row
+		var current_column = 0
+		for column in inventory.container_matrix[row].size():
+			var entry = inventory.container_matrix[row][column]
+			var new_container = single_container.instantiate()
+			container_node.add_child(new_container)
+			new_container.position = Vector2( current_column * hotbar_horizontal_offset , current_row * hotbar_vertical_offset )
+			new_container._set_size(entry.get("size"))
+			current_column += entry.get("size")
+	
+	
+	### SEARCH ALL ARMAMENT AND EQUIPMENT SLOTS FOR CONTAINER ITEMS.
+	### APPEND ALL SLOT COUNTS TO container_item_list ARRAY
+	#var container_item_list : Array[int] = []
+	#for array in inventory.equipment.values():
+		#for item in array:
+			#if item is BasicItem and item.container != []: 
+				#var new_container_size : int = item.container.size()
+				#container_item_list.append(new_container_size)
+	#
+	### CLEAR CONTAINERS AND REMAKE FROM SCRATCH
+	#for i in container_node.get_children(): i.queue_free()
+	#for i in container_item_list.size():
+		#var new_container = single_container.instantiate()
+		#container_node.add_child(new_container)
+		#new_container.position = Vector2(0,i*hotbar_vertical_offset)
+		#new_container._set_size(container_item_list[i])
 	
 	## FILL CONTAINERS WITH RELEVANT ITEMS
 

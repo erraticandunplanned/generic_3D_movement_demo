@@ -135,7 +135,8 @@ func open_weapon_selection_wheel(left : bool):
 	var selection_texture_array : Array[ItemTexture] = []
 	for i in range(4):
 		var selection_index = i if left else i+4
-		var new_texture : ItemTexture = inventory.inv_armaments[selection_index].texture if inventory.inv_armaments[selection_index] is BasicItem else ItemTexture.new()
+		#var new_texture : ItemTexture = inventory.inv_armaments[selection_index].texture if inventory.inv_armaments[selection_index] is BasicItem else ItemTexture.new()
+		var new_texture : ItemTexture = inventory.equipment.get(inventory.ARMAMENTS)[selection_index].texture if inventory.equipment.get(inventory.ARMAMENTS)[selection_index] is BasicItem else ItemTexture.new()
 		selection_texture_array.append(new_texture)
 	
 	new_wheel.selection = inventory.active_armament_left if left else inventory.active_armament_right
@@ -154,12 +155,12 @@ func set_new_armament_from_wheel(left : bool):
 
 func set_armaments():
 	## SET ARMAMENT TEXTURES
-	var left_armament = inventory.inv_armaments[inventory.active_armament_left]
+	var left_armament = inventory.equipment.get(inventory.ARMAMENTS)[inventory.active_armament_left] #inventory.inv_armaments[inventory.active_armament_left]
 	if left_armament is BasicItem:
 		armament_left_slot.set_item_texture(left_armament.texture)
 	else:
 		armament_left_slot.set_item_texture(ItemTexture.new())
-	var right_armament = inventory.inv_armaments[4 + inventory.active_armament_right]
+	var right_armament = inventory.equipment.get(inventory.ARMAMENTS)[4 + inventory.active_armament_right] #inventory.inv_armaments[4 + inventory.active_armament_right]
 	if right_armament is BasicItem:
 		armament_right_slot.set_item_texture(right_armament.texture)
 	else:
