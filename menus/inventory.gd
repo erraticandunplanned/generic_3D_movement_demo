@@ -1,14 +1,15 @@
 extends Control
 
-@onready var inventory_node          : Node2D = $inventory
-@onready var equipment_node          : Node2D = $slotmap/EquipmentLayout
-@onready var container_node          : Node2D = $slotmap/containers
-@onready var selection_tilemap : TileMapLayer = $slotmap/slot_selection
-@onready var cursor_node             : Node2D = $cursor
-@onready var cursor_item_texture     : Node2D = $cursor/InventoryItemTexture
-@onready var item_texture_path       : String = "res://textures/item_images/"
-@onready var item_texture_node  : PackedScene = preload("res://items_and_materials/inventory_item_texture.tscn")
-@onready var single_container   : PackedScene = preload("res://menus/single_inventory_container.tscn")
+@onready var inventory_node           : Node2D = $inventory
+@onready var equipment_node           : Node2D = $slotmap/EquipmentLayout
+@onready var container_node           : Node2D = $slotmap/containers
+@onready var slot_selection_map : TileMapLayer = $slotmap/slot_selection
+@onready var cont_selection_map : TileMapLayer = $slotmap/container_selection
+@onready var cursor_node              : Node2D = $cursor
+@onready var cursor_item_texture      : Node2D = $cursor/InventoryItemTexture
+@onready var item_texture_path        : String = "res://textures/item_images/"
+@onready var item_texture_node   : PackedScene = preload("res://items_and_materials/inventory_item_texture.tscn")
+@onready var single_container    : PackedScene = preload("res://menus/single_inventory_container.tscn")
 
 var player : CharacterBody3D
 var statistics : StatisticsComponent
@@ -57,14 +58,12 @@ func _ready():
 	## MOUSE SETUP
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	screen_size = get_viewport_rect().size / 2
-	cursor_node.position = selection_tilemap.map_to_local(inventory_begin_location) + $slotmap.global_position
+	cursor_node.position = slot_selection_map.map_to_local(inventory_begin_location) + $slotmap.global_position
 	
 	## SLOT SETUP
 	update_inventory_containers()
 	update_equipment_layout()
-	
-	## SET HOTBAR OUTLINE CORRECTLY
-	pass
+	cycle_hotbar(true,false)
 
 func _input(event):
 	## MOVE CURSOR ACCORDING TO CONTINUOUS MOUSE MOVEMENT
@@ -84,11 +83,7 @@ func _process(_delta):
 	if Input.is_action_just_pressed("ui_tab_right"): change_accessory_set(1)
 	
 	## MOVE ACTIVE HOTBAR
-	if Input.is_action_just_pressed("cycle_hotbar"):
-		pass
-		#inventory.active_hotbar_start += 8
-		#if (inventory.active_hotbar_start + 7) > inventory.inv_slots.size(): inventory.active_hotbar_start = 0
-		#hotbar_outline.position.y = 512 + (floor(inventory.active_hotbar_start / 8) * 128)
+	if Input.is_action_just_pressed("cycle_hotbar"): cycle_hotbar()
 	
 						#################
 						## MOVE CURSOR ##
@@ -108,12 +103,12 @@ func _process(_delta):
 	if discrete_input != Vector2i.ZERO:
 		cursor_mode = false
 		tile_location += discrete_input
-		cursor_node.position = selection_tilemap.map_to_local(tile_location) + (selection_tilemap.global_position - self.global_position)
+		cursor_node.position = slot_selection_map.map_to_local(tile_location) + (slot_selection_map.global_position - self.global_position)
 	
 	## SET SELECTION TO TILE SET MAP SPACE
-	selection_tilemap.clear()
-	tile_location = selection_tilemap.local_to_map(cursor_node.global_position - selection_tilemap.global_position)
-	selection_tilemap.set_cell(tile_location,0,Vector2i.ZERO)
+	slot_selection_map.clear()
+	tile_location = slot_selection_map.local_to_map(cursor_node.global_position - slot_selection_map.global_position)
+	slot_selection_map.set_cell(tile_location,0,Vector2i.ZERO)
 	
 	
 	## IF DISCRETE MOVEMENT ATTEMPTS TO MOVE THE SELECTION OFF THE INVENTORY AREA, 
@@ -284,6 +279,18 @@ func _process(_delta):
 	if Input.is_action_just_pressed("ui_select_stack") and index != -1:
 		pass
 
+func cycle_hotbar(down: bool = true, cycle : bool = true):
+	if cycle:
+		## SET HOTBAR INDEX
+		var hotbar_max_size : int = inventory.container_matrix.size() - 1
+		inventory.active_hotbar_index = inventory.active_hotbar_index + 1 if down else inventory.active_hotbar_index - 1
+		inventory.active_hotbar_index = 0 if inventory.active_hotbar_index > hotbar_max_size else hotbar_max_size if inventory.active_hotbar_index < 0 else inventory.active_hotbar_index
+	## SET CONTAINER OUTLINE
+	cont_selection_map.clear()
+	cont_selection_map.set_cell(Vector2i(0,inventory.active_hotbar_index),0,Vector2i(1,1))
+	for i in range(10): cont_selection_map.set_cell(Vector2i(i+1,inventory.active_hotbar_index),0,Vector2i(2,1))
+	cont_selection_map.set_cell(Vector2i(11,inventory.active_hotbar_index),0,Vector2i(3,1))
+
 func update_inventory_containers():
 	## CLEAR CONTAINERS AND REMAKE FROM CONTAINER_MATRIX
 	for i in container_node.get_children(): i.queue_free()
@@ -292,6 +299,7 @@ func update_inventory_containers():
 		current_row = row
 		var current_column := 0
 		for column in inventory.container_matrix[row].size():
+			## CREATE NEW CONTAINER
 			var entry = inventory.container_matrix[row][column]
 			var new_container = single_container.instantiate()
 			container_node.add_child(new_container)
@@ -301,10 +309,12 @@ func update_inventory_containers():
 			var target_state = 0 if ( current_row == 0 and current_column == 0 ) else 1 if current_row == 0 else 2 if current_column == 0 else 3
 			var target_color = Color(randf(),randf(),randf())
 			new_container.set_all(target_size, target_state, target_color)
+			## FILL CONTAINER WITH RELEVANT ITEMS
+			for i in range(entry.get("size")):
+				var placed_item := inventory.get_item_at_index(Vector2i(row,current_column+i))
+				new_container.set_texture(i, placed_item.texture)
 			## OFFSET COLUMN FOR THE NEXT CONTAINER
 			current_column += target_size
-	
-	## FILL CONTAINERS WITH RELEVANT ITEMS
 
 func update_equipment_layout():
 	var single_equipment_array = inventory.equipment[current_accessory_set] + inventory.equipment[4]

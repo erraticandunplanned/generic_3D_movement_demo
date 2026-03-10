@@ -36,5 +36,5 @@ func _set_border_color(target_color : Color):
 	color = target_color
 	$slotmap_64/container_border.modulate = color
 
-func _set_texture(index : int, tex : ItemTexture):
-	$items.get_child(index)._set_texture(tex)
+func set_texture(index : int, tex : ItemTexture):
+	$items.get_child(index).set_item_texture(tex)

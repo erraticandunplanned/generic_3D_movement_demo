@@ -47,7 +47,6 @@ position = Vector2(-512, 0)
 [node name="SingleInventoryContainer" parent="slotmap/containers" unique_id=116473980 instance=ExtResource("4_vo05c")]
 
 [node name="container_selection" type="TileMapLayer" parent="slotmap" unique_id=2071117594]
-visible = false
 modulate = Color(0.19999999, 0.3333332, 1, 1)
 tile_map_data = PackedByteArray("AAAIAAAAAAACAAEAAAAJAAAAAAACAAEAAAAKAAAAAAACAAEAAAALAAAAAAADAAEAAAAAAAAAAAABAAEAAAABAAAAAAACAAEAAAACAAAAAAACAAEAAAADAAAAAAACAAEAAAAEAAAAAAACAAEAAAAFAAAAAAACAAEAAAAGAAAAAAACAAEAAAAHAAAAAAACAAEAAAA=")
 tile_set = ExtResource("5_apvjq")

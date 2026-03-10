@@ -20,7 +20,7 @@ var hotbar     : Node3D
 const selection_atlas_coord  := Vector2i(0,0)
 const background_atlas_coord := Vector2i(0,3)
 const hotbar_index_map : Array[Vector2i] = [Vector2i(-6,7),Vector2i(-5,7),Vector2i(-4,7),Vector2i(-3,7),Vector2i(-2,7),Vector2i(-1,7),Vector2i(0,7),Vector2i(1,7),Vector2i(2,7),Vector2i(3,7),Vector2i(4,7),Vector2i(5,7)]
-var current_hotbar_size := 0
+
 
 var selecting_weapon := false
 var wheel_open := false
@@ -38,7 +38,7 @@ func _ready():
 	hotbar = hands.get_child(2)
 	
 	## HOTBAR SETUP
-	cycle_hotbar(0,false)
+	cycle_hotbar(0,true)
 	selection_node.clear()
 	selection_node.set_cell(hotbar_index_map[inventory.active_hotbar_item],0,selection_atlas_coord)
 	
@@ -86,16 +86,16 @@ func update_hotbar_selection(amt : int, add : bool = true):
 	## SELECTION CAN BE "ADDED" WHERE SELECTION IS MODIFIED BY +1 OR -1
 	if add:
 		inventory.active_hotbar_item += amt
-		inventory.active_hotbar_item = 0 if inventory.active_hotbar_item >= current_hotbar_size else ( current_hotbar_size - 1 ) if inventory.active_hotbar_item < 0 else inventory.active_hotbar_item
+		inventory.active_hotbar_item = 0 if inventory.active_hotbar_item >= inventory.current_hotbar_size else ( inventory.current_hotbar_size - 1 ) if inventory.active_hotbar_item < 0 else inventory.active_hotbar_item
 	## SELECTION CAN BE "SET" BY SIMPLY SELECTING A SPECIFIC SLOT NUMBER
 	else:
-		inventory.active_hotbar_item = amt if amt <= current_hotbar_size else ( current_hotbar_size - 1 )
+		inventory.active_hotbar_item = amt if amt <= inventory.current_hotbar_size else ( inventory.current_hotbar_size - 1 )
 	selection_node.clear()
 	selection_node.set_cell(hotbar_index_map[inventory.active_hotbar_item],0,selection_atlas_coord)
 	
 	## ADD HOTBAR SCRIPT TO HOTBAR NODE
 	## this allows whatever hotbar item is selected to be "used" when the [use hotbar item] key is pressed
-	var current_item = inventory.get_hotbar_item_at_index(inventory.active_hotbar_item)
+	var current_item = inventory.get_item_at_index(Vector2i(inventory.active_hotbar_index,inventory.active_hotbar_item))
 	var script_path = current_item.hotbar_script_path if current_item is BasicItem else ""
 	if script_path != "":
 		var new_hotbar_script : Script = load(script_path)
@@ -106,22 +106,26 @@ func update_hotbar_selection(amt : int, add : bool = true):
 
 func cycle_hotbar(amt : int, add : bool = true):
 	## SET INDEX
-	var hotbar_index_max : int = inventory.container_matrix.size()
+	var hotbar_index_max : int = inventory.container_matrix.size() - 1
 	if add:
-		inventory.active_hotbar_index = 0 if inventory.active_hotbar_index + amt >= hotbar_index_max else ( hotbar_index_max - 1 ) if inventory.active_hotbar_index + amt < 0 else inventory.active_hotbar_index + amt
+		inventory.active_hotbar_index = 0 if inventory.active_hotbar_index + amt > hotbar_index_max else hotbar_index_max  if inventory.active_hotbar_index + amt < 0 else inventory.active_hotbar_index + amt
 	else:
-		inventory.active_hotbar_index = amt if amt <= hotbar_index_max else 0
+		inventory.active_hotbar_index = amt if amt < hotbar_index_max else 0
 	## GET SIZE
-	current_hotbar_size = 0
+	inventory.current_hotbar_size = 0
 	for i : Dictionary in inventory.container_matrix[inventory.active_hotbar_index]:
-		current_hotbar_size += i.get("size")
+		inventory.current_hotbar_size += i.get("size")
 	## UPDATE SLOTS
 	for i in hotbar_index_map.size():
-		if i < current_hotbar_size: slot_background.set_cell(hotbar_index_map[i],0,background_atlas_coord)
+		if i < inventory.current_hotbar_size: slot_background.set_cell(hotbar_index_map[i],0,background_atlas_coord)
 		else: slot_background.set_cell(hotbar_index_map[i],-1)
-	## UPDATE ITEMS
-	for i in range(current_hotbar_size):
-		var new_texture : ItemTexture = inventory.get_hotbar_item_at_index(i).texture if inventory.get_hotbar_item_at_index(i) is BasicItem else ItemTexture.new()
+	## CLEAR ITEM TEXTURES
+	for i in item_node.get_children():
+		i.clear_texture()
+	## ADD ITEM TEXTURES
+	for i in range(inventory.current_hotbar_size):
+		var item = inventory.get_item_at_index(Vector2i(inventory.active_hotbar_index,i))
+		var new_texture : ItemTexture = item.texture if item is BasicItem else ItemTexture.new()
 		item_node.get_child(i).set_item_texture(new_texture)
 
 func set_armaments():

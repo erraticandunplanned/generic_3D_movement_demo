@@ -5,10 +5,11 @@ class_name InventoryComponent
 						## INVENTORY DICTIONARIES ##
 						############################
 
-var active_hotbar_index   : int = 0
-var active_hotbar_item    : int = 0
-var active_armament_left  : int = 0
-var active_armament_right : int = 0
+var current_hotbar_size   := 0
+var active_hotbar_index   := 0
+var active_hotbar_item    := 0
+var active_armament_left  := 0
+var active_armament_right := 0
 
 const hotbar_width = 11 # width = 12 if you count index 0
 enum {ARMOR, CLOTH, GEARS, CHARM, ARMAMENTS}
@@ -37,13 +38,19 @@ var container_matrix = [[]]
 
 func set_default_inventory():
 	equipment[ARMAMENTS][0] = DataManager.create_item("ore")
+	equipment[ARMAMENTS][1] = DataManager.create_item("shell")
 	equipment[ARMAMENTS][2] = DataManager.create_item("slab")
 	equipment[ARMAMENTS][3] = DataManager.create_item("shell")
 	equipment[ARMAMENTS][4] = DataManager.create_item("shard")
+	equipment[GEARS][2]     = DataManager.create_item("backpack")
 	
 	equipment[ARMAMENTS][3]._insert_item(DataManager.create_item("shard"), 1)
+	equipment[ARMAMENTS][1]._insert_item(DataManager.create_item("ore"), 2)
+	equipment[GEARS][2]._insert_item(DataManager.create_item("slab"), 0)
 	
 	_add_container_to_matrix(Vector2i(4,3), equipment.get(ARMAMENTS)[3].container.size())
+	_add_container_to_matrix(Vector2i(4,1), equipment.get(ARMAMENTS)[1].container.size())
+	_add_container_to_matrix(Vector2i(2,2), equipment.get(GEARS)[2].container.size())
 
 func _add_container_to_matrix(new_container_location: Vector2i, new_container_size : int):
 	var new_dict_entry : Dictionary = {"size":new_container_size,"slot":new_container_location}
@@ -76,9 +83,10 @@ func _relocate_container_in_matrix(from_index : Vector2i, to_index : Vector2i):
 	var entry = container_matrix[from_index.x].pop_at(from_index.y)
 	container_matrix[to_index.x].insert(to_index.y, entry)
 
-func get_hotbar_item_at_index(index : int) -> BasicItem:
+## FROM AN INDEX (OF CONTAINER_MATRIX), RETURN ITEM
+func get_item_at_index(index : Vector2i) -> BasicItem:
 	## FIND CONTAINER_MATRIX ENTRY
-	var current_row = container_matrix[active_hotbar_index]
+	var current_row = container_matrix[index.x]
 	var row_size        := 0
 	var container_index := 0
 	for i in current_row.size():
@@ -86,17 +94,15 @@ func get_hotbar_item_at_index(index : int) -> BasicItem:
 		## ADDS THE CONTAINER SIZE TO ROW_SIZE
 		row_size += current_row[i].get("size")
 		## IF THE ROW_SIZE IS GREATER THAN ACTIVE_HOTBAR, THAT MEANS THAT THE SLOT WE'RE LOOKING FOR IS IN THE MOST RECENT CONTAINER
-		if row_size >= index:
+		if row_size > index.y:
 			row_size -= current_row[i].get("size")
 			break
 		container_index += 1
-	var current_container = container_matrix[active_hotbar_index][container_index]
+	var current_container = container_matrix[index.x][container_index]
 	## FIND CONTAINER IN EQUIPMENT
 	var container_location : Vector2i = current_container.get("slot")
 	var container_item : BasicItem = equipment[container_location.x][container_location.y]
 	## FIND ITEM INSIDE CONTAINER
-	var entry_index = index - row_size
-	var new_item : BasicItem = container_item.container[entry_index]
+	var entry_index = index.y - row_size
+	var new_item : BasicItem = container_item.container[entry_index] if container_item.container[entry_index] is BasicItem else BasicItem.new()
 	return new_item
-	
-	

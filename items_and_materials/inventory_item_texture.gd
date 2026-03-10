@@ -16,5 +16,11 @@ func set_item_texture(tex : ItemTexture):
 	fillA_texture.modulate = tex.fill_color_A
 	fillB_texture.modulate = tex.fill_color_B
 
+func clear_texture():
+	for i in range(3):
+		image_stack[i].texture = AtlasTexture.new()
+	fillA_texture.modulate = Color.WHITE
+	fillB_texture.modulate = Color.WHITE
+
 func set_item_quantity(amt : int, add : bool = false):
 	$quantity.text = str(int($quantity.text) + amt) if add else str(amt)
